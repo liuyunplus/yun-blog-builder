@@ -17,7 +17,7 @@ public final void acquire(int arg) {
 ```
 
 上面代码中虽然看起来简单，但是它按照顺序执行了下图所示的 4 个步骤。下面我们会逐个步骤进行演示分析。
-![](image/215fc060540d11ec9b7cacde48001122.png)
+![](https://raw.githubusercontent.com/liuyunplus/yun-blog-builder/main/blog/image/215fc060540d11ec9b7cacde48001122.png)
 
 第一步：!tryAcquire(arg)
 

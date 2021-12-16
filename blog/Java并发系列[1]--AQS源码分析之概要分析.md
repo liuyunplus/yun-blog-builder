@@ -39,7 +39,7 @@ protected final boolean compareAndSetState(int expect, int update) {
 上面的代码列出了 AQS 的所有成员变量，可以看到 AQS 的成员变量只有三个，分别是同步队列头结点引用，同步队列尾结点引用以及同步状态。注意，这三个成员变量都使用了 volatile 关键字进行修饰，这就确保了多个线程对它的修改都是内存可见的。整个类的核心就是这个同步状态，可以看到同步状态其实就是一个 int 型的变量，大家可以把这个同步状态看成一个密码锁，而且还是从房间里面锁起来的密码锁，state 具体的值就相当于密码控制着密码锁的开合。当然这个锁的密码是多少就由各个子类来规定了，例如在 ReentrantLock 中，state 等于 0 表示锁是开的，state 大于 0 表示锁是锁着的，而在 Semaphore 中，state 大于 0 表示锁是开的，state 等于 0 表示锁是锁着的。
 
 3.AbstractQueuedSynchronizer 的排队区是怎样实现的？
-![](image/2164ceac540d11ec9b7cacde48001122.png)
+![](https://raw.githubusercontent.com/liuyunplus/yun-blog-builder/main/blog/image/2164ceac540d11ec9b7cacde48001122.png)
 
 AbstractQueuedSynchronizer 内部其实有两个排队区，一个是同步队列，一个是条件队列。从上图可以看出，同步队列只有一条，而条件队列可以有多条。同步队列的结点分别持有前后结点的引用，而条件队列的结点只有一个指向后继结点的引用。图中 T 表示线程，每个结点包含一个线程，线程在获取锁失败后首先进入同步队列排队，而想要进入条件队列该线程必须持有锁才行。接下来我们看看队列中每个结点的结构。
 
@@ -140,6 +140,6 @@ private Node enq(final Node node) {
 ```
 
 注意，入队操作使用一个死循环，只有成功将结点添加到同步队列尾部才会返回，返回结果是同步队列原先的尾结点。下图演示了整个操作过程。
-![](image/2164f5e4540d11ec9b7cacde48001122.png)
+![](https://raw.githubusercontent.com/liuyunplus/yun-blog-builder/main/blog/image/2164f5e4540d11ec9b7cacde48001122.png)
 
 读者需要注意添加尾结点的顺序，分为三步：指向尾结点，CAS 更改尾结点，将旧尾结点的后继指向当前结点。在并发环境中这三步操作不一定能保证完成，所以在清空同步队列所有已取消的结点这一操作中，为了寻找非取消状态的结点，不是从前向后遍历而是从后向前遍历的。还有就是每个结点进入队列中时它的等待状态是为 0，只有后继结点的线程需要挂起时才会将前面结点的等待状态改为 SIGNAL。

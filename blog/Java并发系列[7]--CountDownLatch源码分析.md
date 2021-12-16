@@ -4,7 +4,7 @@ date: 2018-04-01 20:51:29
 categories: Java并发
 ---
 CountDownLatch(闭锁)是一个很有用的工具类，利用它我们可以拦截一个或多个线程使其在某个条件成熟后再执行。它的内部提供了一个计数器，在构造闭锁时必须指定计数器的初始值，且计数器的初始值必须大于 0。另外它还提供了一个 countDown 方法来操作计数器的值，每调用一次 countDown 方法计数器都会减 1，直到计数器的值减为 0 时就代表条件已成熟，所有因调用 await 方法而阻塞的线程都会被唤醒。<!-- more -->这就是 CountDownLatch 的内部机制，看起来很简单，无非就是阻塞一部分线程让其在达到某个条件之后再执行。但是 CountDownLatch 的应用场景却比较广泛，只要你脑洞够大利用它就可以玩出各种花样。最常见的一个应用场景是开启多个线程同时执行某个任务，等到所有任务都执行完再统计汇总结果。下图动态演示了闭锁阻塞线程的整个过程。
-![](image/216250aa540d11ec9b7cacde48001122.gif)
+![](https://raw.githubusercontent.com/liuyunplus/yun-blog-builder/main/blog/image/216250aa540d11ec9b7cacde48001122.gif)
 
 上图演示了有 5 个线程因调用 await 方法而被阻塞，它们需要等待计数器的值减为 0 才能继续执行。计数器的初始值在构造闭锁时被指定，后面随着每次 countDown 方法的调用而减 1。下面代码贴出了 CountDownLatch 的构造方法。
 
@@ -135,10 +135,10 @@ public class Player extends Thread {
   
 }
 ```
-![](image/216289b2540d11ec9b7cacde48001122.png)
+![](https://raw.githubusercontent.com/liuyunplus/yun-blog-builder/main/blog/image/216289b2540d11ec9b7cacde48001122.png)
 
 运行结果显示发牌操作一定是在所有玩家都入场后才进行。我们将 23 行的 latch.await()注释掉，对比下看看结果。
 
-![](image/2162b8f6540d11ec9b7cacde48001122.png)
+![](https://raw.githubusercontent.com/liuyunplus/yun-blog-builder/main/blog/image/2162b8f6540d11ec9b7cacde48001122.png)
 
 可以看到在注释掉 latch.await()这行之后，就不能保证在所有玩家入场后才开始发牌了。

@@ -198,6 +198,6 @@ public class Proxy0 extends Proxy implements UserDao {
 1.代理类默认继承 Porxy 类，因为 Java 中只支持单继承，所以 JDK 动态代理只能去实现接口。
 2.代理方法都会去调用 InvocationHandler 的 invoke()方法，因此我们需要重写 InvocationHandler 的 invoke()方法。
 3.调用 invoke()方法时会传入代理实例本身，目标方法和目标方法参数。解释了 invoke()方法的参数是怎样来的。
-![](image/21621cde540d11ec9b7cacde48001122.png)
+![](https://raw.githubusercontent.com/liuyunplus/yun-blog-builder/main/blog/image/21621cde540d11ec9b7cacde48001122.png)
 
 使用刚刚构造出来的 Proxy0 作为代理类再次进行测试，可以看到最终的结果与使用 JDK 动态生成的代理类的效果是一样的。再次验证了我们的分析是可靠且准确的。至此，JDK 动态代理系列文章宣告结束。通过本系列的分析，笔者解决了心中长久以来的疑惑，相信读者们对 JDK 动态代理的理解也更深了一步。但是纸上得来终觉浅，想要更好的掌握 JDK 动态代理技术，读者可参照本系列文章自行查阅 JDK 源码，也可与笔者交流学习心得，指出笔者分析不当的地方，共同学习，共同进步。
