@@ -1,5 +1,5 @@
 ---
-title: 'Java 集合系列[2]--LinkedList 源码分析'
+title: 'Java集合系列[2]--LinkedList 源码分析'
 date: 2018-02-17 16:08:12
 categories: Java基础
 ---

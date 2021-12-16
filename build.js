@@ -4,7 +4,7 @@ import * as path from 'path';
 import handlebars from 'handlebars';
 
 
-const BLOG_ROOT_PATH = "/Users/yliu2/Blog";
+const BLOG_ROOT_PATH = "/Users/liuyun/Blog";
 const DIR_NAME = path.resolve();
 
 /**
@@ -58,9 +58,19 @@ fs.readdirSync("./blog").forEach(function (name) {
   if (stat.isFile()) {
     const blogText = fs.readFileSync(filePath, 'utf8');
     const blogMeta = parseMetaData(blogText);
+    if (Object.keys(blogMeta).length == 0) {
+      return;
+    }
     markdownToHtml(blogMeta, blogText)
     metaList.push(blogMeta);
   }
 });
+
+
+let metas = metaList.sort(function(a, b){
+  let date1 = new Date(Date.parse(a["date"]))
+  let date2 = new Date(Date.parse(b["date"]))
+  return date1 < date2;
+})
 
 renderHomePage(metaList)

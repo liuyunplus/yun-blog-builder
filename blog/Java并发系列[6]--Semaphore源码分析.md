@@ -1,5 +1,5 @@
 ---
-title: 'Java 并发系列[6]--Semaphore 源码分析'
+title: 'Java并发系列[6]--Semaphore 源码分析'
 date: 2018-03-25 20:45:26
 categories: Java并发
 ---

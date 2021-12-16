@@ -1,5 +1,5 @@
 ---
-title: 'Java 并发系列[7]--CountDownLatch 源码分析'
+title: 'Java并发系列[7]--CountDownLatch 源码分析'
 date: 2018-04-01 20:51:29
 categories: Java并发
 ---

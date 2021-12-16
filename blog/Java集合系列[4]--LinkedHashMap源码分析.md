@@ -1,5 +1,5 @@
 ---
-title: 'Java 集合系列[4]--LinkedHashMap 源码分析'
+title: 'Java集合系列[4]--LinkedHashMap 源码分析'
 date: 2018-03-03 16:30:05
 categories: Java基础
 ---

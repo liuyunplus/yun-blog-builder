@@ -1,5 +1,5 @@
 ---
-title: 'Java 集合系列[3]--HashMap 源码分析'
+title: 'Java集合系列[3]--HashMap 源码分析'
 date: 2018-02-28 16:17:11
 categories: Java基础
 ---

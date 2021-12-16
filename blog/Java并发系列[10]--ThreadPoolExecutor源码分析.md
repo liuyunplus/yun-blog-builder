@@ -1,5 +1,5 @@
 ---
-title: 'Java 并发系列[10]--ThreadPoolExecutor 源码分析'
+title: 'Java并发系列[10]--ThreadPoolExecutor 源码分析'
 date: 2018-07-10 21:13:48
 categories: Java并发
 ---

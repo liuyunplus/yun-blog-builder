@@ -1,5 +1,5 @@
 ---
-title: 'Java 并发系列[1]--AQS 源码分析之概要分析'
+title: 'Java并发系列[1]--AQS 源码分析之概要分析'
 date: 2018-03-15 10:46:40
 categories: Java并发
 ---

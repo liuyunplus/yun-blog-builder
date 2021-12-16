@@ -1,5 +1,5 @@
 ---
-title: 'JDK 动态代理[4]--ProxyGenerator 生成代理类字节码解析'
+title: 'JDK动态代理[4]--ProxyGenerator 生成代理类字节码解析'
 date: 2018-01-15 15:50:35
 categories: Java基础
 ---

@@ -1,5 +1,5 @@
 ---
-title: 'Java 并发系列[8]--CyclicBarrier 源码分析'
+title: 'Java并发系列[8]--CyclicBarrier 源码分析'
 date: 2018-04-10 21:00:24
 categories: Java并发
 ---

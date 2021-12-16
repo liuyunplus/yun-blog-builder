@@ -1,5 +1,5 @@
 ---
-title: 'Java 并发系列[2]--AQS 源码分析之独占模式'
+title: 'Java并发系列[2]--AQS 源码分析之独占模式'
 date: 2018-03-17 10:53:27
 categories: Java并发
 ---
