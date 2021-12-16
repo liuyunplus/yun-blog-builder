@@ -11,13 +11,15 @@ const DIR_NAME = path.resolve();
  * 解析文章基础信息
  * @returns 
  */
-function parseMetaData(content) {
-  const meta = {}
-  const lines = content.split(/\r?\n/);
-  const first = lines[0]
-  if (first == "---") {
-    for(let i = 1; i < lines.length; i++) {
-      const line = lines[i]
+function parseMetaData(filePath) {
+  const content = fs.readFileSync(filePath, 'utf8');
+  let result = {}
+  let lines = content.split(/\n/);
+  if (lines[0] == "---") {
+    let meta = {}
+    let index = 1;
+    for(index; index < lines.length; index++) {
+      const line = lines[index]
       if (line == "---") {
         break
       }
@@ -27,8 +29,12 @@ function parseMetaData(content) {
       value = value.replace(/^ *\'|\' *$/g, '')
       meta[key] = value
     }
+    result["meta"] = meta;
+    // 去掉头部信息
+    lines.splice(0, index + 1);
+    result["body"] = lines.join("\n");
   }
-  return meta;
+  return result;
 }
 
 function markdownToHtml(meta, content) {
@@ -56,8 +62,9 @@ fs.readdirSync("./blog").forEach(function (name) {
   var filePath = `${DIR_NAME}/blog/${name}`;
   var stat = fs.statSync(filePath);
   if (stat.isFile()) {
-    const blogText = fs.readFileSync(filePath, 'utf8');
-    const blogMeta = parseMetaData(blogText);
+    let result = parseMetaData(filePath);
+    let blogMeta = result["meta"]
+    let blogText = result["body"]
     if (Object.keys(blogMeta).length == 0) {
       return;
     }
@@ -67,7 +74,7 @@ fs.readdirSync("./blog").forEach(function (name) {
 });
 
 
-let metas = metaList.sort(function(a, b){
+let sortedMetaList = metaList.sort(function(a, b){
   let date1 = new Date(Date.parse(a["date"]))
   let date2 = new Date(Date.parse(b["date"]))
   return date1 < date2;
