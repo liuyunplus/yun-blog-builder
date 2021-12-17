@@ -4,7 +4,7 @@ import * as path from 'path';
 import handlebars from 'handlebars';
 
 
-const BLOG_ROOT_PATH = "/Users/liuyun/Blog";
+const BLOG_ROOT_PATH = "/Users/yliu2/Blog";
 const DIR_NAME = path.resolve();
 
 /**
@@ -58,14 +58,15 @@ function renderHomePage(blogList) {
 
 
 let metaList = []
-fs.readdirSync("./blog").forEach(function (name) {
-  var filePath = `${DIR_NAME}/blog/${name}`;
+fs.readdirSync("./blog").forEach(function (filename) {
+  var filePath = `${DIR_NAME}/blog/${filename}`;
   var stat = fs.statSync(filePath);
-  if (stat.isFile()) {
+  var isHidden = /^\./.test(filename);
+  if (stat.isFile() && !isHidden) {
     let result = parseMetaData(filePath);
     let blogMeta = result["meta"]
     let blogText = result["body"]
-    if (Object.keys(blogMeta).length == 0) {
+    if (!blogMeta || Object.keys(blogMeta).length == 0) {
       return;
     }
     markdownToHtml(blogMeta, blogText)
@@ -77,7 +78,7 @@ fs.readdirSync("./blog").forEach(function (name) {
 let sortedMetaList = metaList.sort(function(a, b){
   let date1 = new Date(Date.parse(a["date"]))
   let date2 = new Date(Date.parse(b["date"]))
-  return date1 < date2;
+  return date2 - date1;
 })
 
-renderHomePage(metaList)
+renderHomePage(sortedMetaList)
