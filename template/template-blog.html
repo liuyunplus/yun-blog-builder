@@ -59,6 +59,7 @@
 	<div class="main-div">{{{ data }}}</div>
   </body>
   <script>
+	//在table外层包装一个div，如果table超长则显示横向滚动条
     [].slice.call(document.querySelectorAll("table")).forEach(function (el) {
       var wrapper = document.createElement("div");
       wrapper.className = "table-area";
