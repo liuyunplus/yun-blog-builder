@@ -41,17 +41,22 @@ function markdownToHtml(meta, content) {
   let blogTmpl = fs.readFileSync('template/template-blog.html', 'utf8')
   const template = handlebars.compile(blogTmpl);
   let html = marked.parse(content)
-  let blogHtml = template({data: html});
+  let param = {
+    title: meta["title"],
+    date: meta["date"],
+    content: html
+  };
+  let blogHtml = template(param);
   const title = meta["title"]
   const result = fs.writeFileSync(BLOG_ROOT_PATH + "/blog/" + title + ".html", blogHtml)
   return result
 }
 
 
-function renderHomePage(blogList) {
+function renderHomePage(dataList) {
   let homeTmpl = fs.readFileSync('template/template-home.html', 'utf8')
   const template = handlebars.compile(homeTmpl);
-  let homeHtml = template({blogList: blogList});
+  let homeHtml = template({dataList: dataList});
   const result = fs.writeFileSync(BLOG_ROOT_PATH + "/index.html", homeHtml)
   return result
 }

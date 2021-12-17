@@ -2,8 +2,9 @@
 title: 'Java集合系列[3]--HashMap 源码分析'
 date: 2018-02-28 16:17:11
 categories: Java基础
+abstract: '前面我们已经分析了ArrayList和LinkedList这两个集合，我们知道ArrayList是基于数组实现的，LinkedList是基于链表实现的。它们各自有自己的优劣势，例如ArrayList在定位查找'
 ---
-前面我们已经分析了 ArrayList 和 LinkedList 这两个集合，我们知道 ArrayList 是基于数组实现的，LinkedList 是基于链表实现的。它们各自有自己的优劣势，例如 ArrayList 在定位查找元素时会优于 LinkedList，而 LinkedList 在添加删除元素时会优于 ArrayList。而本篇介绍的 HashMap 综合了二者的优势，它的底层是基于哈希表实现的，如果不考虑哈希冲突的话，HashMap 在增删改查操作上的时间复杂度都能够达到惊人的 O(1)。我们先看看它所基于的哈希表的结构。<!-- more -->
+前面我们已经分析了 ArrayList 和 LinkedList 这两个集合，我们知道 ArrayList 是基于数组实现的，LinkedList 是基于链表实现的。它们各自有自己的优劣势，例如 ArrayList 在定位查找元素时会优于 LinkedList，而 LinkedList 在添加删除元素时会优于 ArrayList。而本篇介绍的 HashMap 综合了二者的优势，它的底层是基于哈希表实现的，如果不考虑哈希冲突的话，HashMap 在增删改查操作上的时间复杂度都能够达到惊人的 O(1)。我们先看看它所基于的哈希表的结构。
 ![](https://raw.githubusercontent.com/liuyunplus/yun-blog-builder/main/blog/image/2160e90e540d11ec9b7cacde48001122.png)
 
 从上图中可以看到，哈希表是由数组和链表共同构成的一种结构，当然上图是一个不好的示例，一个好的哈希函数应该要尽量平均元素在数组中的分布，减少哈希冲突从而减小链表的长度。链表的长度越长，意味着在查找时需要遍历的结点越多，哈希表的性能也就越差。接下来我们来看下 HashMap 的部分成员变量。

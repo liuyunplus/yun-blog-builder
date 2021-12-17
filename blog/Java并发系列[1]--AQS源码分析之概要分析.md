@@ -2,8 +2,9 @@
 title: 'Java并发系列[1]--AQS 源码分析之概要分析'
 date: 2018-03-15 10:46:40
 categories: Java并发
+abstract: '学习Java并发编程不得不去了解一下java.util.concurrent这个包，这个包下面有许多我们经常用到的并发工具类，例如：ReentrantLock, CountDownLatch, CyclicBarrier, Semaphore等'
 ---
-学习 Java 并发编程不得不去了解一下 java.util.concurrent 这个包，这个包下面有许多我们经常用到的并发工具类，例如：ReentrantLock, CountDownLatch, CyclicBarrier, Semaphore 等。而这些类的底层实现都依赖于 AbstractQueuedSynchronizer 这个类，由此可见这个类的重要性。<!-- more -->所以在 Java 并发系列文章中我首先对 AbstractQueuedSynchronizer 这个类进行分析，由于这个类比较重要，而且代码比较长，为了尽可能分析的透彻一些，我决定用四篇文章对该类进行一个比较完整的介绍。本篇文章作为概要介绍主要是让读者们对该类有个初步了解。为了叙述简单，后续有些地方会用 AQS 代表这个类。
+学习 Java 并发编程不得不去了解一下 java.util.concurrent 这个包，这个包下面有许多我们经常用到的并发工具类，例如：ReentrantLock, CountDownLatch, CyclicBarrier, Semaphore 等。而这些类的底层实现都依赖于 AbstractQueuedSynchronizer 这个类，由此可见这个类的重要性。所以在 Java 并发系列文章中我首先对 AbstractQueuedSynchronizer 这个类进行分析，由于这个类比较重要，而且代码比较长，为了尽可能分析的透彻一些，我决定用四篇文章对该类进行一个比较完整的介绍。本篇文章作为概要介绍主要是让读者们对该类有个初步了解。为了叙述简单，后续有些地方会用 AQS 代表这个类。
 
 1.AbstractQueuedSynchronizer 这个类是干嘛的？
 相信要许多读者使用过 ReentrantLock，但是却不知道 AbstractQueuedSynchronizer 的存在。其实 ReentrantLock 实现了一个内部类 Sync，该内部类继承了 AbstractQueuedSynchronizer，所有锁机制的实现都是依赖于 Sync 内部类，也可以说 ReentrantLock 的实现就是依赖于 AbstractQueuedSynchronizer 类。于此类似，CountDownLatch, CyclicBarrier, Semaphore 这些类也是采用同样的方式来实现自己对于锁的控制。可见，AbstractQueuedSynchronizer 是这些类的基石。那么 AQS 内部到底实现了什么以至于所以这些类都要依赖于它呢？可以这样说，AQS 为这些类提供了基础设施，也就是提供了一个密码锁，这些类拥有了密码锁之后可以自己来设置密码锁的密码。此外，AQS 还提供了一个排队区，并且提供了一个线程训导员，我们知道线程就像一个原始的野蛮人，它不懂得讲礼貌，它只会横冲直撞，所以你得一步一步去教它，告诉它什么时候需要去排队了，要到哪里去排队，排队前要做些什么，排队后要做些什么。这些教化工作全部都由 AQS 帮你完成了，从它这里教化出来的线程都变的非常文明懂礼貌，不再是原始的野蛮人，所以以后我们只需要和这些文明的线程打交道就行了，千万不要和原始线程有过多的接触！

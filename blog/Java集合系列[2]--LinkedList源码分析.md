@@ -2,8 +2,9 @@
 title: 'Java集合系列[2]--LinkedList 源码分析'
 date: 2018-02-17 16:08:12
 categories: Java基础
+abstract: '上篇我们分析了 ArrayList 的底层实现，知道了 ArrayList 底层是基于数组实现的，因此具有查找修改快而插入删除慢的特点。本篇介绍的 LinkedList 是 List 接口的另一种实现，它的底层'
 ---
-上篇我们分析了 ArrayList 的底层实现，知道了 ArrayList 底层是基于数组实现的，因此具有查找修改快而插入删除慢的特点。本篇介绍的 LinkedList 是 List 接口的另一种实现，它的底层是基于双向链表实现的，因此它具有插入删除快而查找修改慢的特点，此外，通过对双向链表的操作还可以实现队列和栈的功能。LinkedList 的底层结构如下图所示。<!-- more -->
+上篇我们分析了 ArrayList 的底层实现，知道了 ArrayList 底层是基于数组实现的，因此具有查找修改快而插入删除慢的特点。本篇介绍的 LinkedList 是 List 接口的另一种实现，它的底层是基于双向链表实现的，因此它具有插入删除快而查找修改慢的特点，此外，通过对双向链表的操作还可以实现队列和栈的功能。LinkedList 的底层结构如下图所示。
 ![](https://raw.githubusercontent.com/liuyunplus/yun-blog-builder/main/blog/image/21659fa8540d11ec9b7cacde48001122.png)
 
 F 表示头结点引用，L 表示尾结点引用，链表的每个结点都有三个元素，分别是前继结点引用(P)，结点元素的值(E)，后继结点的引用(N)。结点由内部类 Node 表示，我们看看它的内部结构。

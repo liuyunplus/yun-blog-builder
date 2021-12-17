@@ -17,7 +17,12 @@
       hljs.highlightAll();
     </script>
     <style>
-      .main-div {
+      .post-header {
+        width: 900px;
+        margin: 0 auto;
+        text-align: center;
+      }
+      .post-main {
         width: 900px;
         margin: 0 auto;
       }
@@ -44,9 +49,11 @@
         background: rgba(223, 226, 229, 0.4); /*背景色*/
         white-space: nowrap; /*表头内容强制在一行显示*/
       }
+      /* 间隔颜色 */
       table tbody tr:nth-child(2n) {
         background: rgba(223, 226, 229, 0.3);
       }
+      /* 鼠标上浮改变颜色 */
       table tr:hover {
         background: #efefef;
       }
@@ -56,7 +63,13 @@
     </style>
   </head>
   <body>
-	<div class="main-div">{{{ data }}}</div>
+    <div class="post-header">
+      <h2 class="post-title">{{ title }}</h2>
+      <p class="post-date">{{ date }}</p>
+    </div>
+    <div class="post-main">
+      {{{ content }}}
+    </div>
   </body>
   <script>
 	//在table外层包装一个div，如果table超长则显示横向滚动条
