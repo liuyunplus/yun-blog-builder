@@ -1,28 +1,19 @@
-let metaList = [
-    {
-        "title": "12333",
-        "date": "2021-03-05 15:06:01"
-    },
-    {
-        "title": "44444",
-        "date": "2021-07-05 15:06:01"
-    },
-    {
-        "title": "8888",
-        "date": "2021-01-05 15:06:01"
-    },
-    {
-        "title": "9999",
-        "date": "2021-01-02 15:06:01"
+import * as fs from 'fs';
+import * as path from 'path';
+import * as os from 'os';
+
+
+function ensureFolderExist(filePath) {
+    if (/^~\//.test(filePath)) {
+        filePath = filePath.replace(/^~/, os.homedir());
     }
-]
-
-
-let sortedMetaList = metaList.sort(function(a, b){
-    let date1 = new Date(Date.parse(a["date"]))
-    let date2 = new Date(Date.parse(b["date"]))
-    return date2 - date1;
-});
-
-console.log(sortedMetaList)
-
+    if (!/^\//.test(filePath)) {
+        throw new Error("路径不正确");
+    }
+    var dirname = path.dirname(filePath);
+    if (fs.existsSync(dirname)) {
+      return true;
+    }
+    ensureFolderExist(dirname);
+    fs.mkdirSync(dirname);
+}

@@ -64,11 +64,11 @@
   </head>
   <body>
     <div class="post-header">
-      <h2 class="post-title">{{ title }}</h2>
-      <p class="post-date">{{ date }}</p>
+      <h2 class="post-title">{{ postMeta.title }}</h2>
+      <p class="post-date">{{ postMeta.date }}</p>
     </div>
     <div class="post-main">
-      {{{ content }}}
+      {{{ postHtml }}}
     </div>
   </body>
   <script>

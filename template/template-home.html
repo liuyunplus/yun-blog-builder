@@ -77,18 +77,17 @@
         <span class="site-archive">归档</span>
         <span class="site-about">关于</span>
       </span>
-      
     </div>
     <div class="post-list">
-      {{#each dataList}}
+      {{#each postList}}
         <div class="post-list-item">
           <div class="post-title">
-            <a href="blog/{{ title }}.html">{{ title }}</a>
+            <a href="blog/{{ postMeta.title }}.html">{{ postMeta.title }}</a>
           </div>
           <div class="post-meta">
-            发布日期: {{ date }}
+            发布日期: {{ postMeta.date }}
           </div>
-          <div class="post-content">{{ abstract }}...
+          <div class="post-content">{{ postMeta.abstract }}...
             <a href="blog/{{ title }}.html">阅读全文</a>
           </div>
         </div>
