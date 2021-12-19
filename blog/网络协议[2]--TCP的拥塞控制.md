@@ -2,6 +2,7 @@
 title: '网络协议[2]--TCP的拥塞控制'
 date: 2020-06-25
 categories: 网络协议
+cover: 'https://gitee.com/liuyunplus/yun-image-repo/raw/master/temp/cover1.jpg'
 abstract: 'TCP协议是一种可靠的网络传输协议，为了保证数据传输的可靠性，发送方在检测到丢包的情况下会进行重传。这样就能够保证接收方收到的数据是完整的，整个过程是自动化的，一切看起来都是这么美好'
 ---
 #### 背景
