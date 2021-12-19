@@ -1,6 +1,6 @@
 ---
 title: 'Java集合系列[2]--LinkedList 源码分析'
-date: 2018-02-17 16:08:12
+date: 2018-02-17
 categories: Java基础
 abstract: '上篇我们分析了 ArrayList 的底层实现，知道了 ArrayList 底层是基于数组实现的，因此具有查找修改快而插入删除慢的特点。本篇介绍的 LinkedList 是 List 接口的另一种实现，它的底层'
 ---

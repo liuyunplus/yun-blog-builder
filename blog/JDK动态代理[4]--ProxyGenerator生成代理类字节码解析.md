@@ -1,6 +1,6 @@
 ---
 title: 'JDK动态代理[4]--ProxyGenerator 生成代理类字节码解析'
-date: 2018-01-15 15:50:35
+date: 2018-01-15
 categories: Java基础
 abstract: '通过前面几篇的分析，我们知道代理类是通过Proxy类的ProxyClassFactory工厂生成的，这个工厂类会去调用ProxyGenerator类的generateProxyClass()方法来生成代理类的字节码'
 ---

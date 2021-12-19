@@ -1,6 +1,6 @@
 ---
 title: 'Java并发系列[4]--AQS源码分析之条件队列'
-date: 2018-03-19 11:05:11
+date: 2018-03-19
 categories: Java并发
 abstract: '通过前面三篇的分析，我们深入了解了AbstractQueuedSynchronizer的内部结构和一些设计理念，知道了AbstractQueuedSynchronizer内部维护了一个同步状态和两个排队区，这两个排队区'
 ---

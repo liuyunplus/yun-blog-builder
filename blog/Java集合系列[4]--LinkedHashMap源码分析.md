@@ -1,6 +1,6 @@
 ---
 title: 'Java集合系列[4]--LinkedHashMap 源码分析'
-date: 2018-03-03 16:30:05
+date: 2018-03-03
 categories: Java基础
 abstract: '这篇文章我们开始分析LinkedHashMap的源码，LinkedHashMap继承了HashMap，也就是说LinkedHashMap是在HashMap的基础上扩展而来的，因此在看LinkedHashMap源码之前，读者有必要先去'
 ---

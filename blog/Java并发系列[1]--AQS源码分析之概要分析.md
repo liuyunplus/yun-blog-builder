@@ -1,6 +1,6 @@
 ---
 title: 'Java并发系列[1]--AQS 源码分析之概要分析'
-date: 2018-03-15 10:46:40
+date: 2018-03-15
 categories: Java并发
 abstract: '学习Java并发编程不得不去了解一下java.util.concurrent这个包，这个包下面有许多我们经常用到的并发工具类，例如：ReentrantLock, CountDownLatch, CyclicBarrier, Semaphore等'
 ---

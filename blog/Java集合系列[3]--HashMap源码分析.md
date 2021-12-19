@@ -1,6 +1,6 @@
 ---
 title: 'Java集合系列[3]--HashMap 源码分析'
-date: 2018-02-28 16:17:11
+date: 2018-02-28
 categories: Java基础
 abstract: '前面我们已经分析了ArrayList和LinkedList这两个集合，我们知道ArrayList是基于数组实现的，LinkedList是基于链表实现的。它们各自有自己的优劣势，例如ArrayList在定位查找'
 ---

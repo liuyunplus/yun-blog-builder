@@ -1,6 +1,6 @@
 ---
 title: 'Java并发系列[5]--ReentrantLock源码分析'
-date: 2018-03-23 20:38:16
+date: 2018-03-23
 categories: Java并发
 abstract: '在Java5.0之前，协调对共享对象的访问可以使用的机制只有synchronized和volatile。我们知道synchronized关键字实现了内置锁，而volatile关键字保证了多线程的内存可见性。在大多数'
 ---

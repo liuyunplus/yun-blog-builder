@@ -1,6 +1,6 @@
 ---
 title: 'Java并发系列[7]--CountDownLatch 源码分析'
-date: 2018-04-01 20:51:29
+date: 2018-04-01
 categories: Java并发
 abstract: 'CountDownLatch(闭锁)是一个很有用的工具类，利用它我们可以拦截一个或多个线程使其在某个条件成熟后再执行。它的内部提供了一个计数器，在构造闭锁时必须指定计数器的初始值，且计数器的'
 ---

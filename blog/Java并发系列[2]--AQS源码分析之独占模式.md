@@ -1,6 +1,6 @@
 ---
 title: 'Java并发系列[2]--AQS 源码分析之独占模式'
-date: 2018-03-17 10:53:27
+date: 2018-03-17
 categories: Java并发
 abstract: '在上一篇《Java 并发系列[1]----AQS 源码分析之概要分析》中我们介绍了 AbstractQueuedSynchronizer 基本的一些概念，主要讲了 AQS 的排队区是怎样实现的，什么是独占模式和共享模'
 ---
