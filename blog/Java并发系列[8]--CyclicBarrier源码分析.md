@@ -2,7 +2,7 @@
 title: 'Java并发系列[8]--CyclicBarrier 源码分析'
 date: 2018-04-10
 categories: Java并发
-cover: 'https://gitee.com/liuyunplus/yun-image-repo/raw/master/temp/cover1.jpg'
+cover: 'https://raw.githubusercontent.com/liuyunplus/yun-blog-builder/main/cover/cover2.jpg'
 abstract: '现实生活中我们经常会遇到这样的情景，在进行某个活动前需要等待人全部都齐了才开始。例如吃饭时要等全家人都上座了才动筷子，旅游时要等全部人都到齐了才出发，比赛时要等运动员都上场后才开始'
 ---
 现实生活中我们经常会遇到这样的情景，在进行某个活动前需要等待人全部都齐了才开始。例如吃饭时要等全家人都上座了才动筷子，旅游时要等全部人都到齐了才出发，比赛时要等运动员都上场后才开始。在 JUC 包中为我们提供了一个同步工具类能够很好的模拟这类场景，它就是 CyclicBarrier 类。利用 CyclicBarrier 类可以实现一组线程相互等待，当所有线程都到达某个屏障点后再进行后续的操作。下图演示了这一过程。

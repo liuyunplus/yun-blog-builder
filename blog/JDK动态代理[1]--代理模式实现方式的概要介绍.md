@@ -2,7 +2,7 @@
 title: JDK动态代理[1]--代理模式实现方式的概要介绍
 date: 2018-01-01
 categories: Java基础
-cover: 'https://gitee.com/liuyunplus/yun-image-repo/raw/master/temp/cover3.jpg'
+cover: 'https://raw.githubusercontent.com/liuyunplus/yun-blog-builder/main/cover/cover9.jpg'
 abstract: '日常工作中经常会接触到代理模式，但一直没有对其进行深究。代理模式一直就像一团迷雾一样存在我心里，什么是代理模式？为什么要使用代理？代理模式有哪些实现'
 ---
 日常工作中经常会接触到代理模式，但一直没有对其进行深究。代理模式一直就像一团迷雾一样存在我心里，什么是代理模式？为什么要使用代理？代理模式有哪些实现？它的底层机制是怎样的？这些问题促使着我迫切想要揭开代理模式的神秘面纱。
