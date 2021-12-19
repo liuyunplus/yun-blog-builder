@@ -1,8 +1,10 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import * as os from 'os';
+import * as child from 'child_process';
 
 const TARGET_PATH = "~/myblog";
+const DIR_NAME = path.resolve();
 
 /**
  * 创建并写入目标文件
@@ -38,4 +40,11 @@ export function ensureFolderExist(filePath) {
     }
     ensureFolderExist(dirname);
     fs.mkdirSync(dirname);
+}
+
+
+export function moveStyles() {
+    let sourcePath = `${DIR_NAME}/style/styles.less`;
+    let targetPath = parseAbsolutePath(`${TARGET_PATH}/styles.css`);
+    child.exec(`lessc ${sourcePath} ${targetPath}`);
 }

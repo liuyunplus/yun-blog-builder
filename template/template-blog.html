@@ -16,59 +16,28 @@
       };
       hljs.highlightAll();
     </script>
-    <style>
-      .post-header {
-        width: 900px;
-        margin: 0 auto;
-        text-align: center;
-      }
-      .post-main {
-        width: 900px;
-        margin: 0 auto;
-      }
-      img {
-        width: 100%;
-      }
-      table {
-        width: 100%; /*表格宽度*/
-        max-width: 65em; /*表格最大宽度，避免表格过宽*/
-        border: 1px solid #dedede; /*表格外边框设置*/
-        margin: 15px auto; /*外边距*/
-        border-collapse: collapse; /*使用单一线条的边框*/
-        empty-cells: show; /*单元格无内容依旧绘制边框*/
-      }
-      table th,
-      table td {
-        height: 35px; /*统一每一行的默认高度*/
-        border: 1px solid #dedede; /*内部边框样式*/
-        padding: 0 10px; /*内边距*/
-      }
-      table th {
-        font-weight: bold; /*加粗*/
-        text-align: center !important; /*内容居中，加上 !important 避免被 Markdown 样式覆盖*/
-        background: rgba(223, 226, 229, 0.4); /*背景色*/
-        white-space: nowrap; /*表头内容强制在一行显示*/
-      }
-      /* 间隔颜色 */
-      table tbody tr:nth-child(2n) {
-        background: rgba(223, 226, 229, 0.3);
-      }
-      /* 鼠标上浮改变颜色 */
-      table tr:hover {
-        background: #efefef;
-      }
-      .table-area {
-        overflow: auto;
-      }
-    </style>
+    <link rel="stylesheet" type="text/css" href="../styles.css">
   </head>
   <body>
-    <div class="post-header">
-      <h2 class="post-title">{{ postMeta.title }}</h2>
-      <p class="post-date">{{ postMeta.date }}</p>
+    <div class="site-header">
+      <span class="site-header-left">
+        <span class="site-title">我的博客</span>
+      </span>
+      <span class="site-header-right">
+        <span class="site-home"><a href="../index.html">首页</a></span>
+        <span class="site-category">分类</span>
+        <span class="site-archive">归档</span>
+        <span class="site-about"><a href="about/index.html">关于</a></span>
+      </span>
     </div>
     <div class="post-main">
-      {{{ postHtml }}}
+      <div class="post-header">
+        <h2 class="post-title">{{ postMeta.title }}</h2>
+        <p class="post-date">{{ postMeta.date }}</p>
+      </div>
+      <div class="post-body">
+        {{{ postHtml }}}
+      </div>
     </div>
   </body>
   <script>

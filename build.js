@@ -130,6 +130,7 @@ function runBuild() {
   renderHomePage(postList);
   //渲染关于我页面
   renderAboutPage();
+  FileUtils.moveStyles();
 }
 
 

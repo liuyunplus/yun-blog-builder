@@ -1,0 +1,158 @@
+body {
+    font-family: "Open Sans", "Clear Sans", "Helvetica Neue", Helvetica, Arial, 'Segoe UI Emoji', sans-serif;
+    font-size: 18px;
+    background-color: rgb(247, 246, 245);
+    padding: 0px 0px;
+}
+a {
+    text-decoration: none;
+}
+code {
+    font-size: 16px;
+}
+figure {
+    margin-inline-end: 0px;
+    margin-inline-start: 0px;
+}
+
+// 表格样式
+table {
+    width: 100%; /*表格宽度*/
+    max-width: 65em; /*表格最大宽度，避免表格过宽*/
+    border: 1px solid #dedede; /*表格外边框设置*/
+    margin: 15px auto; /*外边距*/
+    border-collapse: collapse; /*使用单一线条的边框*/
+    empty-cells: show; /*单元格无内容依旧绘制边框*/
+    th {
+        height: 35px; /*统一每一行的默认高度*/
+        border: 1px solid #dedede; /*内部边框样式*/
+        padding: 0 10px; /*内边距*/
+        font-weight: bold; /*加粗*/
+        text-align: center !important; /*内容居中，加上 !important 避免被 Markdown 样式覆盖*/
+        background: rgba(223, 226, 229, 0.4); /*背景色*/
+        white-space: nowrap; /*表头内容强制在一行显示*/
+    }
+    td {
+        height: 35px; /*统一每一行的默认高度*/
+        border: 1px solid #dedede; /*内部边框样式*/
+        padding: 0 10px; /*内边距*/
+    }
+    tbody tr:nth-child(2n) {
+        background: rgba(223, 226, 229, 0.3);
+    }
+    tr:hover {
+        background: #efefef;
+    }
+}
+.table-area {
+    overflow: auto;
+}
+// 引用块的样式
+blockquote {
+    color: rgb(119, 119, 119);
+    background: #f9f9f9;
+    border-left: 5px solid #ccc;
+    margin: 10px 0px;
+    padding: 10px 10px;
+}
+blockquote:before {
+    color: #ccc;
+    font-size: 4em;
+    line-height: 0.1em;
+    margin-right: 0.25em;
+    vertical-align: -0.4em;
+}
+blockquote p {
+    display: inline;
+}
+
+.site-header {
+    width: 900px;
+    height: 50px;
+    margin: 0 auto;
+    padding-top: 20px;
+    background-color: #171F26;
+    .site-header-left {
+        width: 100px;
+        float: left;
+        margin-left: 20px;
+        font-weight: 600;
+        color: white;
+        .site-title {
+            font-size: 24px;
+        }
+    }
+    .site-header-right {
+        width: 200px;
+        float: right;
+        color: white;
+        text-align: right;
+        margin-right: 20px;
+        a {
+            color: white;
+        }
+    }
+}
+
+// 首页样式
+.home-main {
+    width: 900px;
+    margin: 0 auto;
+    .post-list {
+        width: 900px;
+        margin: 0 auto;
+        .post-list-item {
+            background-color: white;
+            padding: 10px 10px 10px 10px;
+            margin: 20px 0px;
+            border-radius: 5px;
+            box-shadow: 0 1px 2px rgb(151 151 151 / 58%);
+            .post-title {
+                font-size: 22px;
+                font-weight: 500;
+                a {
+                    color: rgb(33, 33, 33);
+                }
+                a:hover {
+                    color: rgb(102, 102, 102);
+                }
+            }
+            .post-meta {
+                font-size: 15px;
+                color: rgb(164, 164, 164);
+                margin-top: 3px;
+                margin-bottom: 10px;
+            }
+            .post-content {
+                a {
+                    color: blue;
+                }
+            }
+        }
+    }
+}
+
+
+// 文章详情页样式
+.post-main {
+    width: 900px;
+    margin: 0 auto;
+    .post-header {
+        width: 100%;
+        text-align: center;
+    }
+    .post-body {
+        width: 100%;
+    }
+    img {
+        width: 100%;
+    }
+}
+
+// 关于我页面样式
+.about-main {
+    width: 900px;
+    margin: 0 auto;
+}
+
+  

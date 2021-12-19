@@ -2,69 +2,7 @@
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <style>
-      body {
-        background-color: rgb(247, 246, 245);
-        padding: 0px 0px;
-      }
-      .site-header {
-        width: 900px;
-        height: 50px;
-        margin: 0 auto;
-        padding-top: 20px;
-        background-color: #171F26;
-      }
-      .site-header-left {
-        width: 100px;
-        float: left;
-        margin-left: 20px;
-        font-weight: 600;
-        color: white;
-      }
-      .site-header-right {
-        width: 200px;
-        float: right;
-        color: white;
-        text-align: right;
-        margin-right: 20px;
-      }
-      .post-list {
-        width: 900px;
-        margin: 0 auto;
-      }
-      .site-title {
-        font-size: 24px;
-      }
-      .post-list-item {
-        background-color: white;
-        padding: 10px 10px 10px 10px;
-        margin: 20px 0px;
-        border-radius: 5px;
-        box-shadow: 0 1px 2px rgb(151 151 151 / 58%);
-      }
-      .post-title {
-        font-size: 22px;
-        font-weight: 500;
-      }
-      .post-meta {
-        font-size: 15px;
-        color: rgb(164, 164, 164);
-        margin-top: 3px;
-        margin-bottom: 10px;
-      }
-      a {
-        text-decoration: none;
-      }
-      .post-title > a:hover {
-        color: rgb(102, 102, 102);
-      }
-      .post-title > a {
-        color: rgb(33, 33, 33);
-      }
-      .post-content > a {
-        color: blue;
-      }
-    </style>
+    <link rel="stylesheet" type="text/css" href="./styles.css">
   </head>
   <body>
     <div class="site-header">
@@ -72,26 +10,28 @@
         <span class="site-title">我的博客</span>
       </span>
       <span class="site-header-right">
-        <span class="site-home">首页</span>
+        <span class="site-home"><a href="./index.html">首页</a></span>
         <span class="site-category">分类</span>
         <span class="site-archive">归档</span>
-        <span class="site-about">关于</span>
+        <span class="site-about"><a href="about/index.html">关于</a></span>
       </span>
     </div>
-    <div class="post-list">
-      {{#each postList}}
-        <div class="post-list-item">
-          <div class="post-title">
-            <a href="blog/{{ postMeta.title }}.html">{{ postMeta.title }}</a>
+    <div class="home-main">
+      <div class="post-list">
+        {{#each postList}}
+          <div class="post-list-item">
+            <div class="post-title">
+              <a href="blog/{{ postMeta.title }}.html">{{ postMeta.title }}</a>
+            </div>
+            <div class="post-meta">
+              发布日期: {{ postMeta.date }}
+            </div>
+            <div class="post-content">{{ postMeta.abstract }}...
+              <a href="blog/{{ title }}.html">阅读全文</a>
+            </div>
           </div>
-          <div class="post-meta">
-            发布日期: {{ postMeta.date }}
-          </div>
-          <div class="post-content">{{ postMeta.abstract }}...
-            <a href="blog/{{ title }}.html">阅读全文</a>
-          </div>
-        </div>
-      {{/each}}
+        {{/each}}
+      </div>
     </div>
   </body>
 </html>
