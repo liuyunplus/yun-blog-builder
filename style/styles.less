@@ -1,8 +1,11 @@
+@body-width: 900px;
+
+
 body {
     font-family: "Open Sans", "Clear Sans", "Helvetica Neue", Helvetica, Arial, 'Segoe UI Emoji', sans-serif;
     font-size: 18px;
-    background-color: rgb(247, 246, 245);
-    padding: 0px 0px;
+    background-color: #EEEEEE;
+    margin: 0px;
 }
 a {
     text-decoration: none;
@@ -66,37 +69,36 @@ blockquote p {
     display: inline;
 }
 
+// 站点头部组件样式
 .site-header {
-    width: 900px;
-    height: 50px;
+    width: 100%;
+    height: 65px;
+    line-height: 65px; /* 实现单行文本垂直居中 */
     margin: 0 auto;
-    padding-top: 20px;
-    background-color: #171F26;
+    background-color: #30475E;
     .site-header-left {
         width: 100px;
-        float: left;
-        margin-left: 20px;
+        font-size: 24px;
         font-weight: 600;
         color: white;
-        .site-title {
-            font-size: 24px;
-        }
+        float: left;
+        margin-left: 20px;
     }
     .site-header-right {
         width: 200px;
-        float: right;
         color: white;
         text-align: right;
+        float: right;
         margin-right: 20px;
-        a {
-            color: white;
-        }
+    }
+    a {
+        color: white;
     }
 }
 
 // 首页样式
 .home-main {
-    width: 900px;
+    width: @body-width;
     margin: 0 auto;
     .post-list {
         width: 900px;
@@ -138,7 +140,7 @@ blockquote p {
 
 // 文章详情页样式
 .post-main {
-    width: 900px;
+    width: @body-width;
     margin: 0 auto;
     .post-header {
         width: 100%;
@@ -154,7 +156,7 @@ blockquote p {
 
 // 关于我页面样式
 .about-main {
-    width: 900px;
+    width: @body-width;
     margin: 0 auto;
 }
 
