@@ -73,9 +73,7 @@ function renderPostPage(postList) {
     let postText = postData["postText"];
     //将Markdown文本转换成HTML
     let postHtml = marked.parse(postText)
-    let renderTmpl = fs.readFileSync('template/template-blog.html', 'utf8')
-    const template = handlebars.compile(renderTmpl);
-    let renderedHtml = template({postMeta: postMeta, postHtml: postHtml});
+    let renderedHtml = getRenderedHtml('template/template-blog.html', {postMeta: postMeta, postHtml: postHtml});
     //写入目标文件
     FileUtils.writeFile(`blog/${postMeta["title"]}.html`, renderedHtml)
   }
@@ -93,9 +91,7 @@ function renderHomePage(postList) {
     let date2 = new Date(Date.parse(b["postMeta"]["date"]))
     return date2 - date1;
   })
-  let renderTmpl = fs.readFileSync('template/template-home.html', 'utf8')
-  const template = handlebars.compile(renderTmpl);
-  let renderedHtml = template({postList: postList});
+  let renderedHtml = getRenderedHtml('template/template-home.html', {postList: postList});
   FileUtils.writeFile("index.html", renderedHtml)
   return true;
 }
@@ -107,11 +103,21 @@ function renderHomePage(postList) {
 function renderAboutPage() {
   const mdText = fs.readFileSync('about/index.md', 'utf8')
   let fragmentHtml = marked.parse(mdText)
-  let renderTmpl = fs.readFileSync('template/template-about.html', 'utf8')
-  const template = handlebars.compile(renderTmpl);
-  let renderedHtml = template({html: fragmentHtml});
+  let renderedHtml = getRenderedHtml('template/template-about.html', {html: fragmentHtml});
   FileUtils.writeFile("about/index.html", renderedHtml)
   return true;
+}
+
+
+function getRenderedHtml(tmplPath, data) {
+  let renderTmpl = fs.readFileSync(tmplPath, 'utf8');
+  const template = handlebars.compile(renderTmpl);
+  let global = {
+    rootPath: "https://liuyunplus.github.io"
+  };
+  data["global"] = global;
+  let renderedHtml = template(data);
+  return renderedHtml;
 }
 
 

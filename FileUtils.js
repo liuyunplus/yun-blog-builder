@@ -3,7 +3,7 @@ import * as path from 'path';
 import * as os from 'os';
 import * as child from 'child_process';
 
-const TARGET_PATH = "~/myblog";
+const TARGET_PATH = "~/Public/liuyunplus.github.io";
 const DIR_NAME = path.resolve();
 
 /**
