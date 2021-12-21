@@ -44,7 +44,7 @@ export function ensureFolderExist(filePath) {
 
 
 export function moveStyles() {
-    let sourcePath = `${DIR_NAME}/style/styles.less`;
-    let targetPath = parseAbsolutePath(`${TARGET_PATH}/styles.css`);
+    let sourcePath = `${DIR_NAME}/style/style.less`;
+    let targetPath = parseAbsolutePath(`${TARGET_PATH}/style.css`);
     child.exec(`lessc ${sourcePath} ${targetPath}`);
 }
