@@ -90,7 +90,7 @@ public class Main {
 ```
 
 测试结果：
-![](https://raw.githubusercontent.com/liuyunplus/yun-blog-builder/main/blog/image/2162e10a540d11ec9b7cacde48001122.png)
+![](https://raw.githubusercontent.com/liuyunplus/yun-blog-builder/main/post/image/2162e10a540d11ec9b7cacde48001122.png)
 
 总结：
 总的来说静态代理实现简单也容易理解，但是静态代理不能使一个代理类反复作用于多个目标对象，代理对象直接持有目标对象的引用，这导致代理对象和目标对象类型紧密耦合了在一起。如果 UserDao 接口下还有另一个实现类也需要进行事务控制，那么就要重新写一个代理类，这样就会产生许多重复的模版代码，不能达到代码复用的目的。而动态代理就可以很好的解决这样的问题。
@@ -173,7 +173,7 @@ public class Main {
 ```
 
 测试结果：
-![](https://raw.githubusercontent.com/liuyunplus/yun-blog-builder/main/blog/image/21631a12540d11ec9b7cacde48001122.png)
+![](https://raw.githubusercontent.com/liuyunplus/yun-blog-builder/main/post/image/21631a12540d11ec9b7cacde48001122.png)
 
 总结：
 之前我们发现了静态代理会产生许多重复代码，不能很好的进行代码复用，而动态代理能够很好的解决这个问题，代理类 TransactionHandler 实现了 InvocationHandler 接口，并且它持有的目标对象类型是 Object，因此事务控制代理类 TransactionHandler 能够代理任意的对象，为任意的对象添加事务控制的逻辑。因此动态代理才真正的将代码中横向切面的逻辑剥离了出来，起到代码复用的目的。但是动态代理也有缺点，一是它的实现比静态代理更加复杂也不好理解；二是它存在一定的限制，例如它要求需要代理的对象必须实现了某个接口；三是它不够灵活，动态代理会为接口中的声明的所有方法添加上相同的代理逻辑。当然，这只是 JDK 动态代理所存在的一些缺陷，动态代理还有另外的实现如使用 CGLIB 库，在本文不做介绍，读者可以自行去了解。
