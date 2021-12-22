@@ -2,7 +2,7 @@
 title: 'Linux技巧系列[1]--awk的妙用'
 date: 2019-03-10
 categories: Linux系列
-cover: 'https://raw.githubusercontent.com/liuyunplus/yun-blog-builder/main/cover/cover6.jpg'
+cover: 6
 abstract: 'awk是Linux及Unix环境中现有的功能最强大的数据处理引擎之一，它提供了极其强大的功能：可以进行正则表达式匹配，数学运算符、控制流语句、进程控制语句甚至于内置的变量和函数。可以看到它具备了'
 ---
 awk是Linux及Unix环境中现有的功能最强大的数据处理引擎之一，它提供了极其强大的功能：可以进行正则表达式匹配，数学运算符、控制流语句、进程控制语句甚至于内置的变量和函数。可以看到它具备了一个完整的语言所应具有的几乎所有精美特性。事实上awk就是隐藏在命令行里的编程语言，利用它我们可以很方便的实现数据排序、数据处理、报表生成以及其他许多强大的功能。

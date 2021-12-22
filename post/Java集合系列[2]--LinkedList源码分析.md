@@ -2,7 +2,7 @@
 title: 'Java集合系列[2]--LinkedList 源码分析'
 date: 2018-02-17
 categories: Java基础
-cover: 'https://raw.githubusercontent.com/liuyunplus/yun-blog-builder/main/cover/cover17.jpg'
+cover: 17
 abstract: '上篇我们分析了 ArrayList 的底层实现，知道了 ArrayList 底层是基于数组实现的，因此具有查找修改快而插入删除慢的特点。本篇介绍的 LinkedList 是 List 接口的另一种实现，它的底层'
 ---
 上篇我们分析了 ArrayList 的底层实现，知道了 ArrayList 底层是基于数组实现的，因此具有查找修改快而插入删除慢的特点。本篇介绍的 LinkedList 是 List 接口的另一种实现，它的底层是基于双向链表实现的，因此它具有插入删除快而查找修改慢的特点，此外，通过对双向链表的操作还可以实现队列和栈的功能。LinkedList 的底层结构如下图所示。
