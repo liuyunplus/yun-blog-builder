@@ -90,7 +90,7 @@ function renderHomePage(postList) {
     return date2 - date1;
   })
   let renderedHtml = getRenderedHtml(Constant.TEMPLATE_HOME, {postList: postList});
-  FileUtils.writeFile(`${Constant.TARGET_PATH}/index.html`, renderedHtml)
+  FileUtils.writeFile(`${Constant.TARGET_PATH}/home.html`, renderedHtml)
   return true;
 }
 

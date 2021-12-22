@@ -46,5 +46,5 @@ export function ensureFolderExist(filePath) {
  */
 export function handleResources() {
     child.exec(`lessc ${Constant.SOURCE_CSS_PATH}/style.less ${Constant.TARGET_CSS_PATH}/style.css`);
-    child.exec(`mv ${Constant.SOURCE_FONT_PATH} ${Constant.TARGET_FONT_PATH}`);
+    child.exec(`cp -rf ${Constant.SOURCE_FONT_PATH}/ ${Constant.TARGET_FONT_PATH}`);
 }
