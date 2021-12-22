@@ -5,17 +5,7 @@
     <link rel="stylesheet" type="text/css" href="./style.css">
   </head>
   <body>
-    <div class="site-header">
-      <span class="site-header-left">
-        <span class="site-title"><a href="{{ global.rootPath }}/index.html">我的博客</a></span>
-      </span>
-      <span class="site-header-right">
-        <span class="site-home"><a href="{{ global.rootPath }}/index.html">首页</a></span>
-        <span class="site-category">分类</span>
-        <span class="site-archive">归档</span>
-        <span class="site-about"><a href="{{ global.rootPath }}/about/index.html">关于</a></span>
-      </span>
-    </div>
+    {{> Header }}
     <div class="home-main">
       <div class="post-list">
         {{#each postList}}

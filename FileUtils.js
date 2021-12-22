@@ -2,17 +2,16 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as os from 'os';
 import * as child from 'child_process';
+import * as Constant from './Constant.js';
 
-const TARGET_PATH = "~/Public/liuyunplus.github.io";
-const DIR_NAME = path.resolve();
+
 
 /**
  * 创建并写入目标文件
  */
-export function writeFile(relativePath, content) {
-    let absolutePath = parseAbsolutePath(TARGET_PATH + "/" + relativePath);
-    ensureFolderExist(absolutePath);
-    fs.writeFileSync(absolutePath, content)
+export function writeFile(path, content) {
+    ensureFolderExist(path);
+    fs.writeFileSync(path, content)
 }
 
 /**
@@ -42,9 +41,10 @@ export function ensureFolderExist(filePath) {
     fs.mkdirSync(dirname);
 }
 
-
-export function moveStyles() {
-    let sourcePath = `${DIR_NAME}/style/style.less`;
-    let targetPath = parseAbsolutePath(`${TARGET_PATH}/style.css`);
-    child.exec(`lessc ${sourcePath} ${targetPath}`);
+/**
+ * 处理其他资源
+ */
+export function handleResources() {
+    child.exec(`lessc ${Constant.SOURCE_CSS_PATH}/style.less ${Constant.TARGET_CSS_PATH}/style.css`);
+    child.exec(`mv ${Constant.SOURCE_FONT_PATH} ${Constant.TARGET_FONT_PATH}`);
 }

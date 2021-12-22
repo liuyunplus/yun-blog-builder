@@ -3,9 +3,7 @@ import * as path from 'path';
 import { marked } from 'marked';
 import handlebars from 'handlebars';
 import * as FileUtils from './FileUtils.js';
-
-
-const DIR_NAME = path.resolve();
+import * as Constant from './Constant.js';
 
 
 /**
@@ -42,7 +40,7 @@ function parsePostMeta(lineList) {
     if (line == "---") {
       tagNum++;
     }
-    // 解析到第2个标记行时就不再向下解析
+    //解析到第2个标记行时就不再向下解析
     if (tagNum == 2) {
       break;
     }
@@ -50,7 +48,7 @@ function parsePostMeta(lineList) {
     if (isMeta) {
       let metaName = line.substr(0, line.indexOf(':'));
       let metaValue = line.substr(line.indexOf(':') + 1).trim()
-      // 去除首尾两端的引号
+      //去除首尾两端的引号
       metaValue = metaValue.replace(/^ *\'|\' *$/g, '')
       postMeta[metaName] = metaValue;
     }
@@ -73,9 +71,9 @@ function renderPostPage(postList) {
     let postText = postData["postText"];
     //将Markdown文本转换成HTML
     let postHtml = marked.parse(postText)
-    let renderedHtml = getRenderedHtml('template/template-blog.html', {postMeta: postMeta, postHtml: postHtml});
+    let renderedHtml = getRenderedHtml(Constant.TEMPLATE_BLOG, {postMeta: postMeta, postHtml: postHtml});
     //写入目标文件
-    FileUtils.writeFile(`blog/${postMeta["title"]}.html`, renderedHtml)
+    FileUtils.writeFile(`${Constant.TARGET_HTML_PATH}/${postMeta["title"]}.html`, renderedHtml)
   }
   return true;
 }
@@ -91,8 +89,8 @@ function renderHomePage(postList) {
     let date2 = new Date(Date.parse(b["postMeta"]["date"]))
     return date2 - date1;
   })
-  let renderedHtml = getRenderedHtml('template/template-home.html', {postList: postList});
-  FileUtils.writeFile("index.html", renderedHtml)
+  let renderedHtml = getRenderedHtml(Constant.TEMPLATE_HOME, {postList: postList});
+  FileUtils.writeFile(`${Constant.TARGET_PATH}/index.html`, renderedHtml)
   return true;
 }
 
@@ -101,21 +99,26 @@ function renderHomePage(postList) {
  * @returns 
  */
 function renderAboutPage() {
-  const mdText = fs.readFileSync('about/index.md', 'utf8')
+  const mdText = fs.readFileSync(`${Constant.SOURCE_ABOUT_PATH}/index.md`, 'utf8')
   let fragmentHtml = marked.parse(mdText)
-  let renderedHtml = getRenderedHtml('template/template-about.html', {html: fragmentHtml});
-  FileUtils.writeFile("about/index.html", renderedHtml)
+  let renderedHtml = getRenderedHtml(Constant.TEMPLATE_ABOUT, {html: fragmentHtml});
+  FileUtils.writeFile(`${Constant.TARGET_HTML_PATH}/about.html`, renderedHtml)
   return true;
 }
 
-
+/**
+ * 获取渲染后的HTML
+ * @returns 
+ */
 function getRenderedHtml(tmplPath, data) {
+  //注册Header模版
+  let headerTmpl = fs.readFileSync(Constant.TEMPLATE_HEADER, 'utf8');
+  handlebars.registerPartial('Header', headerTmpl);
   let renderTmpl = fs.readFileSync(tmplPath, 'utf8');
   const template = handlebars.compile(renderTmpl);
-  let global = {
-    rootPath: "https://liuyunplus.github.io"
+  data["global"] = {
+    rootPath: Constant.TARGET_SERVER
   };
-  data["global"] = global;
   let renderedHtml = template(data);
   return renderedHtml;
 }
@@ -123,8 +126,8 @@ function getRenderedHtml(tmplPath, data) {
 
 function runBuild() {
   let postList = []
-  fs.readdirSync("blog").forEach(function (filename) {
-    let filePath = `${DIR_NAME}/blog/${filename}`;
+  fs.readdirSync("post").forEach(function (fileName) {
+    let filePath = `${Constant.SOURCE_POST_PATH}/${fileName}`;
     let postData = parsePostData(filePath);
     if (postData) {
       postList.push(postData);
@@ -136,7 +139,8 @@ function runBuild() {
   renderHomePage(postList);
   //渲染关于我页面
   renderAboutPage();
-  FileUtils.moveStyles();
+  //处理其他资源(css文件/字体文件等)
+  FileUtils.handleResources();
 }
 
 
