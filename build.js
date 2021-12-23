@@ -133,6 +133,40 @@ function renderArchivePage(postList) {
   return true;
 }
 
+/**
+ * 渲染分类页面
+ * @returns 
+ */
+function renderCategoryPage(postList) {
+  let categoryMap = {};
+  for (let postData of postList) {
+    //获取文章的元数据
+    let postMeta = postData["postMeta"];
+    let category = postMeta["categories"];
+    let postInfo = {
+      "date": postMeta["date"],
+      "title": postMeta["title"]
+    }
+    let childList = categoryMap[category];
+    if (childList) {
+      childList.push(postInfo);
+    } else {
+      categoryMap[category] = [postInfo];
+    }
+  }
+  //渲染分类详情页
+  let categoryList = [];
+  for(let category in categoryMap) {
+    let childList = categoryMap[category];
+    let renderedHtml = getRenderedHtml(Constant.TEMPLATE_CATEGORY, {postList: childList});
+    FileUtils.writeFile(`${Constant.TARGET_HTML_PATH}/category/${category}.html`, renderedHtml)
+    categoryList.push(category);
+  }
+  //渲染分类列表页
+  let renderedHtml = getRenderedHtml(Constant.TEMPLATE_CATEGORY, {categoryList: categoryList});
+  FileUtils.writeFile(`${Constant.TARGET_HTML_PATH}/category.html`, renderedHtml)
+}
+
 
 function runBuild() {
   let postList = []
@@ -151,6 +185,8 @@ function runBuild() {
   renderAboutPage();
   //渲染归档页面
   renderArchivePage(postList);
+  //渲染分类页面
+  renderCategoryPage(postList);
   //处理其他资源(css文件/字体文件等)
   FileUtils.handleResources();
 }
