@@ -5,6 +5,8 @@ export const DIR_NAME = path.resolve();
 export const TEMPLATE_BLOG = "static/template/template-blog.html";
 export const TEMPLATE_HOME = "static/template/template-home.html";
 export const TEMPLATE_ABOUT = "static/template/template-about.html";
+export const TEMPLATE_ARCHIVE = "static/template/template-archive.html";
+export const TEMPLATE_CATEGORY = "static/template/template-category.html";
 export const TEMPLATE_HEADER = "static/template/template-header.html";
 
 export const SOURCE_CSS_PATH = `${DIR_NAME}/static/style`;
@@ -14,7 +16,7 @@ export const SOURCE_POST_PATH = `${DIR_NAME}/post`;
 export const SOURCE_ABOUT_PATH = `${DIR_NAME}/about`;
 
 
-export const TARGET_SERVER = "https://liuyunplus.github.io";
+export const TARGET_SERVER = "/Users/yliu2/Public/liuyunplus.github.io";
 export const TARGET_ROOT_PATH = "/Users/yliu2/Public/liuyunplus.github.io";
 export const TARGET_CSS_PATH = `${TARGET_ROOT_PATH}/css`;
 export const TARGET_HTML_PATH = `${TARGET_ROOT_PATH}/html`;

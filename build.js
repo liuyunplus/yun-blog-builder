@@ -60,6 +60,23 @@ function parsePostMeta(lineList) {
 }
 
 /**
+ * 获取渲染后的HTML
+ * @returns 
+ */
+ function getRenderedHtml(tmplPath, data) {
+  //注册Header模版
+  let headerTmpl = fs.readFileSync(Constant.TEMPLATE_HEADER, 'utf8');
+  handlebars.registerPartial('Header', headerTmpl);
+  let renderTmpl = fs.readFileSync(tmplPath, 'utf8');
+  const template = handlebars.compile(renderTmpl);
+  data["global"] = {
+    rootPath: Constant.TARGET_SERVER
+  };
+  let renderedHtml = template(data);
+  return renderedHtml;
+}
+
+/**
  * 渲染文章页
  * @returns 
  */
@@ -107,20 +124,13 @@ function renderAboutPage() {
 }
 
 /**
- * 获取渲染后的HTML
+ * 渲染归档页面
  * @returns 
  */
-function getRenderedHtml(tmplPath, data) {
-  //注册Header模版
-  let headerTmpl = fs.readFileSync(Constant.TEMPLATE_HEADER, 'utf8');
-  handlebars.registerPartial('Header', headerTmpl);
-  let renderTmpl = fs.readFileSync(tmplPath, 'utf8');
-  const template = handlebars.compile(renderTmpl);
-  data["global"] = {
-    rootPath: Constant.TARGET_SERVER
-  };
-  let renderedHtml = template(data);
-  return renderedHtml;
+function renderArchivePage(postList) {
+  let renderedHtml = getRenderedHtml(Constant.TEMPLATE_ARCHIVE, {postList: postList});
+  FileUtils.writeFile(`${Constant.TARGET_HTML_PATH}/archive.html`, renderedHtml)
+  return true;
 }
 
 
@@ -139,6 +149,8 @@ function runBuild() {
   renderHomePage(postList);
   //渲染关于我页面
   renderAboutPage();
+  //渲染归档页面
+  renderArchivePage(postList);
   //处理其他资源(css文件/字体文件等)
   FileUtils.handleResources();
 }
