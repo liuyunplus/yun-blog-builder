@@ -16,8 +16,8 @@ export const SOURCE_POST_PATH = `${DIR_NAME}/post`;
 export const SOURCE_ABOUT_PATH = `${DIR_NAME}/about`;
 
 
-export const TARGET_SERVER = "/Users/yliu2/Public/liuyunplus.github.io";
-export const TARGET_ROOT_PATH = "/Users/yliu2/Public/liuyunplus.github.io";
+export const TARGET_SERVER = "https://liuyunplus.github.io";
+export const TARGET_ROOT_PATH = "/Users/liuyun/Public/MyPro/liuyunplus.github.io";
 export const TARGET_CSS_PATH = `${TARGET_ROOT_PATH}/css`;
 export const TARGET_HTML_PATH = `${TARGET_ROOT_PATH}/html`;
 export const TARGET_FONT_PATH = `${TARGET_ROOT_PATH}/font`;
