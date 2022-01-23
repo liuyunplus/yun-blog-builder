@@ -73,26 +73,28 @@ blockquote p {
 .site-header {
     width: 100%;
     height: 65px;
-    line-height: 65px; /* 实现单行文本垂直居中 */
-    margin: 0 auto;
-    background-color: #30475E;
-    .site-header-left {
-        width: 100px;
-        font-size: 24px;
-        font-weight: 600;
+    line-height: 65px;
+    background-color: #525252;
+    .header-main {
+        width: @body-width;
         color: white;
-        float: left;
-        margin-left: 20px;
-    }
-    .site-header-right {
-        width: 200px;
-        color: white;
-        text-align: right;
-        float: right;
-        margin-right: 20px;
-    }
-    a {
-        color: white;
+        margin: 0px auto;
+        display: flex;
+        justify-content: space-between;
+        .header-left {
+            font-size: 26px;
+        }
+        .header-right {
+            font-size: 18px;
+            text-align: right;
+        }
+        a {
+            color: #fff;
+            cursor: pointer;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
     }
 }
 
@@ -114,9 +116,10 @@ blockquote p {
                 font-weight: 500;
                 a {
                     color: rgb(33, 33, 33);
+                    text-decoration: none;
                 }
                 a:hover {
-                    color: rgb(102, 102, 102);
+                    text-decoration: underline;
                 }
             }
             .post-meta {
@@ -127,7 +130,11 @@ blockquote p {
             }
             .post-content {
                 a {
-                    color: blue;
+                    color: gray;
+                    text-decoration: none;
+                }
+                a:hover {
+                    text-decoration: underline;
                 }
             }
             img {
@@ -164,11 +171,32 @@ blockquote p {
 .archive-main {
     width: @body-width - 250px;
     margin: 20px auto;
+    .issue {
+        padding: 14px 0px;
+        display: flex;
+        align-items: center;
+        font-size: 18px;
+        font-weight: 400;
+        border-bottom-style: solid;
+        border-bottom-color: rgb(224, 228, 232);
+        border-bottom-width: 1px;
+        .issue-date {
+            margin-right: 25px;
+            color: rgb(111, 115, 121);
+        }
+    }
+    .issue:last-child {
+        border-bottom: none;
+    }
     a {
-        color: rgb(33, 33, 33);
+        text-decoration: none;
+        color: rgb(181, 73, 91);
+        cursor: pointer;
     }
     a:hover {
-        color: rgb(102, 102, 102);
+        font-weight: 600;
+        color: rgb(181, 73, 91);
+        text-decoration: underline;
     }
 }
 
