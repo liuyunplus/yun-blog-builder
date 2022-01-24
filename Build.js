@@ -67,6 +67,11 @@ function parsePostMeta(lineList) {
   //注册Header模版
   let headerTmpl = fs.readFileSync(Constant.TEMPLATE_HEADER, 'utf8');
   handlebars.registerPartial('Header', headerTmpl);
+  //注册Footer模版
+  let footerTmpl = fs.readFileSync(Constant.TEMPLATE_FOOTER, 'utf8');
+  handlebars.registerPartial('Footer', footerTmpl);
+
+  //开始获取渲染模版
   let renderTmpl = fs.readFileSync(tmplPath, 'utf8');
   const template = handlebars.compile(renderTmpl);
   data["global"] = {
@@ -141,29 +146,27 @@ function renderCategoryPage(postList) {
   let categoryMap = {};
   for (let postData of postList) {
     //获取文章的元数据
-    let postMeta = postData["postMeta"];
-    let category = postMeta["categories"];
-    let postInfo = {
-      "date": postMeta["date"],
-      "title": postMeta["title"]
-    }
+    let category = postData["postMeta"]["categories"];
     let childList = categoryMap[category];
     if (childList) {
-      childList.push(postInfo);
+      childList.push(postData);
     } else {
-      categoryMap[category] = [postInfo];
+      categoryMap[category] = [postData];
     }
   }
   //渲染分类详情页
-  let categoryList = [];
+  let categoryInfos = [];
   for(let category in categoryMap) {
-    let childList = categoryMap[category];
-    let renderedHtml = getRenderedHtml(Constant.TEMPLATE_CATEGORY, {postList: childList});
+    let postList = categoryMap[category];
+    let renderedHtml = getRenderedHtml(Constant.TEMPLATE_ARCHIVE, {postList: postList});
     FileUtils.writeFile(`${Constant.TARGET_HTML_PATH}/category/${category}.html`, renderedHtml)
-    categoryList.push(category);
+    categoryInfos.push({
+      "categoryName": category,
+      "categorySize": postList.length
+    });
   }
   //渲染分类列表页
-  let renderedHtml = getRenderedHtml(Constant.TEMPLATE_CATEGORY, {categoryList: categoryList});
+  let renderedHtml = getRenderedHtml(Constant.TEMPLATE_CATEGORY, {categoryInfos: categoryInfos});
   FileUtils.writeFile(`${Constant.TARGET_HTML_PATH}/category.html`, renderedHtml)
 }
 
