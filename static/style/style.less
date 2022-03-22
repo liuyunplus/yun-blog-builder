@@ -1,4 +1,6 @@
 @body-width: 900px;
+@header-height: 65px;
+@footer-height: 40px;
 
 
 body {
@@ -69,43 +71,55 @@ blockquote p {
     display: inline;
 }
 
-// 站点头部组件样式
-.site-header {
+// 站点页头样式
+header {
     width: 100%;
-    height: 65px;
-    line-height: 65px; /* 实现单行文本垂直居中 */
-    margin: 0 auto;
-    background-color: #30475E;
-    .site-header-left {
-        width: 100px;
-        font-size: 24px;
-        font-weight: 600;
+    height: @header-height;
+    line-height: @header-height;
+    background-color: #525252;
+    .header-main {
+        width: @body-width;
         color: white;
-        float: left;
-        margin-left: 20px;
+        margin: 0px auto;
+        display: flex;
+        justify-content: space-between;
+        .header-left {
+            font-size: 26px;
+        }
+        .header-right {
+            font-size: 18px;
+            text-align: right;
+        }
+        a {
+            color: #fff;
+            cursor: pointer;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
     }
-    .site-header-right {
-        width: 200px;
-        color: white;
-        text-align: right;
-        float: right;
-        margin-right: 20px;
-    }
-    a {
-        color: white;
-    }
+}
+// 站点页脚样式
+footer {
+    height: @footer-height;
+    line-height: @footer-height;
+    font-size: 16px;
+    text-align: center;
+    color: gray;
+    background-color: #dadada;
 }
 
 // 首页样式
 .home-main {
     width: @body-width;
+    min-height: calc(100vh - @header-height - @footer-height);
     margin: 0 auto;
     .post-list {
-        width: 900px;
+        width: @body-width;
         margin: 0 auto;
         .post-list-item {
             background-color: white;
-            padding: 10px 10px 10px 10px;
+            padding: 10px;
             margin: 20px 0px;
             border-radius: 5px;
             box-shadow: 0 1px 2px rgb(151 151 151 / 58%);
@@ -116,7 +130,7 @@ blockquote p {
                     color: rgb(33, 33, 33);
                 }
                 a:hover {
-                    color: rgb(102, 102, 102);
+                    text-decoration: underline;
                 }
             }
             .post-meta {
@@ -127,7 +141,10 @@ blockquote p {
             }
             .post-content {
                 a {
-                    color: blue;
+                    color: gray;
+                }
+                a:hover {
+                    text-decoration: underline;
                 }
             }
             img {
@@ -137,10 +154,10 @@ blockquote p {
     }
 }
 
-
 // 文章详情页样式
 .post-main {
     width: @body-width;
+    min-height: calc(100vh - @header-height - @footer-height);
     margin: 0 auto;
     .post-header {
         width: 100%;
@@ -154,34 +171,71 @@ blockquote p {
     }
 }
 
-// 关于我页面样式
-.about-main {
-    width: @body-width;
-    margin: 0 auto;
-}
-
 // 归档页面样式
 .archive-main {
     width: @body-width - 250px;
-    margin: 20px auto;
+    min-height: calc(100vh - @header-height - @footer-height - 20px);
+    margin: 10px auto;
+    .issue {
+        padding: 14px 0px;
+        display: flex;
+        align-items: center;
+        font-size: 18px;
+        font-weight: 400;
+        border-bottom-style: solid;
+        border-bottom-color: rgb(224, 228, 232);
+        border-bottom-width: 1px;
+        .issue-date {
+            margin-right: 25px;
+            color: rgb(111, 115, 121);
+        }
+    }
+    .issue:last-child {
+        border-bottom: none;
+    }
     a {
-        color: rgb(33, 33, 33);
+        text-decoration: none;
+        color: rgb(181, 73, 91);
+        cursor: pointer;
     }
     a:hover {
-        color: rgb(102, 102, 102);
+        font-weight: 600;
+        color: rgb(181, 73, 91);
+        text-decoration: underline;
     }
 }
 
 // 分类页面样式
 .category-main {
     width: @body-width - 250px;
-    margin: 20px auto;
+    min-height: calc(100vh - @header-height - @footer-height - 20px);
+    margin: 10px auto;
+    .category-name, .category-post {
+        padding: 14px 0px;
+        border-bottom-style: solid;
+        border-bottom-color: #e0e4e8;
+        border-bottom-width: 1px;
+    }
+    .category-name:last-child, .category-post:last-child {
+        border-bottom: none;
+    }
     a {
-        color: rgb(33, 33, 33);
+        text-decoration: none;
+        color: #b5495b;
+        cursor: pointer;
     }
     a:hover {
-        color: rgb(102, 102, 102);
+        font-weight: 600;
+        color: #b5495b;
+        text-decoration: underline;
     }
+}
+
+// 关于我页面样式
+.about-main {
+    width: @body-width;
+    min-height: calc(100vh - @header-height - @footer-height);
+    margin: 0 auto;
 }
 
   

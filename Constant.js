@@ -8,6 +8,7 @@ export const TEMPLATE_ABOUT = "static/template/template-about.html";
 export const TEMPLATE_ARCHIVE = "static/template/template-archive.html";
 export const TEMPLATE_CATEGORY = "static/template/template-category.html";
 export const TEMPLATE_HEADER = "static/template/template-header.html";
+export const TEMPLATE_FOOTER = "static/template/template-footer.html";
 
 export const SOURCE_CSS_PATH = `${DIR_NAME}/static/style`;
 export const SOURCE_FONT_PATH = `${DIR_NAME}/static/font`;

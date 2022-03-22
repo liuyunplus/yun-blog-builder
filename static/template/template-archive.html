@@ -8,10 +8,16 @@
     {{> Header }}
     <div class="archive-main">
       {{#each postList}}
-        <div>
-          <a href="{{ ../global.rootPath }}/html/{{ postMeta.title }}.html">{{ postMeta.date }} {{ postMeta.title }}</a>
+        <div class="issue">
+          <div class="issue-date">
+            {{ postMeta.date }}
+          </div>
+          <div class="issue-title">
+            <a href="{{ ../global.rootPath }}/html/{{ postMeta.title }}.html">{{ postMeta.title }}</a>
+          </div>
         </div>
       {{/each}}
     </div>
+    {{> Footer }}
   </body>
 </html>

@@ -7,16 +7,12 @@
   <body>
     {{> Header }}
     <div class="category-main">
-      {{#each categoryList}}
-        <div>
-          <a href="{{ ../global.rootPath }}/html/category/{{ this }}.html">{{ this }}</a>
-        </div>
-      {{/each}}
-      {{#each postList}}
-        <div>
-          <a href="{{ ../global.rootPath }}/html/{{ title }}.html">{{ date }} {{ title }}</a>
+      {{#each categoryInfos}}
+        <div class="category-name">
+          <a href="{{ ../global.rootPath }}/html/category/{{ categoryName }}.html">{{ categoryName }}({{ categorySize }})</a>
         </div>
       {{/each}}
     </div>
+    {{> Footer }}
   </body>
 </html>
