@@ -8,17 +8,14 @@
 #### 1 未提交读
 
 脏读示例：
-![](https://gitee.com/liuyun1995/yun-blog-image/raw/master/MySQL%E7%B3%BB%E5%88%97%5B1%5D--%E4%BA%8B%E5%8A%A1%E7%9A%84%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB/1.png)
 
 #### 2 已提交读
 
 不可重复读示例：
-![](https://gitee.com/liuyun1995/yun-blog-image/raw/master/MySQL%E7%B3%BB%E5%88%97%5B1%5D--%E4%BA%8B%E5%8A%A1%E7%9A%84%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB/2.png)
 
 #### 3 可重复读
 
 幻读示例：
-![](https://gitee.com/liuyun1995/yun-blog-image/raw/master/MySQL%E7%B3%BB%E5%88%97%5B1%5D--%E4%BA%8B%E5%8A%A1%E7%9A%84%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB/3.png)
 
 #### 4 序列化读
 
