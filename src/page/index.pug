@@ -1,0 +1,19 @@
+doctype html
+html
+    head
+        meta(charset="UTF-8")
+        title LiuYun's Blog
+        link(rel="icon" href="./image/favicon.ico")
+        link(rel='stylesheet', href='./css/global.css')
+        link(rel='stylesheet', href='./css/home.css')
+    body
+        include ../common/header
+        each postList, year in postMap
+            .post-group
+                .post-year #{year}
+                .post-list
+                    each post in postList
+                        .post-item
+                            a(href=`page/${post.id}.html`) #{post.title}
+                            span #{post.date}
+        include ../common/footer

@@ -1,0 +1,106 @@
+.title {
+  font-size: 24px;
+  text-align: center;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  font-weight: bold;
+  line-height: 1.4;
+  cursor: text;
+}
+
+h1 {
+  font-size: 2.25em;
+}
+
+h2 {
+  font-size: 1.75em;
+}
+
+h3 {
+  font-size: 1.5em;
+}
+
+h4 {
+  font-size: 1.25em;
+}
+
+h5 {
+  font-size: 1em;
+}
+
+p, pre, blockquote, ul, ol, dl, table {
+  margin: 0.313em 0;
+}
+
+a {
+  text-decoration: none;
+}
+
+img {
+  width: 100%;
+}
+
+pre code {
+  font-family: "JetBrains Mono", "bree serif", "微软雅黑", sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+// 表格样式
+table {
+  width: 100%; /*表格宽度*/
+  max-width: 65em; /*表格最大宽度，避免表格过宽*/
+  border: 1px solid #dedede; /*表格外边框设置*/
+  margin: 15px auto; /*外边距*/
+  border-collapse: collapse; /*使用单一线条的边框*/
+  empty-cells: show; /*单元格无内容依旧绘制边框*/
+
+  th {
+    height: 35px; /*统一每一行的默认高度*/
+    border: 1px solid #dedede; /*内部边框样式*/
+    padding: 0 10px; /*内边距*/
+    font-weight: bold; /*加粗*/
+    text-align: center !important; /*内容居中，加上 !important 避免被 Markdown 样式覆盖*/
+    background: rgba(223, 226, 229, 0.4); /*背景色*/
+    white-space: nowrap; /*表头内容强制在一行显示*/
+  }
+
+  td {
+    height: 35px; /*统一每一行的默认高度*/
+    border: 1px solid #dedede; /*内部边框样式*/
+    padding: 0 10px; /*内边距*/
+  }
+
+  tbody tr:nth-child(2n) {
+    background: rgba(223, 226, 229, 0.3);
+  }
+
+  tr:hover {
+    background: #efefef;
+  }
+}
+
+// 引用块样式
+blockquote {
+  color: #777777;
+  background: #f9f9f9;
+  border-left: 4px solid #dfe2e5;
+  margin: 10px 0px;
+  padding: 2px 0px;
+
+  &:before {
+    color: #ccc;
+    font-size: 4em;
+    line-height: 0.1em;
+    margin-right: 0.25em;
+    vertical-align: -0.4em;
+  }
+
+  p {
+    display: inline;
+  }
+
+}

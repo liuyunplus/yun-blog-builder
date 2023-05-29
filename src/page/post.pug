@@ -1,0 +1,17 @@
+doctype html
+html
+    head
+        meta(charset="UTF-8")
+        title LiuYun's Blog
+        link(rel="icon" href="../image/favicon.ico")
+        link(rel='stylesheet', href='../css/global.css')
+        link(rel='stylesheet', href='../css/post.css')
+        link(rel='stylesheet', href='../module/highlight/mexico-light.min.css')
+        script(src='../module/highlight/highlight.min.js')
+    body
+        include ../common/header
+        .title #{title}
+        != mdHtml
+        include ../common/footer
+    script.
+        hljs.highlightAll();

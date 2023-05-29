@@ -1,0 +1,37 @@
+.post-group {
+  display: flex;
+  margin-bottom: 20px;
+  font-family: "JetBrains Mono", "bree serif", "微软雅黑", sans-serif;
+
+  &:first-child {
+    margin-top: 20px;
+  }
+
+  a {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  .post-year {
+    width: 110px;
+    text-align: left;
+    font-size: 26px;
+    padding-top: 6px;
+  }
+
+  .post-list {
+    width: 100%;
+    .post-item {
+      display: flex;
+      justify-content: space-between;
+      height: 46px;
+      line-height: 46px;
+      border-bottom: 1px dashed rgb(125, 130, 138);
+    }
+  }
+
+}

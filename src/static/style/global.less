@@ -1,0 +1,51 @@
+@import "../font/font";
+
+body {
+  font-family: "微软雅黑", sans-serif;
+  font-size: 1.12rem;
+  width: 950px;
+  margin: 0 auto;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  width: 950px;
+  height: 80px;
+  margin: 0px auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-sizing: border-box;
+
+  .header-left {
+    font-size: 32px;
+  }
+
+  .header-right {
+    font-size: 18px;
+    text-align: right;
+  }
+
+  a {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+}
+
+.footer {
+  font-family: "微软雅黑", sans-serif;
+  width: 950px;
+  height: 40px;
+  margin-top: auto;
+  margin-right: auto;
+  margin-left: auto;
+  text-align: center;
+  line-height: 40px;
+}
