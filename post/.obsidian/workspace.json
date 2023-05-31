@@ -1,0 +1,138 @@
+{
+  "main": {
+    "id": "796a35ff25cfcacd",
+    "type": "split",
+    "children": [
+      {
+        "id": "66ed50e9200e8789",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "6ca0d2f6eb3a1769",
+            "type": "leaf",
+            "state": {
+              "type": "empty",
+              "state": {}
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "c00d1d254ee162bf",
+    "type": "split",
+    "children": [
+      {
+        "id": "65bee0c2633c0a51",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "667fdb105ace0075",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "59f4a59f74978727",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "1584ee8d7d16900a",
+            "type": "leaf",
+            "state": {
+              "type": "starred",
+              "state": {}
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 322.5
+  },
+  "right": {
+    "id": "2f4fc675735eb5f2",
+    "type": "split",
+    "children": [
+      {
+        "id": "ea84ee7879efb57f",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "a2671fd2e6cc2823",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "2dbd47d845877b04",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "1e2288fb2e2799fb",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true
+              }
+            }
+          },
+          {
+            "id": "8b377e12a6acc8cc",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {}
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "active": "667fdb105ace0075",
+  "lastOpenFiles": [
+    "打造正则引擎[2]--Thompson算法/image/bq0DmP.png",
+    "打造正则引擎[2]--Thompson算法/image/3pcW5T.png",
+    "打造正则引擎[2]--Thompson算法/image/0lIYMD.png",
+    "打造正则引擎[1]--正则表达式的介绍/assets/中文.md"
+  ]
+}
