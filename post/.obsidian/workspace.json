@@ -4,17 +4,17 @@
     "type": "split",
     "children": [
       {
-        "id": "e72c3b7c3a5ea6ec",
+        "id": "2edc609d97a2a5f8",
         "type": "tabs",
         "children": [
           {
-            "id": "39efa6958f91eba9",
+            "id": "e9437bf64927925e",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Linux Series [1] - The magic of awk/index.md",
-                "mode": "preview",
+                "file": "打造正则引擎[1]--正则表达式的介绍/assets/中文.md",
+                "mode": "source",
                 "source": false
               }
             }
@@ -77,7 +77,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 264.5
+    "width": 336.5
   },
   "right": {
     "id": "2f4fc675735eb5f2",
@@ -93,7 +93,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Linux Series [1] - The magic of awk/index.md",
+                "file": "打造正则引擎[1]--正则表达式的介绍/assets/中文.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -110,7 +110,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Linux Series [1] - The magic of awk/index.md",
+                "file": "打造正则引擎[1]--正则表达式的介绍/assets/中文.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -133,7 +133,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Linux Series [1] - The magic of awk/index.md"
+                "file": "打造正则引擎[1]--正则表达式的介绍/assets/中文.md"
               }
             }
           }
@@ -146,16 +146,17 @@
   },
   "left-ribbon": {
     "hiddenItems": {
-      "switcher:Open quick switcher": false,
-      "graph:Open graph view": false,
-      "canvas:Create new canvas": false,
-      "daily-notes:Open today's daily note": false,
-      "templates:Insert template": false,
-      "command-palette:Open command palette": false
+      "switcher:打开快速切换": false,
+      "graph:查看关系图谱": false,
+      "canvas:新建白板": false,
+      "daily-notes:打开/创建今天的日记": false,
+      "templates:插入模板": false,
+      "command-palette:打开命令面板": false
     }
   },
-  "active": "39efa6958f91eba9",
+  "active": "667fdb105ace0075",
   "lastOpenFiles": [
+    "打造正则引擎[1]--正则表达式的介绍/image/Hopcroft算法.svg",
     "Linux Series [1] - The magic of awk/index.md",
     "打造正则引擎[2]--Thompson算法/image/bq0DmP.png",
     "打造正则引擎[2]--Thompson算法/image/3pcW5T.png",
