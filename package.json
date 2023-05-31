@@ -1,4 +1,8 @@
 {
+  "scripts": {
+    "prebuild": "npm install",
+    "build": "gulp build"
+  },
   "dependencies": {
     "cheerio": "^1.0.0-rc.12",
     "esm": "^3.2.25",

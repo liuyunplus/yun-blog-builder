@@ -4,15 +4,19 @@
     "type": "split",
     "children": [
       {
-        "id": "66ed50e9200e8789",
+        "id": "e72c3b7c3a5ea6ec",
         "type": "tabs",
         "children": [
           {
-            "id": "6ca0d2f6eb3a1769",
+            "id": "39efa6958f91eba9",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {}
+              "type": "markdown",
+              "state": {
+                "file": "Linux Series [1] - The magic of awk/index.md",
+                "mode": "preview",
+                "source": false
+              }
             }
           }
         ]
@@ -60,12 +64,20 @@
               "type": "starred",
               "state": {}
             }
+          },
+          {
+            "id": "d25cf6c0e6c09be4",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {}
+            }
           }
         ]
       }
     ],
     "direction": "horizontal",
-    "width": 322.5
+    "width": 264.5
   },
   "right": {
     "id": "2f4fc675735eb5f2",
@@ -81,6 +93,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "Linux Series [1] - The magic of awk/index.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -97,6 +110,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
+                "file": "Linux Series [1] - The magic of awk/index.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -118,7 +132,9 @@
             "type": "leaf",
             "state": {
               "type": "outline",
-              "state": {}
+              "state": {
+                "file": "Linux Series [1] - The magic of awk/index.md"
+              }
             }
           }
         ]
@@ -128,8 +144,19 @@
     "width": 300,
     "collapsed": true
   },
-  "active": "667fdb105ace0075",
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false
+    }
+  },
+  "active": "39efa6958f91eba9",
   "lastOpenFiles": [
+    "Linux Series [1] - The magic of awk/index.md",
     "打造正则引擎[2]--Thompson算法/image/bq0DmP.png",
     "打造正则引擎[2]--Thompson算法/image/3pcW5T.png",
     "打造正则引擎[2]--Thompson算法/image/0lIYMD.png",
