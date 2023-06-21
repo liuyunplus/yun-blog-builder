@@ -4,19 +4,15 @@
     "type": "split",
     "children": [
       {
-        "id": "2edc609d97a2a5f8",
+        "id": "1d86a07dceeeab6b",
         "type": "tabs",
         "children": [
           {
-            "id": "e9437bf64927925e",
+            "id": "803f6da2ca48bc80",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "打造正则引擎[1]--正则表达式的介绍/assets/中文.md",
-                "mode": "source",
-                "source": false
-              }
+              "type": "empty",
+              "state": {}
             }
           }
         ]
@@ -93,7 +89,6 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "打造正则引擎[1]--正则表达式的介绍/assets/中文.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -110,7 +105,6 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "打造正则引擎[1]--正则表达式的介绍/assets/中文.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -132,9 +126,7 @@
             "type": "leaf",
             "state": {
               "type": "outline",
-              "state": {
-                "file": "打造正则引擎[1]--正则表达式的介绍/assets/中文.md"
-              }
+              "state": {}
             }
           }
         ]
@@ -154,13 +146,13 @@
       "command-palette:打开命令面板": false
     }
   },
-  "active": "667fdb105ace0075",
+  "active": "803f6da2ca48bc80",
   "lastOpenFiles": [
+    "打造正则引擎[1]--正则表达式的介绍/assets/中文.md",
     "打造正则引擎[1]--正则表达式的介绍/image/Hopcroft算法.svg",
     "Linux Series [1] - The magic of awk/index.md",
     "打造正则引擎[2]--Thompson算法/image/bq0DmP.png",
     "打造正则引擎[2]--Thompson算法/image/3pcW5T.png",
-    "打造正则引擎[2]--Thompson算法/image/0lIYMD.png",
-    "打造正则引擎[1]--正则表达式的介绍/assets/中文.md"
+    "打造正则引擎[2]--Thompson算法/image/0lIYMD.png"
   ]
 }
