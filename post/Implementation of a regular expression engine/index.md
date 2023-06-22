@@ -1,191 +1,186 @@
----
-title: 打造正则引擎[1]--正则表达式的介绍
-date: 2020-06-07
-category: 正则表达式
----
-#### 1. 前言
+#### 1. Foreword
 
-在计算机领域，正则表达式是一个名副其实的神器，它的诞生可以说是直接推动了计算机软件的发展进程。到目前为止它已经在编译器，搜索引擎，文本处理等多个领域中有着广泛的应用，并且仍在持续的探索着许多未知的可能性。对于普通使用者而言，熟练的掌握好正则表达式能够有效的提高我们的工作效率，改善我们的生活品质。可是面对形如天书般的正则语法，不少人对此望而却步。本文将从正则表达式原理出发，让读者能够对正则表达式语法产生直观的印象，后续我们通过亲自动手打造一个正则引擎，来加深对正则表达式的理解。
+In the computer field, regular expressions are a veritable artifact, and its birth can be said to have directly promoted the development of computer software. So far it has been widely used in compilers, search engines, text processing and other fields, and is still exploring many unknown possibilities. For ordinary users, proficiency in regular expressions can effectively improve our work efficiency and improve our quality of life. However, in the face of regular grammar like a book of heaven, many people are discouraged from it. This article will start from the principle of regular expressions, so that readers can have an intuitive impression of the syntax of regular expressions. Later, we will build a regular engine by ourselves to deepen our understanding of regular expressions.
 
-#### 2. 什么是语言？
+#### 2. What is language?
 
-我们平时说的语言是由一个个句子所构成的，其中的每个句子都是由字符组成的排列组合。对于英文来说，这些字符来自字母表，而对于中文来说，这些字符则取自汉字表。无论是字母表还是汉字表，它们都是有限的字符集合，基于这些字符集合，构成了纷繁多样的语言世界。我们可以进一步的进行抽象概括，语言就是某个给定字母表上一个任意的可数的字符串集合，其中给定的字母表是一个有限的符号集合，而字符串是该字母表中符号的一个有穷序列。例如，计算机指令是由{0, 1}这样的二进制字母表所组成的有穷序列，而计算机语言就是由这些计算机指令所构成的集合。基于这种抽象，我们可以针对语言做一些代数运算。在此之前，我们先来看一下字符串的运算。
+The language we usually speak is composed of sentences, each of which is a combination of characters. For English, these characters are taken from the alphabet, and for Chinese, these characters are taken from the Chinese character table. Whether it is the alphabet or the Chinese character list, they are limited character sets, and based on these character sets, various language worlds are formed. We can further abstract and generalize that a language is an arbitrary and countable set of strings on a given alphabet, where the given alphabet is a finite set of symbols, and the strings are the symbols in the alphabet a finite sequence. For example, a computer instruction is a finite sequence of binary alphabets such as {0, 1}, and a computer language is a collection of these computer instructions. Based on this abstraction, we can do some algebraic operations on the language. Before that, let's take a look at string operations.
 
-假设 x 和 y 都是字符串，x 和 y 的连接操作就是把 y 附加到 x 后面所形成的串。例如，如果 x = dog 且 y = house，那么 xy = doghouse。假设 $\epsilon$ 是空串，那么对于任何字符串 $s$ 都有，$s{\epsilon} = {\epsilon}{s}=s$。如果把两个串的连接看成是这两个串的"乘积"，我们可以定义串的"指数"运算如下：定义 $s^0$ 为 $\epsilon$ ，并且对于 $i\gt0$，$s^i$ 为 $s^{i-1}s$。因为 $\epsilon{s}=s$，由此可知 $s^1=s$，$s^2=ss$，$s^3=sss$，依次类推。
+Assuming that both x and y are strings, the connection operation of x and y is the string formed by appending y to x. For example, if x = "dog" and y = "house", then xy = "doghouse". Assuming $\epsilon$ is the empty string, then for any string $s$, $s{\epsilon} = {\epsilon}{s}=s$. If the connection of two strings is regarded as the "product" of these two strings, we can define the "exponential" operation of the strings as follows: define $s^0$ as $\epsilon$, and for $i\gt0$, $s^i$ is $s^{i-1}s$. Because $\epsilon{s}=s$, it follows that $s^1=s$, $s^2=ss$, $s^3=sss$, and so on.
 
-语言运算除了常见的集合运算，还有连接运算和闭包运算，语言的连接就是从第一个语言中任取一个串，再从第二个语言中任取一个串，然后将它们连接后得到的所有串的集合。语言的闭包运算包括Kleene闭包和正闭包，一个语言 $L$ 的 Kleene 闭包记作 $L^*$，就是将 $L$ 连接 0 次或多次后得到的串集；$L$ 的正闭包记作 $L^+$，就是将 $L$ 连接 1 次或多次后得到的串集。下表列出了这些运算的正式定义。
+In addition to common set operations, there are concatenation operations and closure operations in language computation. Language concatenation is the process of selecting a string from the first language, selecting another string from the second language, and then obtaining the collection of all strings by concatenating them. Language closure operations include the Kleene closure and the positive closure. The Kleene closure of a language L is denoted as L*, which represents the set of strings obtained by concatenating L zero or more times. The positive closure of L is denoted as L+, which represents the set of strings obtained by concatenating L one or more times. The table below presents the formal definitions of these operations.
 
-| 运算          | 定义和表示 |
+| Operation | Definition |
 | ------------- | ---------- |
-| L和M的并      | $L\cup M= \lbrace s\mid s属于L或者属于M \rbrace $ |
-| L和M的连接    | $ LM = \lbrace st\mid s属于L且t属于M \rbrace $ |
-| L的Kleene闭包 | $ L^* = \cup_{i=0}^{\infty} L^i $ |
-| L的正闭包     | $ L^+ = \cup_{i=1}^{\infty} L^i $ |
+| Union of L and M | $L\cup M= \lbrace s\mid s \text{ belongs to } L \text{ or } s \text{ belongs to } M \rbrace $ |
+| Concatenation of L and M | $ LM = \lbrace st\mid s \text{ belongs to } L \text{ and } t \text{ belongs to } M \rbrace $ |
+| Kleene Closure of L | $ L^* = \cup_{i=0}^{\infty} L^i $ |
+| Positive Closure of L | $ L^+ = \cup_{i=1}^{\infty} L^i $ |
 
-令 $L$ 表示字母的集合 {A, B, ..., Z, a, b, c, ..., z}，令 $D$ 表示数字的集合 {0, 1, ..., 9}。根据如上所述的运算，我们可以构造得到新的语言。
+Let L represent the set of letters {A, B, ..., Z, a, b, c, ..., z}, and let D represent the set of numbers {0, 1, ..., 9}. Using the operations described above, we can construct new languages.
 
-- $L\cup{D}$ 是长度为1的串的集合，每个串是一个字母或一个数字。
-- $LD$ 是长度为2的串的集合，每个串都是一个字母跟一个数字。
-- $L^4$ 是所有由4个字母构成的串的集合。
-- $L^*$ 是所有由字母构成的串的集合，包括空串 $\epsilon$。
-- $L(L\cup{D})^*$ 是所有以字母开头的，由字母和数字组成的串的集合。
-- $D^+$ 是由一个或多个数字构成的串的集合。
+- $L\cup{D}$ is the set of strings of length 1, where each string is either a letter or a number.
+- $LD$ is the set of strings of length 2, where each string consists of a letter followed by a number.
+- $L^4$ is the set of strings composed of 4 letters.
+- $L^*$ is the set of strings composed of letters, including the empty string $\epsilon$.
+- $L(L\cup{D})^*$ is the set of strings that start with a letter and are composed of letters and numbers.
+- $D^+$ is the set of strings composed of one or more numbers.
 
-#### 3. 正则的介绍
+#### 3. Introduction to Regular Expressions
 
-为了更好的描述语言，人们通过使用正则表达式来表示语言，一个正则表达式就代表了一种类型的语言。通过上面的描述我们知道可以对语言进行代数运算来构造另一种语言。同理，可以对较小的正则表达式进行代数运算，从而得到一个更大的正则表达式。例如，假设 $r$ 和 $s$ 都是正则表达式，分别表示语言 $L(r)$ 和 $L(s)$，通过对其进行简单的并、连接和闭包运算，我们就能构造出一个更加丰富的正则表达式。
+In order to better describe the language, people express the language by using regular expressions, and a regular expression represents a type of language. From the above description, we know that we can perform algebraic operations on the language to construct another language. In the same way, algebraic operations can be performed on smaller regular expressions to obtain a larger regular expression. For example, assuming that r and s are both regular expressions representing languages L(r) and L(s) respectively, by performing simple union, connection and closure operations on them, we can construct a richer regular expression.
 
-- $(r)\mid(s)$ 是一个正则表达式，表示语言 $L(r)\cup{L(s)}$。
-- $(r)(s)$ 是一个正则表达式，表示语言 $L(r)L(s)$。
-- $(r)^*$ 是一个正则表达式，表示语言 $(L(r))^*$。
-- $(r)$ 是一个正则表达式，表示语言 $L(r)$。
+- $(r)\mid(s)$ is a regular expression that represents the language $L(r)\cup{L(s)}$.
+- $(r)(s)$ is a regular expression that represents the language $L(r)L(s)$.
+- $(r)^*$ is a regular expression that represents the language $(L(r))^*$.
+- $(r)$ is a regular expression that represents the language $L(r)$.
 
-同理，我们可以给这些运算符设置一些优先级，以便在书写时省去一些不必要的括号，完整的符号优先级列表如下所示，其中标红的是我们已经了解到的基本运算符，未标红的是一些扩展运算符，它们的存在主要是为了增强正则表达式的表述能力，后续我们会了解到它们的含义。
+In the same way, we can set some priorities for these operators to save some unnecessary parentheses when writing. The complete symbol priority list is as follows, where the red ones are the basic operators we have learned. Those not marked in red are some expansion operators, which exist mainly to enhance the expressive ability of regular expressions, and we will learn their meanings later.
 
-| 优先权 | 符号                       |
+| Precedence | Symbol                 |
 | ------ | -------------------------- |
-| 最高   | \                                     |
-| 高     | $\color{red}{()}$、(?:)、(?=)、[]      |
-| 中     | $\color{red}*$、+、？、{n}、{n,}、{n,m} |
-| 低     | ^、\$、一般字符                         |
-| 次最低 | $\color{red}{连接}$                    |
-| 最低   | $\color{red}\mid $                    |
+| Highest | \                                     |
+| High | $\color{red}{()}$、(?:)、(?=)、[]      |
+| Medium | $\color{red}*$、+、？、{n}、{n,}、{n,m} |
+| Low  | ^、\$、General characters       |
+| Second Lowest | $\color{red}{\text{Concatenation}}$ |
+| Lowest | $\color{red}\mid $                    |
 
-通过约定的运算符优先级，我们可以将表达式 $(a)\mid((b)^*(c))$ 改写为 $a\mid b^*{c}$。这两个表达式都描述的是同样的串集合，而后者看起来会简洁许多。和其他数学运算符一样，正则表达式同样也遵守一些代数定律，通过这些定律我们可以了解到不同形式的正则表达式可以是等价的，因此它们描述的语言也是相同的，下表列出了对于任意正则表达式 $r$，$s$ 和 $t$ 都成立的代数定律。
+By using the convention of operator precedence, we can rewrite the expression (a)|((b)\*(c)) as a|b\*c. Both of these expressions describe the same set of strings, but the latter appears to be much more concise. Like other mathematical operators, regular expressions also follow certain algebraic laws. Through these laws, we can understand that different forms of regular expressions can be equivalent, and therefore, they describe the same language. The table below lists the algebraic laws that hold true for any regular expressions r, s, and t.
 
-| 定律                          | 描述                      |
+| Law                       | Description           |
 | ----------------------------- | ------------------------- |
-| $r\mid s=s\mid r$             | $\mid$ 是可交换的         |
-| $r\mid(s\mid t)=(r\mid s)t$   | $\mid$ 是可结合的         |
-| $r(st)=(rs)t$                 | 连接是可结合的             |
-| $r(s\mid t)=rs\mid rt;(s\mid t)r=sr\mid tr$ | 连接对 $\mid$ 是可分配的|
-| $\epsilon{r}=r\epsilon=r$     | $\epsilon$ 是连接的单位元 |
-| $r^*=(r\mid\epsilon)^*$       | 闭包中一定包含 $\epsilon$ |
-| $r^{\{**\}}=r^{\{*\}}$  | * 具有幂等性              |
+| $r\mid s=s\mid r$             | $\mid$ is commutative |
+| $r\mid(s\mid t)=(r\mid s)t$   | $\mid$ is associative |
+| $r(st)=(rs)t$                 | Concatenation is associative |
+| $r(s\mid t)=rs\mid rt;(s\mid t)r=sr\mid tr$ | Concatenation distributes over $\mid$ |
+| $\epsilon{r}=r\epsilon=r$     | $\epsilon$ is the identity element for concatenation |
+| $r^*=(r\mid\epsilon)^*$       | Closure always includes $\epsilon$ |
+| $r^{\{**\}}=r^{\{*\}}$  | * is idempotent |
 
-#### 4. 正则的扩展
+#### 4. Extensions to regular expressions
 
-通过对子表达式进行基本的并、连接和闭包等运算我们就可以构造出许多表意丰富的正则表达式，可是要满足一些特殊的需求仍然远远不够。因此许多正则引擎为基本的正则表达式添加了一些扩展运算符，它们被用来增强正则表达式描述串模式的能力，如下所示：
+We can construct many expressive regular expressions by performing basic operations such as union, connection, and closure on subexpressions, but it is still far from enough to meet some special requirements. Therefore, many regular engines add some expansion operators to basic regular expressions, which are used to enhance the ability of regular expressions to describe string patterns, as follows:
 
-| 表达式 | 说明                               | 示例      | 匹配内容              |
+| Expression | Description                    | Example | Matches       |
 | ------ | ---------------------------------- | --------- | --------------------- |
-| .      | 匹配除换行符以外的任意字符         | a.c       | abc, asg, a2c |
-| ^      | 匹配一行的开始                     | ^abc      | abc，abcdef，abc123   |
-| $      | 匹配一行的结尾                     | abc$      | myabc，123abc，theabc |
-| ?      | ?前一个字符出现0次或1次            | ab?c      | ac，abc               |
-| {n\}​   | {}前一个字符出现的次数等于n次      | (abc){2}  | abcabc                |
-| {n,}​   | {}前一个字符出现的次数大于等于n次  | (abc){2,} | abcabc, abcabcabc     |
-| {n,m}​  | {}前一个字符出现的次数为[n, m]之间 | (a){2,4}  | aa, aaa, aaaaa        |
-| [...]​  | 匹配方括号内的任意字符             | [abc]     | a，b，c               |
-| [^...] | 排除方括号内的所有字符             | [^abc]    | xyz, 123, 1de         |
-| [a-z]  | 匹配a到z之间的任意字符             | [b-z]     | bc, mind, xyz         |
+| .      | Matches any character except a newline | a.c       | abc, asg, a2c |
+| ^      | Matches the start of a line | ^abc      | abc，abcdef，abc123   |
+| $      | Matches the end of a line | abc$      | myabc，123abc，theabc |
+| ?      | Matches the preceding character 0 or 1 | ab?c      | ac，abc               |
+| {n\}​   | Matches the preceding character exactly n times | (abc){2}  | abcabc                |
+| {n,}​   | Matches the preceding character n or more times | (abc){2,} | abcabc, abcabcabc     |
+| {n,m}​  | Matches the preceding character between n and m times | (a){2,4}  | aa, aaa, aaaaa        |
+| [...]​  | Matches any character within the brackets | [abc]     | a，b，c               |
+| [^...] | Matches any character not in the brackets | [^abc]    | xyz, 123, 1de         |
+| [a-z]  | Matches any character between a and z | [b-z]     | bc, mind, xyz         |
 
-除了上面的扩展运算符，大部分正则实现还会提供一些常用的字符集简写，这可以使正则表达式更加简练，下面列出了一些常用的简写:
+In addition to the above expansion operators, most regular implementations also provide some common character set shorthands, which can make regular expressions more concise. Some common shorthands are listed below:
 
-| 符号 | 描述                                       |
-| ---- | ------------------------------------------ |
-| \d   | 匹配数字，等同于[0-9]                      |
-| \D   | 匹配非数字，等同于\[^\d]                   |
-| \s   | 匹配所有空格字符，等同于[\t\n\f\r\p{Z}]    |
-| \S   | 匹配所有非空格字符，等同于\[^\s]           |
-| \w   | 匹配所有字母数字，等同于[a-zA-Z0-9_]       |
-| \W   | 匹配所有非字母数字，即符号，等同于\[^\w]   |
-| \f   | 匹配一个换页符                             |
-| \n   | 匹配一个换行符                             |
-| \r   | 匹配一个回车符                             |
-| \t   | 匹配一个制表符                             |
-| \v   | 匹配一个垂直制表符                         |
-| \p   | 匹配CR/LF(等同于\r\n)，用来匹配DOS行终止符 |
+| Symbol | Description                                                  |
+| ------ | ------------------------------------------------------------ |
+| \d     | Matches a digit, equivalent to [0-9]                         |
+| \D     | Matches a non-digit, equivalent to \[^\d]                    |
+| \s     | Matches any whitespace character, equivalent to [\t\n\f\r\p{Z}] |
+| \S     | Matches any non-whitespace character, equivalent to \[^\s]   |
+| \w     | Matches any alphanumeric character, equivalent to [a-zA-Z0-9_] |
+| \W     | Matches any non-alphanumeric character, including symbols, equivalent to \[^\w] |
+| \f     | Matches a form feed character                                |
+| \n     | Matches a newline character                                  |
+| \r     | Matches a carriage return character                          |
+| \t     | Matches a tab character                                      |
+| \v     | Matches a vertical tab character                             |
+| \p     | Matches a CR/LF (carriage return/line feed), used to match DOS line terminators |
 
-#### 5. 有穷自动机
+#### 5. Finite automata
 
-正则表达式是一种具有高度概括性的表示方法，能够用简洁的语法来描述庞大的字符串集合，它的作用是用来简化人们的编码工作。而在计算机中是使用有穷自动机来描述形式语言的，它是一种基于事件驱动的状态转移图，具有和正则表达式相同的表达能力。有穷自动机是一种抽象数学模型，它可以根据外部输入来改变自身的状态，从而达到模拟和控制执行流的目的。有穷自动机由五个部分组成，可以用一个五元组 $(S，\Sigma，s，F，\delta)$ 来表示，其中各部分的含义如下所示：
+Regular expression is a highly generalized expression method, which can describe a huge collection of strings with concise syntax, and its function is to simplify people's coding work. In computers, finite automata are used to describe formal languages, which are event-driven state transition diagrams and have the same expressive power as regular expressions. A finite automaton is an abstract mathematical model that can change its state according to external input, so as to achieve the purpose of simulating and controlling the execution flow. A finite automaton consists of five parts, which can be represented by a five-tuple $(S, \Sigma, s, F, \delta)$, where the meanings of each part are as follows:
 
-- $S$：表示一个有穷状态集合。
-- $\Sigma$：表示一个输入符号集合。
-- $s$：代表一个初始状态。
-- $F$：代表一个接受状态集合。
-- $\delta$：表示状态之间的转换函数集合。
+- $S$：Finite set of states.
+- $\Sigma$：Set of input symbols.
+- $s$：Initial state.
+- $F$：Collection of accepting states.
+- $\delta$：Collection of transition functions between states.
 
-例如，假设需要识别一个英文字符串是否包含"main"子串，可以利用程序来模拟这样一个有穷自动机。
+For example, suppose it is necessary to identify whether an English string contains the "main" substring, and a program can be used to simulate such a finite automaton.
 
-![](../image/regular-0.svg)
+![](./image/regular-0.svg)
 
-上图是一个非常简单的有穷自动机模型，它从初始状态 0 开始不断的读入下一个字符并执行状态转换，如果最终自动机能到达接受状态 4，则表明输入字符串里面包含 "main" 子串，否则表明不包含该子串。这样的自动机同样也是由五个部分组成，其中每个部分的具体含义如下：
+The above figure is a very simple finite automaton model, which starts from the initial state 0 and continuously reads in the next character and performs state transitions. If the final automaton can reach the acceptance state 4, it indicates that the input string contains "main" substring, otherwise it indicates that the substring is not included. Such an automaton is also composed of five parts, the specific meaning of each part is as follows:
 
-- $S$ ：有限状态集合 $\lbrace 0，1，2，3，4 \rbrace$
-- $\Sigma$ ：英文字母表 $\lbrace a，b，c，\dots，z，A，B，C，\dots，Z \rbrace$
-- $s$ ：初始状态 $0$
-- $F$：接受状态集合 $\lbrace 4 \rbrace$
-- $\delta$ ：状态转换函数集合 $\lbrace (0，m)\to 1，(1，a)\to 2，(2，i)\to 3，(3，n)\to 4 \rbrace$
+- $S$ ：Finite state set $\lbrace 0，1，2，3，4 \rbrace$
+- $\Sigma$ ：Alphabet $\lbrace a，b，c，\dots，z，A，B，C，\dots，Z \rbrace$
+- $s$ ：Initial state $0$
+- $F$：Accept state set $\lbrace 4 \rbrace$
+- $\delta$ ：Collection of state transition functions $\lbrace (0，m)\to 1，(1，a)\to 2，(2，i)\to 3，(3，n)\to 4 \rbrace$
 
-根据状态转移的性质，有穷自动机 (FA) 又分为不确定有穷自动机 (NFA) 和确定有穷自动机 (DFA) ，NFA 允许对空串输入 $\epsilon$ 进行状态转移，并且对同一个输入字符允许转移到多个目标状态。DFA 则对这些做了限制，不允许基于空串的状态转移，对同一个输入字符只能转移到一个目标状态。NFA 和 DFA 在表达力上是等价的，任何 DFA 都是某个 NFA 的一个特例，同时任何 NFA 都可以通过一个 DFA 来模拟。例如下面的 NFA 和 DFA 描述的是同一种语言。
+According to the nature of state transition, finite automata (FA) are divided into uncertain finite automata (NFA) and deterministic finite automata (DFA). NFA allows state transition for empty string input $\epsilon$, and Transitions to multiple goal states are allowed for the same input character. DFA has restrictions on these, does not allow state transitions based on empty strings, and can only transition to one target state for the same input character. NFA and DFA are equivalent in expressive power, any DFA is a special case of an NFA, and any NFA can be simulated by a DFA. For example, the NFA and DFA below describe the same language.
 
-(1) 可以识别模式 $a(b|c)^*$ 的 NFA 如下图所示。
+(1) An NFA that can recognize the pattern $a(b|c)^*$ is shown in the figure below.
 
-![](../image/regular-1.svg)
+![](./image/regular-1.svg)
 
-(2) 可以识别模式 $a(b|c)^*$ 的 DFA 如下图所示。
+(2) A DFA that recognizes the pattern $a(b|c)^*$ is shown in the figure below.
 
-![](../image/regular-2.svg)
+![](./image/regular-2.svg)
 
-从上面两幅图可以看出，NFA 的状态转移具有不确定性而 DFA 的状态转移是确定的，对于机器来说不确定性会产生大量回溯，从而导致 NFA 的执行性能不如 DFA 。另一方面，基于正则表达式直接构造 NFA 会比直接构造 DFA 更加简单并且所需的时间更少，所以在实际应用中需要结合场景来使用 NFA 或者 DFA 。一般来说，对于复杂并且需要多次复用的正则表达式，直接编译成 DFA 来模拟效果会更好；而对于简单并且只使用几次的正则表达式而言，使用 NFA 来模拟效果会更好。对二者之间具体区别的概括如下表所示。
+As can be seen from the above two figures, the state transition of NFA is uncertain and the state transition of DFA is deterministic. For machines, uncertainty will generate a lot of backtracking, which leads to the execution performance of NFA is not as good as that of DFA. On the other hand, directly constructing NFA based on regular expressions is simpler and requires less time than directly constructing DFA, so in practical applications, it is necessary to use NFA or DFA in combination with scenarios. Generally speaking, for complex regular expressions that need to be reused many times, it will be better to directly compile them into DFA to simulate the effect; and for simple regular expressions that are only used a few times, it will be better to use NFA to simulate the effect good. A summary of the specific differences between the two is shown in the table below.
 
-| 描述                                   | 不确定有穷自动机(NFA) | 确定有穷自动机(DFA) |
-| -------------------------------------- | --------------------- | ------------------- |
-| 是否允许基于空串 $\epsilon$ 的状态转换 | 是                    | 否                  |
-| 单个输入可转换的目标状态数量           | 多个                  | 一个                |
-| 基于正则表达式进行构建的复杂度         | 简单                  | 复杂                |
-| 初始构建所需时间                       | 少                    | 多                  |
-| 识别字符串所需时间                     | 多                    | 少                  |
+| Description                                           | NFA      | DFA     |
+| ----------------------------------------------------- | -------- | ------- |
+| Allow transitions based on empty string $\epsilon$    | Yes      | No      |
+| Number of target states for a single input transition | Multiple | One     |
+| Complexity based on regular expression construction   | Simple   | Complex |
+| Time required for initial construction                | Less     | More    |
+| Time required for string recognition                  | More     | Less    |
 
-#### 6. Thompson算法
+#### 6. Thompson algorithm
 
-上面我们讨论过复杂正则表达式可以由简单正则表达式通过并集，连接，闭包等基础运算构造而成，Thompson 算法就是利用这种归纳思想来将一个正则表达式转化成为一个等价的 NFA 的，该算法通过递归地将一个正则表达式划分成构成它的子表达式，在得到每个子表达式对应的 NFA 之后，根据子表达式之间的运算关系和一系列规则来构造表达式自身对应的 NFA。下面分别描述通过子表达式 NFA 构造自身 NFA 的运算规则。
+We discussed above that complex regular expressions can be constructed from simple regular expressions through basic operations such as union, connection, and closure. The Thompson algorithm uses this inductive idea to convert a regular expression into an equivalent NFA Yes, the algorithm recursively divides a regular expression into its sub-expressions, and after obtaining the NFA corresponding to each sub-expression, constructs the expression itself according to the operational relationship between the sub-expressions and a series of rules The corresponding NFA. The operation rules for constructing its own NFA through subexpression NFA are described below.
 
-##### 6.1 最小NFA构造
+##### 6.1 Minimal NFA Construction
 
-假设 $r_1=\epsilon，r_2=a$，代表 $r_1$ 的NFA如下图左侧所示，代表 $r_2$ 的NFA如下图右侧所示。这里空串 $\epsilon$ 和单个字符 $a$ 都是最小的正则表达式，因此无需继续递归，通过它们构造NFA的规则是：新建一个开始状态 $i$ 和一个接受状态 $f$，将这两个状态直接相连，标号可以是空串 $\epsilon$ 或者单个字符，由此得到的NFA只有一次状态转换。
+Assuming $r_1=\epsilon$ and $r_2=a$, the NFA representing $r_1$ is shown on the left side of the following diagram, while the NFA representing $r_2$ is shown on the right side. Here, the empty string $\epsilon$ and the single character $a$ are both minimal regular expressions, so there is no need for further recursion. The rules for constructing an NFA using them are as follows: create a new start state i and an accept state f, and connect these two states directly. The label can be either the empty string $\epsilon$ or a single character. The resulting NFA has only one state transition.
 
-![](../image/thompson-0.svg)
+![](./image/thompson-0.svg)
 
-##### 6.2 并集运算
+##### 6.2 Union operation
 
-假设 $r=s|t$， $r$ 的NFA即 $N(r)$ 可通过下图构造得到。这里 $i$ 和 $f$ 是新状态，分别是 $N(r)$ 的开始状态和接受状态。从 $i$ 到 $N(s)$ 和 $N(t)$ 的开始状态各有一个 $\epsilon$ 转换，从 $N(s)$ 和 $N(t)$ 到接受状态 $f$ 也各有一个 $\epsilon$ 转换。请注意，$N(s)$ 和 $N(t)$ 的接受状态在 $N(r)$ 中不是接受状态。因为从 $i$ 到 $f$ 的任何路径要么只通过 $N(s)$，要么只通过 $N(t)$ ，且离开 $i$ 或进入 $f$ 的 $\epsilon$ 转换都不会改变路径上的标号，因此我们可以判定 $N(r)$ 可以识别的串集合是 $L(s)\cup L(t)$。
+Assuming r=s|t, the NFA of r, denoted as N(r), can be constructed as shown in the following diagram. Here, i and f are new states representing the start state and accept state of N(r), respectively. There is an $\epsilon$ transition from i to the start states of both N(s) and N(t), and there is also an $\epsilon$ transition from the accept states of N(s) and N(t) to f. Please note that the accept states of N(s) and N(t) are not accept states in N(r). This is because any path from i to f in N(r) either goes through N(s) or goes through N(t), and the $\epsilon$ transitions entering or leaving i and f do not change the labels along the path. Therefore, we can conclude that the set of strings recognized by N(r) is L(s) $\cup$ L(t).
 
-![](../image/thompson-1.svg)
+![](./image/thompson-1.svg)
 
-##### 6.3 连接运算
+##### 6.3 Connection operation
 
-假设 $r=st$，$r$ 的NFA即 $N(r)$ 可通过下图构造得到。$N(s)$ 的开始状态变成了 $N(r)$ 的开始状态。$N(t)$ 的接受状态成为 $N(r)$ 的唯一接受状态。$N(s)$ 的接受状态和 $N(t)$ 的开始状态合并为一个状态，合并后的状态拥有原来进入和离开合并前的两个状态的全部转换。一条从 $i$ 到 $f$ 的路径必须首先经过 $N(s)$，因此这条路径的标号以 $L(s)$ 中的某个串开始。然后，这条路径继续通过 $N(t)$，因此这条路径的标号以 $L(t)$ 中的某个串结束。所以 $N(r)$ 可以识别的串恰好是 $L(s)L(t)$。
+Assuming r=st, the NFA of r, denoted as N(r), can be constructed as shown in the following diagram. The start state of N(s) becomes the start state of N(r). The accept state of N(t) becomes the only accept state of N(r). The accept state of N(s) and the start state of N(t) are merged into a single state, which retains all the transitions from the original states entering and leaving the merged state. A path from i to f must first pass through N(s), so the labels along this path start with a string from L(s). Then, the path continues through N(t), so the labels along this path end with a string from L(t). Therefore, the strings recognized by N(r) are precisely L(s)L(t).
 
-![](../image/thompson-2.svg)
+![](./image/thompson-2.svg)
 
-##### 6.4 闭包运算
+##### 6.4 Closure operation
 
-假设 $r=s^*$，$r$ 的NFA即 $N(r)$ 可以通过下图构造得到。这里 $i$ 和 $f$ 是两个新状态，分别是 $N(r)$ 的开始状态和接受状态。要从 $i$ 到达 $f$，我们可以沿着新引入的标号为 $\epsilon$ 的路径前进，这个路径对应于 $L(s)^0$ 中的一个串。我们也可以到达 $N(s)$ 的开始状态，然后经过该NFA，再零次或多次从它的接受状态回到它的开始状态并重复上述过程。这些选项使得 $N(r)$ 可以接受$L(s)^1$、$L(s)^2$ 等集合中的所有串，因此 $N(r)$ 可以识别的所有串的集合就是 $L(s)^*$。
+Assuming $r=s^*$, the NFA of r, denoted as N(r), can be constructed as shown in the following diagram. Here, i and f are two new states representing the start state and accept state of N(r), respectively. To reach f from i, we can proceed along the newly introduced $\epsilon$-labeled path, which corresponds to a string in $L(s)^0$. We can also reach the start state of N(s) and then traverse through that NFA, returning zero or more times from its accept state to its start state and repeating the process. These options allow N(r) to accept all strings in the sets $L(s)^1$, $L(s)^2$, and so on. Therefore, the set of all strings recognized by N(r) is precisely $L(s)^*$.
 
-![](../image/thompson-3.svg)
+![](./image/thompson-3.svg)
 
-#### 7. 子集构造法
+#### 7. Subset construction
 
-由于 NFA 的状态转换存在着不确定性，这主要是由于它支持基于空串的转换，还有就是一个输入字符可以转到多个目标状态。这会导致计算机在执行时会产生大量回溯，严重影响执行性能。但是由于从正则表达式构造 NFA 比直接构造 DFA 更加简单，所以 NFA 适合于正则表达式简单，并且只使用一两次的场景，例如 linux 中的 grep 命令。对于想要多次复用同一正则表达式的场景，还是需要将其转换成 DFA 更加可靠。下面介绍的子集构造算法就是用于将 NFA 转换成等价的 DFA 的算法。
+Due to the uncertainty of the state transition of NFA, this is mainly because it supports transitions based on empty strings, and one input character can go to multiple target states. This will cause the computer to generate a lot of backtracking during execution, seriously affecting execution performance. However, since constructing NFA from regular expressions is simpler than directly constructing DFA, NFA is suitable for scenarios where regular expressions are simple and only used once or twice, such as the grep command in linux. For scenarios where you want to reuse the same regular expression multiple times, it is still more reliable to convert it into DFA. The subset construction algorithm described below is the algorithm used to convert an NFA into an equivalent DFA.
 
-##### 7.1 算法原理
+##### 7.1 Algorithm principle
 
-子集构造法的步骤如下：
+The steps of the subset construction method are as follows:
 
-1. 首先基于 NFA 的初始状态，求所有能够通过它进行 $\epsilon$ 转换得到的状态集合，将该集合标记为 $q_0$，并添加到集合 Q 中，此时 Q = { $q_0$ }。
+1. Firstly, based on the initial state of NFA, find all the state sets that can be transformed by $\epsilon$ through it, mark this set as $q_0$, and add it to the set Q, at this time Q = { $q_0$ }.
 
-2. 从集合 Q 中提取状态集合 q，遍历每个输入字符 c 并执行以下操作：
+2. Extract the set of states q from the set Q, iterate over each input character c and do the following:
 
-   2.1 计算状态集合 q 中每个状态在字符 c 下的状态迁移，将迁移后的状态收集为一个新的集合。
+   2.1 Calculate the state transition of each state in the state set q under the character c, and collect the migrated states as a new set.
 
-   2.2 对新集合中的状态再进行 epsilon 转换，生成一个全新的状态集合，并将其添加到 Q 中。
+   2.2 Perform epsilon transformation on the states in the new set to generate a brand new state set and add it to Q.
 
-3. 不断执行下面的操作，直到我们再也不能向集合 Q 中添加新的元素，此时退出循环操作。
+3. Continue to perform the following operations until we can no longer add new elements to the collection Q, and then exit the loop operation.
 
-4. 将 Q 中的每个状态集合映射为 DFA 状态，将包含 NFA 初始状态的集合标记为 DFA 的初始状态，将包含 NFA 结束状态的集合标记为 DFA 的结束状态，并将 Q 中元素的转移关系映射为 DFA 状态转移关系。
+4. Map each state set in Q to a DFA state, mark the set containing the initial state of NFA as the initial state of DFA, mark the set containing the end state of NFA as the end state of DFA, and map the transition relationship of elements in Q It is a DFA state transition relationship.
 
 
 The following is expressed in pseudocode:
@@ -207,61 +202,61 @@ end;
 
 The three operation definitions involved in the above code are as follows:
 
-![](../image/construction-1.svg)
+![](./image/construction-1.svg)
 
-##### 7.2 算法示例
+##### 7.2 Algorithm example
 
-以正则表达式 $(a|b)^{*}abb$ 为例，它的 NFA 如下图所示。
+Taking the regular expression $(a|b)^{*}abb$ as an example, its NFA is shown in the figure below.
 
-![](../image/construction-0.svg)
+![](./image/construction-0.svg)
 
-Step 0: 由于 NFA 的初始状态为 0，因此初始状态集合为 $\epsilon$-closure(0) = {0, 1, 2, 4, 7}，将该集合标记为 A，并添加到集合 Q 中，此时 Q = { A }。
+Step 0: Since the initial state of NFA is 0, the initial state set is $\epsilon$-closure(0) = {0, 1, 2, 4, 7}, mark this set as A, and add it to set Q, where Q = {A}.
 
-Step 1: 从 Q 中取出集合 A，分别求出当输入 a, b 符号时的状态集合:
+Step 1: Take the set A from Q, and find the state set when inputting symbols a and b respectively:
 
-$\epsilon$-closure(move(A, a)) = {1, 2, 3, 4, 6, 7, 8}，将该集合标记为 B，并添加到 Q 中，此时 Q = { B }。
+$\epsilon$-closure(move(A, a)) = {1, 2, 3, 4, 6, 7, 8}, mark this set as B and add it to Q, where Q = { B }.
 
-$\epsilon$-closure(move(A, b)) = {1, 2, 4, 5, 6, 7}，将该集合标记为 C，并添加到 Q 中，此时 Q = {B, C}。
+$\epsilon$-closure(move(A, b)) = {1, 2, 4, 5, 6, 7}, mark this set as C and add it to Q, where Q = {B, C}.
 
-Step 2: 从 Q 中取出集合 B，分别求出当输入 a, b 符号时的状态集合:
+Step 2: Take the set B from Q, and find the state set when inputting symbols a and b respectively:
 
-$\epsilon$-closure(move(B, a)) = {1, 2, 3, 4, 6, 7, 8}，该集合就是 B，不再添加到 Q 中，此时 Q = { C }。
+$\epsilon$-closure(move(B, a)) = {1, 2, 3, 4, 6, 7, 8}, this set is B, which is not added to Q this time, so Q = { C }.
 
-$\epsilon$-closure(move(B, b)) = {1, 2, 4, 5, 6, 7, 9}，将该集合标记为 D，并添加到 Q 中，此时 Q = {C, D}。
+$\epsilon$-closure(move(B, b)) = {1, 2, 4, 5, 6, 7, 9}, mark this set as D and add it to Q, where Q = {C, D}.
 
-Step 3: 从 Q 中取出集合 C，分别求出当输入 a, b 符号时的状态集合:
+Step 3: Take the set C from Q, and find the state set when inputting symbols a and b respectively:
 
-$\epsilon$-closure(move(C, a)) = {1, 2, 3, 4, 6, 7, 8}，该集合就是 B，不再添加到 Q 中，此时 Q = { D }。
+$\epsilon$-closure(move(C, a)) = {1, 2, 3, 4, 6, 7, 8}, this set is B, which is not added to Q this time, so Q = { D }.
 
-$\epsilon$-closure(move(C, b)) = {1, 2, 4, 5, 6, 7}，该集合就是 C，不再添加到 Q 中，此时 Q = { D }。
+$\epsilon$-closure(move(C, b)) = {1, 2, 4, 5, 6, 7}, this set is C, which is not added to Q this time, so Q = { D }.
 
-Step 4: 从 Q 中取出集合 D，分别求出当输入 a, b 符号时的状态集合:
+Step 4: Take the set D from Q, and find the state set when inputting symbols a and b respectively:
 
-$\epsilon$-closure(move(D, a)) = {1, 2, 3, 4, 6, 7, 8}，该集合就是 B，不再添加到 Q 中，此时 Q = {}。
+$\epsilon$-closure(move(D, a)) = {1, 2, 3, 4, 6, 7, 8}, this set is B, which is not added to Q this time, so Q = {}.
 
-$\epsilon$-closure(move(D, b)) = {1, 2, 4, 5, 6, 7, 10}，将该集合标记为 E，并添加到 Q 中，此时 Q = { E }。
+$\epsilon$-closure(move(D, b)) = {1, 2, 4, 5, 6, 7, 10}, mark this set as E and add it to Q, where Q = { E }.
 
-Step 5: 从 Q 中取出集合 E，分别求出当输入 a, b 符号时的状态集合:
+Step 5: Take the set E from Q, and find the state set when inputting symbols a and b respectively:
 
-$\epsilon$-closure(move(E, a)) = {1, 2, 3, 4, 6, 7, 8}，该集合就是 B，不再添加到 Q 中，此时 Q = {}
+$\epsilon$-closure(move(E, a)) = {1, 2, 3, 4, 6, 7, 8}, this set is B, which is not added to Q this time, so Q = {}.
 
-$\epsilon$-closure(move(E, b)) = {1, 2, 4, 5, 6, 7}，该集合就是 C，不再添加到 Q 中，此时 Q = {}
+$\epsilon$-closure(move(E, b)) = {1, 2, 4, 5, 6, 7}, this set is C, which is not added to Q this time, so Q = {}.
 
-Step 6: 由于集合 Q 中已经没有新的状态可以加入，因此结束循环，新的状态转移表如下所示:
+Step 6: Since there is no new state to be added in the set Q, the loop ends, and the new state transition table is as follows:
 
-![](../image/construction-2.svg)
+![](./image/construction-2.svg)
 
-Step 7: 通过上面的状态转移表生成的 DFA 如下所示:
+Step 7: The DFA generated by the above state transition table is as follows:
 
-![](../image/construction-3.svg)
+![](./image/construction-3.svg)
 
-#### 8. Hopcroft算法
+#### 8. Hopcroft algorithm
 
-使用子集构造法将 NFA 转换为 DFA 后，通常会存在许多冗余的状态，这会导致 DFA 不够精简。为了提高计算机模拟执行的效率，可以使用 Hopcroft 算法对 DFA 进行状态最小化。下面将介绍这个算法的工作原理。
+After using the subset construction method to convert NFA to DFA, there are usually many redundant states, which makes DFA not compact enough. To improve the efficiency of computer simulation execution, Hopcroft's algorithm can be used to minimize the state of DFA. The working principle of this algorithm will be described below.
 
-##### 8.1 算法原理
+##### 8.1 Algorithm principle
 
-Hopcroft算法的主要思想是基于等价类的概念。它的核心观点是，如果两个状态在接收任何输入字符时都具有相同的行为，那么它们是等价的，可以合并为一个等价类。以下是该算法的整体过程描述:
+The main idea of Hopcroft's algorithm is based on the concept of equivalence classes. Its core idea is that if two states have the same behavior when receiving any input character, then they are equivalent and can be merged into an equivalence class. The following is the overall process description of the algorithm:
 
 1. First, partition states initially into accepting states and non-accepting states.
 
@@ -295,36 +290,36 @@ Split(S):
 	return S
 ```
 
-##### 8.2 算法示例
+##### 8.2 Algorithm example
 
-考虑以下左侧的 DFA 作为示例，其状态转移表如右侧所示。
+Consider the DFA below as an example on the left, with the state transition table shown on the right.
 
-![](../image/hopcroft-0.svg)
+![](./image/hopcroft-0.svg)
 
-Step 0：首先，将状态分为非接受状态 {A, B, C, D} 和接受状态 {E}，分别用 S0 和 S1 表示。
+Step 0：First, divide the states into non-acceptance states {A, B, C, D} and the acceptance state {E}, denoted as S0 and S1, respectively.
 
-![](../image/hopcroft-1.svg)
+![](./image/hopcroft-1.svg)
 
-Step 1：由于集合 S1 中只有一个状态，无法进一步划分，因此我们将继续对集合 S0 进行划分。
+Step 1：Since S1 contains only one state, further partitioning is not possible. We proceed to partition the set S0.
 
-![](../image/hopcroft-2.svg)
+![](./image/hopcroft-2.svg)
 
-Step 2: 根据上图可知，在输入 0 和 1 时，状态 A、B 和 C 的后继状态都属于 S0，而只有状态 D 在输入 1 时的后继状态属于 S1。因此，我们可以将集合 {A, B, C, D} 划分为 {A, B, C} 和 {D}。此时的等价类集合为 P1。
+Step 2: Based on the diagram, we observe that states A, B, and C all transition to S0 for inputs 0 and 1, while state D transitions to S1 only for input 1. We partition {A, B, C, D} into {A, B, C} and {D}, forming the equivalence class set P1.
 
-![](../image/hopcroft-3.svg)
+![](./image/hopcroft-3.svg)
 
-Step 3：根据上图可知，在输入 0 和 1 时，状态 A 和 C 的后继状态都属于 S0，而只有状态 B 在输入 1 时的后继状态属于 S1。因此，我们可以将集合 {A, B, C} 划分为 {A, C} 和 {B}。此时的等价类集合为 P2。
+Step 3: According to the diagram, states A and C both transition to S0 for inputs 0 and 1, while state B transitions to S1 only for input 1. We partition {A, B, C} into {A, C} and {B}, resulting in the equivalence class set P2.
 
-![](../image/hopcroft-4.svg)
+![](./image/hopcroft-4.svg)
 
-Step 4：根据上图可知，在输入 0 和 1 时，状态 A 和 C 的后继状态完全相同，因此集合 {A, C} 不再进行划分。现在所有的等价类都不能再继续划分，因此最终等价类集合 P3 = {{A, C}, {B}, {D}, {E}}，如下所示。
+Step 4: By examining the diagram, we find that states A and C have identical successor states for inputs 0 and 1. Thus, we no longer partition the set {A, C}. At this point, all equivalence classes cannot be further divided. The final equivalence class set is P3 = {{A, C}, {B}, {D}, {E}}.
 
-![](../image/hopcroft-5.svg)
+![](./image/hopcroft-5.svg)
 
-Step 5：最后，将每个等价类的状态合并，其对应的最小化 DFA 如下所示。
+Step 5: Finally, we merge the states within each equivalence class to obtain the corresponding minimized DFA as shown.
 
-![](../image/hopcroft-6.svg)
+![](./image/hopcroft-6.svg)
 
-#### 9. 总结
+#### 9. Summarize
 
-本文介绍了正则表达式的基本概念，以及如何通过基本的并、连接和闭包等运算构建复杂的正则表达式。我们还详细介绍了使用 Thompson 算法将正则表达式转换为 NFA 形式。然而，由于 NFA 存在不确定性，如空转换等，可能导致回溯问题。因此，我们采用子集构造算法将 NFA 转换为 DFA，并利用 Hopcroft 算法最小化 DFA 的状态数，以提高状态机的运行效率。这些算法的应用使得我们能够构建一个高效的简易正则表达式引擎。通过深入理解正则表达式的基本原理，我们将能够在以后的正则表达式使用中更加的灵活自如。
+This article introduces the basic concepts of regular expressions and how to construct complex regular expressions through basic operations such as union, connection and closure. We also detail the conversion of regular expressions into NFA form using Thompson's algorithm. However, due to non-determinism in NFA, such as null transitions, etc., it may cause backtracking problems. Therefore, we use the subset construction algorithm to convert NFA to DFA, and use the Hopcroft algorithm to minimize the number of states of DFA to improve the operating efficiency of the state machine. The application of these algorithms allows us to build an efficient and simple regular expression engine. By deeply understanding the basic principles of regular expressions, we will be able to be more flexible in the use of regular expressions in the future.
