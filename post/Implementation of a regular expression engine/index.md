@@ -109,7 +109,7 @@ category: 正则表达式
 
 例如，假设需要识别一个英文字符串是否包含"main"子串，可以利用程序来模拟这样一个有穷自动机。
 
-![](https://raw.githubusercontent.com/liuyunplus/yun-images/master/JbuRf0.png)
+![](../image/regular-0.svg)
 
 上图是一个非常简单的有穷自动机模型，它从初始状态 0 开始不断的读入下一个字符并执行状态转换，如果最终自动机能到达接受状态 4，则表明输入字符串里面包含 "main" 子串，否则表明不包含该子串。这样的自动机同样也是由五个部分组成，其中每个部分的具体含义如下：
 
@@ -123,11 +123,11 @@ category: 正则表达式
 
 (1) 可以识别模式 $a(b|c)^*$ 的 NFA 如下图所示。
 
-![](https://raw.githubusercontent.com/liuyunplus/yun-images/master/bq0DmP.png)
+![](../image/regular-1.svg)
 
 (2) 可以识别模式 $a(b|c)^*$ 的 DFA 如下图所示。
 
-![](https://raw.githubusercontent.com/liuyunplus/yun-images/master/LlOfgy.png)
+![](../image/regular-2.svg)
 
 从上面两幅图可以看出，NFA 的状态转移具有不确定性而 DFA 的状态转移是确定的，对于机器来说不确定性会产生大量回溯，从而导致 NFA 的执行性能不如 DFA 。另一方面，基于正则表达式直接构造 NFA 会比直接构造 DFA 更加简单并且所需的时间更少，所以在实际应用中需要结合场景来使用 NFA 或者 DFA 。一般来说，对于复杂并且需要多次复用的正则表达式，直接编译成 DFA 来模拟效果会更好；而对于简单并且只使用几次的正则表达式而言，使用 NFA 来模拟效果会更好。对二者之间具体区别的概括如下表所示。
 
@@ -207,51 +207,53 @@ end;
 
 The three operation definitions involved in the above code are as follows:
 
-![](../image/subset-construction-1.svg)
+![](../image/construction-1.svg)
 
 ##### 7.2 算法示例
 
 以正则表达式 $(a|b)^{*}abb$ 为例，它的 NFA 如下图所示。
 
-![](../image/subset-construction-0.svg)**Step 0:** 由于 NFA 的初始状态为 0，因此初始状态集合为 $\epsilon$-closure(0) = {0, 1, 2, 4, 7}，将该集合标记为 A，并添加到集合 Q 中，此时 Q = { A }。
+![](../image/construction-0.svg)
 
-**Step 1:** 从 Q 中取出集合 A，分别求出当输入 a, b 符号时的状态集合:
+Step 0: 由于 NFA 的初始状态为 0，因此初始状态集合为 $\epsilon$-closure(0) = {0, 1, 2, 4, 7}，将该集合标记为 A，并添加到集合 Q 中，此时 Q = { A }。
+
+Step 1: 从 Q 中取出集合 A，分别求出当输入 a, b 符号时的状态集合:
 
 $\epsilon$-closure(move(A, a)) = {1, 2, 3, 4, 6, 7, 8}，将该集合标记为 B，并添加到 Q 中，此时 Q = { B }。
 
 $\epsilon$-closure(move(A, b)) = {1, 2, 4, 5, 6, 7}，将该集合标记为 C，并添加到 Q 中，此时 Q = {B, C}。
 
-**Step 2:** 从 Q 中取出集合 B，分别求出当输入 a, b 符号时的状态集合:
+Step 2: 从 Q 中取出集合 B，分别求出当输入 a, b 符号时的状态集合:
 
 $\epsilon$-closure(move(B, a)) = {1, 2, 3, 4, 6, 7, 8}，该集合就是 B，不再添加到 Q 中，此时 Q = { C }。
 
 $\epsilon$-closure(move(B, b)) = {1, 2, 4, 5, 6, 7, 9}，将该集合标记为 D，并添加到 Q 中，此时 Q = {C, D}。
 
-**Step 3:** 从 Q 中取出集合 C，分别求出当输入 a, b 符号时的状态集合:
+Step 3: 从 Q 中取出集合 C，分别求出当输入 a, b 符号时的状态集合:
 
 $\epsilon$-closure(move(C, a)) = {1, 2, 3, 4, 6, 7, 8}，该集合就是 B，不再添加到 Q 中，此时 Q = { D }。
 
 $\epsilon$-closure(move(C, b)) = {1, 2, 4, 5, 6, 7}，该集合就是 C，不再添加到 Q 中，此时 Q = { D }。
 
-**Step 4:** 从 Q 中取出集合 D，分别求出当输入 a, b 符号时的状态集合:
+Step 4: 从 Q 中取出集合 D，分别求出当输入 a, b 符号时的状态集合:
 
 $\epsilon$-closure(move(D, a)) = {1, 2, 3, 4, 6, 7, 8}，该集合就是 B，不再添加到 Q 中，此时 Q = {}。
 
 $\epsilon$-closure(move(D, b)) = {1, 2, 4, 5, 6, 7, 10}，将该集合标记为 E，并添加到 Q 中，此时 Q = { E }。
 
-**Step 5:** 从 Q 中取出集合 E，分别求出当输入 a, b 符号时的状态集合:
+Step 5: 从 Q 中取出集合 E，分别求出当输入 a, b 符号时的状态集合:
 
 $\epsilon$-closure(move(E, a)) = {1, 2, 3, 4, 6, 7, 8}，该集合就是 B，不再添加到 Q 中，此时 Q = {}
 
 $\epsilon$-closure(move(E, b)) = {1, 2, 4, 5, 6, 7}，该集合就是 C，不再添加到 Q 中，此时 Q = {}
 
-**Step 6:** 由于集合 Q 中已经没有新的状态可以加入，因此结束循环，新的状态转移表如下所示:
+Step 6: 由于集合 Q 中已经没有新的状态可以加入，因此结束循环，新的状态转移表如下所示:
 
-![](../image/subset-construction-2.svg)
+![](../image/construction-2.svg)
 
-**Step 7:** 通过上面的状态转移表生成的 DFA 如下所示:
+Step 7: 通过上面的状态转移表生成的 DFA 如下所示:
 
-![](../image/subset-construction-3.svg)
+![](../image/construction-3.svg)
 
 #### 8. Hopcroft算法
 
