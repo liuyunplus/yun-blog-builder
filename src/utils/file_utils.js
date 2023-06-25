@@ -6,16 +6,16 @@ function generatePostMap(postMetaList) {
     //按时间倒序排序
     postMetaList.sort((a, b) => Date.parse(b.date) - Date.parse(a.date))
     //按年份进行分组
-    let postYearMap = postMetaList.reduce((map, postMeta) => {
+    let postYearMap = {}
+    for (const postMeta of postMetaList) {
         postMeta.id = postMeta.date.replaceAll("-", "")
         let year = parseInt(postMeta.date.split("-")[0])
-        if (map[year]) {
-            map[year].push(postMeta);
+        if (postYearMap[year]) {
+            postYearMap[year].push(postMeta);
         } else {
-            map[year] = [postMeta];
+            postYearMap[year] = [postMeta];
         }
-        return map;
-    }, {})
+    }
     return postYearMap;
 }
 
