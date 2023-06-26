@@ -6,7 +6,7 @@ In the computer field, regular expressions are a veritable artifact, and its bir
 
 The language we usually speak is composed of sentences, each of which is a combination of characters. For English, these characters are taken from the alphabet, and for Chinese, these characters are taken from the Chinese character table. Whether it is the alphabet or the Chinese character list, they are limited character sets, and based on these character sets, various language worlds are formed. We can further abstract and generalize that a language is an arbitrary and countable set of strings on a given alphabet, where the given alphabet is a finite set of symbols, and the strings are the symbols in the alphabet a finite sequence. For example, a computer instruction is a finite sequence of binary alphabets such as {0, 1}, and a computer language is a collection of these computer instructions. Based on this abstraction, we can do some algebraic operations on the language. Before that, let's take a look at string operations.
 
-Assuming that both x and y are strings, the connection operation of x and y is the string formed by appending y to x. For example, if x = "dog" and y = "house", then xy = "doghouse". Assuming $\epsilon$ is the empty string, then for any string $s$, $s{\epsilon} = {\epsilon}{s}=s$. If the connection of two strings is regarded as the "product" of these two strings, we can define the "exponential" operation of the strings as follows: define $s^0$ as $\epsilon$, and for $i\gt0$, $s^i$ is $s^{i-1}s$. Because $\epsilon{s}=s$, it follows that $s^1=s$, $s^2=ss$, $s^3=sss$, and so on.
+Assuming that both x and y are strings, the concatenation operation of x and y is the string formed by appending y to x. For example, if x = "dog" and y = "house", then xy = "doghouse". Assuming $\epsilon$ is the empty string, then for any string $s$, $s{\epsilon} = {\epsilon}{s}=s$. If the connection of two strings is regarded as the "product" of these two strings, we can define the "exponential" operation of the strings as follows: define $s^0$ as $\epsilon$, and for $i\gt0$, $s^i$ is $s^{i-1}s$. Because $\epsilon{s}=s$, it follows that $s^1=s$, $s^2=ss$, $s^3=sss$, and so on.
 
 In addition to common set operations, there are concatenation operations and closure operations in language computation. Language concatenation is the process of selecting a string from the first language, selecting another string from the second language, and then obtaining the collection of all strings by concatenating them. Language closure operations include the Kleene closure and the positive closure. The Kleene closure of a language L is denoted as L*, which represents the set of strings obtained by concatenating L zero or more times. The positive closure of L is denoted as L+, which represents the set of strings obtained by concatenating L one or more times. The table below presents the formal definitions of these operations.
 
@@ -28,7 +28,7 @@ Let L represent the set of letters {A, B, ..., Z, a, b, c, ..., z}, and let D re
 
 #### 3. Introduction to Regular Expressions
 
-In order to better describe the language, people express the language by using regular expressions, and a regular expression represents a type of language. From the above description, we know that we can perform algebraic operations on the language to construct another language. In the same way, algebraic operations can be performed on smaller regular expressions to obtain a larger regular expression. For example, assuming that r and s are both regular expressions representing languages L(r) and L(s) respectively, by performing simple union, connection and closure operations on them, we can construct a richer regular expression.
+In order to better describe the language, people express the language by using regular expressions, and a regular expression represents a type of language. From the above description, we know that we can perform algebraic operations on the language to construct another language. In the same way, algebraic operations can be performed on smaller regular expressions to obtain a larger regular expression. For example, assuming that r and s are both regular expressions representing languages L(r) and L(s) respectively, by performing simple union, oncatenation and closure operations on them, we can construct a richer regular expression.
 
 - $(r)\mid(s)$ is a regular expression that represents the language $L(r)\cup{L(s)}$.
 - $(r)(s)$ is a regular expression that represents the language $L(r)L(s)$.
@@ -43,7 +43,7 @@ In the same way, we can set some priorities for these operators to save some unn
 | High | $\color{red}{()}$、(?:)、(?=)、[]      |
 | Medium | $\color{red}*$、+、？、{n}、{n,}、{n,m} |
 | Low  | ^、\$、General characters       |
-| Second Lowest | $\color{red}{\text{Concatenation}}$ |
+| Second Lowest | <font color="red">Concatenation</font> |
 | Lowest | $\color{red}\mid $                    |
 
 By using the convention of operator precedence, we can rewrite the expression (a)|((b)\*(c)) as a|b\*c. Both of these expressions describe the same set of strings, but the latter appears to be much more concise. Like other mathematical operators, regular expressions also follow certain algebraic laws. Through these laws, we can understand that different forms of regular expressions can be equivalent, and therefore, they describe the same language. The table below lists the algebraic laws that hold true for any regular expressions r, s, and t.
@@ -60,7 +60,7 @@ By using the convention of operator precedence, we can rewrite the expression (a
 
 #### 4. Extensions to regular expressions
 
-We can construct many expressive regular expressions by performing basic operations such as union, connection, and closure on subexpressions, but it is still far from enough to meet some special requirements. Therefore, many regular engines add some expansion operators to basic regular expressions, which are used to enhance the ability of regular expressions to describe string patterns, as follows:
+We can construct many expressive regular expressions by performing basic operations such as union, concatenation, and closure on subexpressions, but it is still far from enough to meet some special requirements. Therefore, many regular engines add some expansion operators to basic regular expressions, which are used to enhance the ability of regular expressions to describe string patterns, as follows:
 
 | Expression | Description                    | Example | Matches       |
 | ------ | ---------------------------------- | --------- | --------------------- |
@@ -136,7 +136,7 @@ As can be seen from the above two figures, the state transition of NFA is uncert
 
 #### 6. Thompson algorithm
 
-We discussed above that complex regular expressions can be constructed from simple regular expressions through basic operations such as union, connection, and closure. The Thompson algorithm uses this inductive idea to convert a regular expression into an equivalent NFA Yes, the algorithm recursively divides a regular expression into its sub-expressions, and after obtaining the NFA corresponding to each sub-expression, constructs the expression itself according to the operational relationship between the sub-expressions and a series of rules The corresponding NFA. The operation rules for constructing its own NFA through subexpression NFA are described below.
+We discussed above that complex regular expressions can be constructed from simple regular expressions through basic operations such as union, concatenation, and closure. The Thompson algorithm uses this inductive idea to convert a regular expression into an equivalent NFA Yes, the algorithm recursively divides a regular expression into its sub-expressions, and after obtaining the NFA corresponding to each sub-expression, constructs the expression itself according to the operational relationship between the sub-expressions and a series of rules The corresponding NFA. The operation rules for constructing its own NFA through subexpression NFA are described below.
 
 ##### 6.1 Minimal NFA Construction
 
@@ -150,7 +150,7 @@ Assuming r=s|t, the NFA of r, denoted as N(r), can be constructed as shown in th
 
 ![](./image/thompson-1.svg)
 
-##### 6.3 Connection operation
+##### 6.3 Concatenation operation
 
 Assuming r=st, the NFA of r, denoted as N(r), can be constructed as shown in the following diagram. The start state of N(s) becomes the start state of N(r). The accept state of N(t) becomes the only accept state of N(r). The accept state of N(s) and the start state of N(t) are merged into a single state, which retains all the transitions from the original states entering and leaving the merged state. A path from i to f must first pass through N(s), so the labels along this path start with a string from L(s). Then, the path continues through N(t), so the labels along this path end with a string from L(t). Therefore, the strings recognized by N(r) are precisely L(s)L(t).
 
@@ -322,4 +322,4 @@ Step 5: Finally, we merge the states within each equivalence class to obtain the
 
 #### 9. Summarize
 
-This article introduces the basic concepts of regular expressions and how to construct complex regular expressions through basic operations such as union, connection and closure. We also detail the conversion of regular expressions into NFA form using Thompson's algorithm. However, due to non-determinism in NFA, such as null transitions, etc., it may cause backtracking problems. Therefore, we use the subset construction algorithm to convert NFA to DFA, and use the Hopcroft algorithm to minimize the number of states of DFA to improve the operating efficiency of the state machine. The application of these algorithms allows us to build an efficient and simple regular expression engine. By deeply understanding the basic principles of regular expressions, we will be able to be more flexible in the use of regular expressions in the future.
+This article introduces the basic concepts of regular expressions and how to construct complex regular expressions through basic operations such as union, concatenation and closure. We also detail the conversion of regular expressions into NFA form using Thompson's algorithm. However, due to non-determinism in NFA, such as null transitions, etc., it may cause backtracking problems. Therefore, we use the subset construction algorithm to convert NFA to DFA, and use the Hopcroft algorithm to minimize the number of states of DFA to improve the operating efficiency of the state machine. The application of these algorithms allows us to build an efficient and simple regular expression engine. By deeply understanding the basic principles of regular expressions, we will be able to be more flexible in the use of regular expressions in the future.
