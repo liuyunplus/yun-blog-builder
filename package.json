@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "prebuild": "npm install",
+    "prebuild": "pnpm install",
     "build": "gulp build"
   },
   "dependencies": {

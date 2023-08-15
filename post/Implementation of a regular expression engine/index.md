@@ -6,34 +6,34 @@ In the computer field, regular expressions are a veritable artifact, and its bir
 
 The language we usually speak is composed of sentences, each of which is a combination of characters. For English, these characters are taken from the alphabet, and for Chinese, these characters are taken from the Chinese character table. Whether it is the alphabet or the Chinese character list, they are limited character sets, and based on these character sets, various language worlds are formed. We can further abstract and generalize that a language is an arbitrary and countable set of strings on a given alphabet, where the given alphabet is a finite set of symbols, and the strings are the symbols in the alphabet a finite sequence. For example, a computer instruction is a finite sequence of binary alphabets such as {0, 1}, and a computer language is a collection of these computer instructions. Based on this abstraction, we can do some algebraic operations on the language. Before that, let's take a look at string operations.
 
-Assuming that both x and y are strings, the concatenation operation of x and y is the string formed by appending y to x. For example, if x = "dog" and y = "house", then xy = "doghouse". Assuming $\epsilon$ is the empty string, then for any string $s$, $s{\epsilon} = {\epsilon}{s}=s$. If the connection of two strings is regarded as the "product" of these two strings, we can define the "exponential" operation of the strings as follows: define $s^0$ as $\epsilon$, and for $i\gt0$, $s^i$ is $s^{i-1}s$. Because $\epsilon{s}=s$, it follows that $s^1=s$, $s^2=ss$, $s^3=sss$, and so on.
+ Assuming that both x and y are strings, the concatenation operation of x and y is the string formed by appending y to x. For example, if x = "dog" and y = "house", then xy = "doghouse". Assuming $\epsilon$ is the empty string, then for any string s, sε = εs = s. If the connection of two strings is regarded as the "product" of these two strings, we can define the "exponential" operation of the strings as follows: define s<sup>0</sup> as ε, and for i > 0, s<sup>i</sup> is s<sup>i-1</sup>s. Because εs = s, it follows that s<sup>1</sup> = s, s<sup>2</sup> = ss, s<sup>3</sup> = sss, and so on.
 
 In addition to common set operations, there are concatenation operations and closure operations in language computation. Language concatenation is the process of selecting a string from the first language, selecting another string from the second language, and then obtaining the collection of all strings by concatenating them. Language closure operations include the Kleene closure and the positive closure. The Kleene closure of a language L is denoted as L*, which represents the set of strings obtained by concatenating L zero or more times. The positive closure of L is denoted as L+, which represents the set of strings obtained by concatenating L one or more times. The table below presents the formal definitions of these operations.
 
 | Operation | Definition |
 | ------------- | ---------- |
-| Union of L and M | $L\cup M= \lbrace s\mid s \text{ belongs to } L \text{ or } s \text{ belongs to } M \rbrace $ |
-| Concatenation of L and M | $ LM = \lbrace st\mid s \text{ belongs to } L \text{ and } t \text{ belongs to } M \rbrace $ |
+| Union of L and M | L ∪ M = {s\|s belings to L or s nelings to M} |
+| Concatenation of L and M | LM={st\|s belongs to L and t belongs to M} |
 | Kleene Closure of L | $ L^* = \cup_{i=0}^{\infty} L^i $ |
 | Positive Closure of L | $ L^+ = \cup_{i=1}^{\infty} L^i $ |
 
 Let L represent the set of letters {A, B, ..., Z, a, b, c, ..., z}, and let D represent the set of numbers {0, 1, ..., 9}. Using the operations described above, we can construct new languages.
 
-- $L\cup{D}$ is the set of strings of length 1, where each string is either a letter or a number.
-- $LD$ is the set of strings of length 2, where each string consists of a letter followed by a number.
-- $L^4$ is the set of strings composed of 4 letters.
-- $L^*$ is the set of strings composed of letters, including the empty string $\epsilon$.
-- $L(L\cup{D})^*$ is the set of strings that start with a letter and are composed of letters and numbers.
-- $D^+$ is the set of strings composed of one or more numbers.
+- L ∪ D is the set of strings of length 1, where each string is either a letter or a number.
+- LD is the set of strings of length 2, where each string consists of a letter followed by a number.
+- L<sup>4</sup> is the set of strings composed of 4 letters.
+- L<sup>\*</sup> is the set of strings composed of letters, including the empty string ε.
+- L(L ∪ D)<sup>\*</sup> is the set of strings that start with a letter and are composed of letters and numbers.
+- D<sup>+</sup> is the set of strings composed of one or more numbers.
 
 #### 3. Introduction to Regular Expressions
 
 In order to better describe the language, people express the language by using regular expressions, and a regular expression represents a type of language. From the above description, we know that we can perform algebraic operations on the language to construct another language. In the same way, algebraic operations can be performed on smaller regular expressions to obtain a larger regular expression. For example, assuming that r and s are both regular expressions representing languages L(r) and L(s) respectively, by performing simple union, oncatenation and closure operations on them, we can construct a richer regular expression.
 
-- $(r)\mid(s)$ is a regular expression that represents the language $L(r)\cup{L(s)}$.
-- $(r)(s)$ is a regular expression that represents the language $L(r)L(s)$.
-- $(r)^*$ is a regular expression that represents the language $(L(r))^*$.
-- $(r)$ is a regular expression that represents the language $L(r)$.
+- (r)|(s) is a regular expression that represents the language L(r) ∪ L(s).
+- (r)(s) is a regular expression that represents the language L(r)L(s).
+- (r)<sup>\*</sup> is a regular expression that represents the language (L(r))<sup>\*</sup>.
+- (r) is a regular expression that represents the language L(r).
 
 In the same way, we can set some priorities for these operators to save some unnecessary parentheses when writing. The complete symbol priority list is as follows, where the red ones are the basic operators we have learned. Those not marked in red are some expansion operators, which exist mainly to enhance the expressive ability of regular expressions, and we will learn their meanings later.
 
@@ -50,13 +50,13 @@ By using the convention of operator precedence, we can rewrite the expression (a
 
 | Law                       | Description           |
 | ----------------------------- | ------------------------- |
-| $r\mid s=s\mid r$             | $\mid$ is commutative |
-| $r\mid(s\mid t)=(r\mid s)t$   | $\mid$ is associative |
-| $r(st)=(rs)t$                 | Concatenation is associative |
-| $r(s\mid t)=rs\mid rt;(s\mid t)r=sr\mid tr$ | Concatenation distributes over $\mid$ |
-| $\epsilon{r}=r\epsilon=r$     | $\epsilon$ is the identity element for concatenation |
-| $r^*=(r\mid\epsilon)^*$       | Closure always includes $\epsilon$ |
-| $r^{\{**\}}=r^{\{*\}}$  | * is idempotent |
+| r\|s = s\|r | \| is commutative |
+| r\|(s\|t) = (r\|s)t | \| is associative |
+| r(st) = rs(t)  | Concatenation is associative |
+| r(s\|t) = rs\|rt;  (s\|t)r = sr\|tr | Concatenation distributes over \| |
+| εr = rε = r | ε is the identity element for concatenation |
+| r* = (r\|ε)* | Closure always includes ε |
+| r<sup>{\*\*}</sup> = r<sup>{\*}</sup> | * is idempotent |
 
 #### 4. Extensions to regular expressions
 
@@ -94,13 +94,13 @@ In addition to the above expansion operators, most regular implementations also 
 
 #### 5. Finite automata
 
-Regular expression is a highly generalized expression method, which can describe a huge collection of strings with concise syntax, and its function is to simplify people's coding work. In computers, finite automata are used to describe formal languages, which are event-driven state transition diagrams and have the same expressive power as regular expressions. A finite automaton is an abstract mathematical model that can change its state according to external input, so as to achieve the purpose of simulating and controlling the execution flow. A finite automaton consists of five parts, which can be represented by a five-tuple $(S, \Sigma, s, F, \delta)$, where the meanings of each part are as follows:
+Regular expression is a highly generalized expression method, which can describe a huge collection of strings with concise syntax, and its function is to simplify people's coding work. In computers, finite automata are used to describe formal languages, which are event-driven state transition diagrams and have the same expressive power as regular expressions. A finite automaton is an abstract mathematical model that can change its state according to external input, so as to achieve the purpose of simulating and controlling the execution flow. A finite automaton consists of five parts, which can be represented by a five-tuple (S, Σ, s, F, δ), where the meanings of each part are as follows:
 
-- $S$：Finite set of states.
-- $\Sigma$：Set of input symbols.
-- $s$：Initial state.
-- $F$：Collection of accepting states.
-- $\delta$：Collection of transition functions between states.
+- S: Finite set of states.
+- Σ: Set of input symbols.
+- s: Initial state.
+- F: Collection of accepting states.
+- δ: Collection of transition functions between states.
 
 For example, suppose it is necessary to identify whether an English string contains the "main" substring, and a program can be used to simulate such a finite automaton.
 
@@ -108,19 +108,19 @@ For example, suppose it is necessary to identify whether an English string conta
 
 The above figure is a very simple finite automaton model, which starts from the initial state 0 and continuously reads in the next character and performs state transitions. If the final automaton can reach the acceptance state 4, it indicates that the input string contains "main" substring, otherwise it indicates that the substring is not included. Such an automaton is also composed of five parts, the specific meaning of each part is as follows:
 
-- $S$ ：Finite state set $\lbrace 0，1，2，3，4 \rbrace$
-- $\Sigma$ ：Alphabet $\lbrace a，b，c，\dots，z，A，B，C，\dots，Z \rbrace$
-- $s$ ：Initial state $0$
-- $F$：Accept state set $\lbrace 4 \rbrace$
-- $\delta$ ：Collection of state transition functions $\lbrace (0，m)\to 1，(1，a)\to 2，(2，i)\to 3，(3，n)\to 4 \rbrace$
+- S: Finite state set {0, 1, 2, 3, 4}.
+- Σ: Alphabet {a, b, c, ..., z, A, B, C, ..., Z}.
+- s: Initial state 0.
+- F: Accept state set {4}.
+- δ: Collection of state transition functions {(0, m) → 1, (1, a) → 2, (2, i) → 3, (3, n) → 4}.
 
 According to the nature of state transition, finite automata (FA) are divided into uncertain finite automata (NFA) and deterministic finite automata (DFA). NFA allows state transition for empty string input $\epsilon$, and Transitions to multiple goal states are allowed for the same input character. DFA has restrictions on these, does not allow state transitions based on empty strings, and can only transition to one target state for the same input character. NFA and DFA are equivalent in expressive power, any DFA is a special case of an NFA, and any NFA can be simulated by a DFA. For example, the NFA and DFA below describe the same language.
 
-(1) An NFA that can recognize the pattern $a(b|c)^*$ is shown in the figure below.
+(1) An NFA that can recognize the pattern a(b|c)<sup>\*</sup> is shown in the figure below.
 
 ![](./image/regular-1.svg)
 
-(2) A DFA that recognizes the pattern $a(b|c)^*$ is shown in the figure below.
+(2) A DFA that recognizes the pattern a(b|c)<sup>\*</sup> is shown in the figure below.
 
 ![](./image/regular-2.svg)
 
@@ -140,7 +140,7 @@ We discussed above that complex regular expressions can be constructed from simp
 
 ##### 6.1 Minimal NFA Construction
 
-Assuming $r_1=\epsilon$ and $r_2=a$, the NFA representing $r_1$ is shown on the left side of the following diagram, while the NFA representing $r_2$ is shown on the right side. Here, the empty string $\epsilon$ and the single character $a$ are both minimal regular expressions, so there is no need for further recursion. The rules for constructing an NFA using them are as follows: create a new start state i and an accept state f, and connect these two states directly. The label can be either the empty string $\epsilon$ or a single character. The resulting NFA has only one state transition.
+Assuming r<sub>1</sub> = ε and r<sub>2</sub> = a, the NFA representing r<sub>1</sub> is shown on the left side of the following diagram, while the NFA representing r<sub>2</sub> is shown on the right side. Here, the empty string ε and the single character 'a' are both minimal regular expressions, so there is no need for further recursion. The rules for constructing an NFA using them are as follows: create a new start state i and an accept state f, and connect these two states directly. The label can be either the empty string ε or a single character. The resulting NFA has only one state transition.
 
 ![](./image/thompson-0.svg)
 
@@ -158,7 +158,7 @@ Assuming r=st, the NFA of r, denoted as N(r), can be constructed as shown in the
 
 ##### 6.4 Closure operation
 
-Assuming $r=s^*$, the NFA of r, denoted as N(r), can be constructed as shown in the following diagram. Here, i and f are two new states representing the start state and accept state of N(r), respectively. To reach f from i, we can proceed along the newly introduced $\epsilon$-labeled path, which corresponds to a string in $L(s)^0$. We can also reach the start state of N(s) and then traverse through that NFA, returning zero or more times from its accept state to its start state and repeating the process. These options allow N(r) to accept all strings in the sets $L(s)^1$, $L(s)^2$, and so on. Therefore, the set of all strings recognized by N(r) is precisely $L(s)^*$.
+Assuming r = s<sup>\*</sup>, the NFA of r, denoted as N(r), can be constructed as shown in the following diagram. Here, i and f are two new states representing the start state and accept state of N(r), respectively. To reach f from i, we can proceed along the newly introduced $\epsilon$-labeled path, which corresponds to a string in L(s)<sup>0</sup>. We can also reach the start state of N(s) and then traverse through that NFA, returning zero or more times from its accept state to its start state and repeating the process. These options allow N(r) to accept all strings in the sets L(s)<sup>1</sup>, L(s)<sup>2</sup>, and so on. Therefore, the set of all strings recognized by N(r) is precisely L(s)<sup>\*</sup>.
 
 ![](./image/thompson-3.svg)
 
@@ -170,7 +170,7 @@ Due to the uncertainty of the state transition of NFA, this is mainly because it
 
 The steps of the subset construction method are as follows:
 
-1. Firstly, based on the initial state of NFA, find all the state sets that can be transformed by $\epsilon$ through it, mark this set as $q_0$, and add it to the set Q, at this time Q = { $q_0$ }.
+1. Firstly, based on the initial state of NFA, find all the state sets that can be transformed by ε through it, mark this set as q<sub>0</sub>, and add it to the set Q, at this time Q = { q<sub>0</sub> }.
 
 2. Extract the set of states q from the set Q, iterate over each input character c and do the following:
 
@@ -206,41 +206,41 @@ The three operation definitions involved in the above code are as follows:
 
 ##### 7.2 Algorithm example
 
-Taking the regular expression $(a|b)^{*}abb$ as an example, its NFA is shown in the figure below.
+Taking the regular expression (a|b)<sup>*</sup>abb as an example, its NFA is shown in the figure below.
 
 ![](./image/construction-0.svg)
 
-Step 0: Since the initial state of NFA is 0, the initial state set is $\epsilon$-closure(0) = {0, 1, 2, 4, 7}, mark this set as A, and add it to set Q, where Q = {A}.
+Step 0: Since the initial state of NFA is 0, the initial state set is ε-closure(0) = {0, 1, 2, 4, 7}, mark this set as A, and add it to set Q, where Q = {A}.
 
 Step 1: Take the set A from Q, and find the state set when inputting symbols a and b respectively:
 
-$\epsilon$-closure(move(A, a)) = {1, 2, 3, 4, 6, 7, 8}, mark this set as B and add it to Q, where Q = { B }.
+ε-closure(move(A, a)) = {1, 2, 3, 4, 6, 7, 8}, mark this set as B and add it to Q, where Q = { B }.
 
-$\epsilon$-closure(move(A, b)) = {1, 2, 4, 5, 6, 7}, mark this set as C and add it to Q, where Q = {B, C}.
+ε-closure(move(A, b)) = {1, 2, 4, 5, 6, 7}, mark this set as C and add it to Q, where Q = {B, C}.
 
 Step 2: Take the set B from Q, and find the state set when inputting symbols a and b respectively:
 
-$\epsilon$-closure(move(B, a)) = {1, 2, 3, 4, 6, 7, 8}, this set is B, which is not added to Q this time, so Q = { C }.
+ε-closure(move(B, a)) = {1, 2, 3, 4, 6, 7, 8}, this set is B, which is not added to Q this time, so Q = { C }.
 
-$\epsilon$-closure(move(B, b)) = {1, 2, 4, 5, 6, 7, 9}, mark this set as D and add it to Q, where Q = {C, D}.
+ε-closure(move(B, b)) = {1, 2, 4, 5, 6, 7, 9}, mark this set as D and add it to Q, where Q = {C, D}.
 
 Step 3: Take the set C from Q, and find the state set when inputting symbols a and b respectively:
 
-$\epsilon$-closure(move(C, a)) = {1, 2, 3, 4, 6, 7, 8}, this set is B, which is not added to Q this time, so Q = { D }.
+ε-closure(move(C, a)) = {1, 2, 3, 4, 6, 7, 8}, this set is B, which is not added to Q this time, so Q = { D }.
 
-$\epsilon$-closure(move(C, b)) = {1, 2, 4, 5, 6, 7}, this set is C, which is not added to Q this time, so Q = { D }.
+ε-closure(move(C, b)) = {1, 2, 4, 5, 6, 7}, this set is C, which is not added to Q this time, so Q = { D }.
 
 Step 4: Take the set D from Q, and find the state set when inputting symbols a and b respectively:
 
-$\epsilon$-closure(move(D, a)) = {1, 2, 3, 4, 6, 7, 8}, this set is B, which is not added to Q this time, so Q = {}.
+ε-closure(move(D, a)) = {1, 2, 3, 4, 6, 7, 8}, this set is B, which is not added to Q this time, so Q = {}.
 
-$\epsilon$-closure(move(D, b)) = {1, 2, 4, 5, 6, 7, 10}, mark this set as E and add it to Q, where Q = { E }.
+ε-closure(move(D, b)) = {1, 2, 4, 5, 6, 7, 10}, mark this set as E and add it to Q, where Q = { E }.
 
 Step 5: Take the set E from Q, and find the state set when inputting symbols a and b respectively:
 
-$\epsilon$-closure(move(E, a)) = {1, 2, 3, 4, 6, 7, 8}, this set is B, which is not added to Q this time, so Q = {}.
+ε-closure(move(E, a)) = {1, 2, 3, 4, 6, 7, 8}, this set is B, which is not added to Q this time, so Q = {}.
 
-$\epsilon$-closure(move(E, b)) = {1, 2, 4, 5, 6, 7}, this set is C, which is not added to Q this time, so Q = {}.
+ε-closure(move(E, b)) = {1, 2, 4, 5, 6, 7}, this set is C, which is not added to Q this time, so Q = {}.
 
 Step 6: Since there is no new state to be added in the set Q, the loop ends, and the new state transition table is as follows:
 

@@ -25,7 +25,7 @@ a) Measuring the interval between the first transmission and the arrival of the 
 
 b) Measuring the interval between the second transmission and the arrival of the ACK. If the ACK confirms the first transmission, the RTT will be underestimated.
 
-![1](./image/H9rQLA.png)
+![](./image/1.svg)
 
 To avoid the inaccuracy of RTT sample values for retransmitted data and its impact on the statistical estimation of the average RTT, the first part of the Karn algorithm involves ignoring retransmissions. This means that retransmitted packets are not included in the RTT sample collection. However, this approach can lead to another problem. If there is a sudden network jitter causing significant delays, all packets may be retransmitted due to timeouts. Since the retransmitted data is not considered in the RTT sample statistics, the RTO remains at a small value, leading to unnecessary packet retransmissions and network congestion. The second part of the Karn algorithm addresses this issue by doubling the back-off factor. This means that whenever a retransmission occurs, the RTO value is doubled. Although this method can solve the aforementioned problem, it may also reduce the transmission performance of TCP. A better approach is to use the timestamp option to avoid the retransmission ambiguity problem.
 
@@ -67,13 +67,13 @@ if(m < (srtt - mdev)) {
 
 The Fast Retransmit mechanism triggers retransmission based on feedback information from the receiving end, rather than relying on the timeout of the retransmission timer. Therefore, compared to Timeout Retransmission, Fast Retransmit can more promptly and effectively address packet loss situations. Typical TCP implementations incorporate both of these retransmission mechanisms. The working principle of Fast Retransmit is as follows: when the receiver receives an out-of-order packet, it immediately sends a duplicate ACK. Upon receiving a certain number of duplicate ACKs, the sender retransmits the previous packet. Since receiving duplicate ACKs does not necessarily mean that the packet has been lost, but could be caused by packet reordering in the network, the sender waits for the number of duplicate ACKs to reach a certain threshold before initiating retransmission. Typically, this threshold is set to 3, but some implementations may dynamically adjust the threshold based on the current level of packet reordering. The specific workflow is illustrated in the diagram below.
 
-![2](./image/q0kaHf.png)
+![](./image/2.svg)
 
 #### 4. Selective retransmission
 
 Although Fast Retransmit can more promptly detect packet loss compared to Timeout Retransmission, it cannot precisely determine which packets are lost. As a result, it may retransmit packets that have already been received correctly, thereby reducing the transmission efficiency of TCP. For example, in the diagram above, the sender receives three consecutive duplicate ACKs. However, since these duplicate ACKs can be triggered by any packet after Segment 2, the sender cannot determine whether it needs to retransmit other packets after Segment 2. To address this issue, TCP introduces the Selective Acknowledgment (SACK) option in the header. By using the SACK option, an ACK can include three or four SACK blocks that inform the sender about the missing out-of-order data. Each SACK block contains the starting and ending sequence numbers of the out-of-order data. Therefore, disregarding congestion control, with the SACK option, the sender can fill up to three gaps in the receiver's buffer within one Round Trip Time (RTT), effectively improving the transmission performance of TCP. The specific working principle is illustrated in the diagram below.
 
-![4](./image/IdtrNz.png)
+![](./image/3.svg)
 
 #### 5. References
 
