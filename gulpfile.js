@@ -39,9 +39,9 @@ function build_home(cb) {
         const config = JSON.parse(fs.readFileSync(file, 'utf-8'))
         configList.push(config);
     }
-    const postMap = file_utils.generatePostMap(configList);
+    const postList = file_utils.generatePostMap(configList);
     const homePage = pug.compileFile('src/page/index.pug');
-    const html = homePage({postMap: postMap});
+    const html = homePage({postList: postList});
     file_utils.writeFileSync(`dist/index.html`, html)
     cb()
 }

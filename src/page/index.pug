@@ -8,11 +8,11 @@ html
         link(rel='stylesheet', href='./css/home.css')
     body
         include ../common/header
-        each postList, year in postMap
+        each item in postList
             .post-group
-                .post-year #{year}
+                .post-year #{item[0]}
                 .post-list
-                    each post in postList
+                    each post in item[1]
                         .post-item
                             a(href=`page/${post.id}.html`) #{post.title}
                             span #{post.date}
