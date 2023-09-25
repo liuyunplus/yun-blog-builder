@@ -27,7 +27,7 @@ The entire Slow Start process can be summarized as follows:
 
 - Initialize the cwnd with a value of 1, indicating the ability to transmit data of one MSS size.
 - Whenever an ACK is received, set cwnd = cwnd + 1, leading to linear growth.
-- After each round-trip time (RTT), set $cwnd = cwnd^2$, leading to exponential growth.
+- After each round-trip time (RTT), set cwnd = cwnd^2, leading to exponential growth.
 - Set the slow start threshold (ssthresh), when cwnd >= ssthresh, transition into the congestion avoidance phase.
 
 ![TCP拥塞控制-慢启动](https://raw.githubusercontent.com/liuyunplus/yun-images/master/aqNu0f.svg)
@@ -104,17 +104,15 @@ The biggest problem with SACK is that currently selective acknowledgements are n
 
 ##### 3.4 HSTCP
 
-根据数学估算，标准TCP的拥塞窗口w和丢包率p的关系为: $w = 1.2/\sqrt{p}$ . 
+根据数学计算，标准TCP的拥塞窗口w和丢包率p存在某种约束关系，该关系的数学表达式为: $w = 1.2/\sqrt{p}$ . 也就是说随着拥塞窗口w的增大，丢包率p必须足够小才行，这使得标准TCP无法充分利用高带宽网络。假设当前带宽为10Gbps， 往返时间为100ms，每个包的字节数为1500 byte。为了能充分利用带宽，拥塞窗口w要达到 83,333 segments。此时可以计算最大丢包率 $p = 1.5 / w^2  \approx 1/5,000,000,000$ , 也就是说发送5000000000个包最多只能丢一个包。可以计算丢包间隔时间 $S = ((1/p ÷ w) × 100) ÷ 1000 ≈ 6000s ≈ 1.7h$，也就是说至少隔1.7小时才能丢一个包，这显然是不可能的。
 
-假设当前带宽为 10Gbps， 往返时间为 100ms，每个包的字节数为 1500 byte。为了能充分利用带宽，拥塞窗口w要达到 83,333 segments
 
-可以计算丢包率 $p = 1.5 / w^2  \approx 1/5,000,000,000$ , 
 
-N = 1/p = 5000,000,000
+根据数学计算，标准TCP的拥塞窗口w和丢包率p之间存在一定的制约关系，可以用数学表达式$w = 1.2/\sqrt{p}$来表示。简而言之，拥塞窗口w必须保持较小，才能确保丢包率p足够低。这一特性限制了标准TCP在高带宽网络上充分利用带宽的能力。
 
-S = N/10W = 5000000000/10*83333 ≈ 6000 s ≈ 1.7 h
+假设当前网络带宽为10Gbps，往返时间为100ms，每个数据包的大小为1500字节。为了最大程度地利用带宽，拥塞窗口w需要达到83,333个数据包。在这种情况下，可以计算出最大允许的丢包率为$p = 1.5 / w^2 \approx 1/5,000,000,000$，这意味着在发送50亿个数据包时，最多只能允许丢失一个数据包。
 
-也就是说要隔1.7小时才能丢一个包，这显然是不可能的。
+此外，还可以计算出平均丢包的时间间隔$S$，它约为6000秒，相当于1.7小时。这意味着在理想情况下，至少需要1.7小时才会发生一次数据包丢失，这显然是不切实际的。
 
 
 
@@ -126,7 +124,7 @@ HighSpeed TCP use three parameters, Low_Window, High_Window, and High_P. To ensu
 
 
 
-W = $(p/Low_P)^S$ Low_Window
+W = $(p/\text{Low}_p)^S \text{Low}_{window}$
 
 
 
@@ -145,18 +143,6 @@ w = (1 - b(w))w
 当 w = High_Window时，
 
 a(w) = High_Window^2 * High_P * 2 * b(w)/(2-b(w))
-
-
-
-
-
-In a steady-state environment, with a packet loss rate p, the current Standard TCP's average congestion window is roughly $\frac{1.2}{\sqrt{(p)}}$ segments.  This places a serious constraint on the congestion windows that can be achieved by TCP in realistic environments.  For example, for a Standard TCP connection with 1500-byte packets and a 100 ms round-trip time, achieving a steady-state throughput of 10 Gbps would require an average congestion window of 83,333 segments, and a packet drop rate of at most one congestion event every 5,000,000,000 packets (or equivalently, at most one congestion event every 1 2/3 hours).  The average packet drop rate of at most $2*10^{(-10)}$ needed for full link utilization in this environment corresponds to a bit error rate of at most $2*10^{(-14)}$, and this is an unrealistic requirement for current networks.
-
-
-
-The congestion control mechanisms of the current Standard TCP constrains the congestion windows that can be achieved by TCP in realistic environments. For example, for a Standard TCP connection with 1500-byte packets and a 100 ms round-trip time, achieving a steady-state throughput of 10 Gbps would require an average congestion window of 83,333 segments, and a packet drop rate of at most one congestion event every 5,000,000,000 packets (or equivalently, at most one congestion event every 1 2/3 hours). This is widely acknowledged as an unrealistic constraint.  To address this limitation of TCP.
-
-
 
 
 
