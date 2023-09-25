@@ -1,125 +1,238 @@
-#### 1 背景
+#### 1 Background
 
-TCP协议是一种可靠的网络传输协议，为了保证数据传输的可靠性，发送方在检测到丢包的情况下会进行重传。这样就能够保证接收方收到的数据是完整的，整个过程是自动化的，一切看起来都是这么美好。但是，如果不进行任何控制，就会导致一个灾难性的后果。试想，一般出现了丢包的情况可能就意味着目前网络已经过载，也就是说网络已经出现了拥堵，此时如果仍然不断的尝试重传，无疑会进一步加重网络的负担，使得丢包变得更加频繁，然而这又进一步加剧了重传....，此时整个网络已经陷入恶性循环，最终走向瘫痪。
+The TCP protocol is a reliable network transmission protocol. To ensure the reliability of data transmission, the sender will initiate retransmissions when it detects packet loss. This ensures that the receiver receives complete data, and the entire process is automated, making everything seem ideal. However, without proper control, it can lead to catastrophic consequences. Imagine that in general, packet loss may indicate that the network is already overloaded, meaning it's congested. If continuous retransmission attempts are made at this point without control, it will undoubtedly further burden the network, leading to more frequent packet losses. This, in turn, exacerbates the retransmission issue. At this point, the entire network falls into a vicious cycle, ultimately leading to paralysis.
 
-#### 2 基本思想
+#### 2 Basic Idea
 
-为了避免这种情况的发生，TCP协议使用了拥塞控制机制，目的是根据网络的拥塞状况动态的调整TCP发送端的发送速率。这样我们就能够让网络环境保持一种同时具有高吞吐量，低延时，低丢包率的平衡状态。在此之前的滑动窗口协议能够让发送方根据接收方回传的通知窗口(awnd)的值来调整自身窗口大小，以便发送速率能够跟上处理速率。现在我们要引入一个称为拥塞窗口(cwnd)的变量，该变量能够估算当前网络的最佳承载能力，并随着网络的拥塞程度而不断变化。此时发送方的实际窗口值(W)需要取这两者的较小值，用公式表示如下：
+To prevent this situation, the TCP protocol employs a congestion control mechanism with the goal of dynamically adjusting the sending rate of the TCP sender based on the network's congestion condition. This allows us to maintain a balanced network environment with high throughput, low latency, and low packet loss simultaneously. Prior to this, the sliding window protocol allowed the sender to adjust its window size based on the value of the receiver's advertised window (awnd) to keep up with the processing rate. Now, we introduce a variable called the congestion window (cwnd), which estimates the current network's optimal capacity and continuously adapts based on the degree of congestion in the network. At this point, the sender's actual window value (W) should be the minimum of these two, as represented by the following formula:
 $$
 W=min(cwnd，awnd)
 $$
 
-通知窗口可以通过返回的ACK头部信息获得，但是要如何才能获取拥塞窗口的值呢？我们可以考虑逐步的给网络施加压力，以此来探索网络中的最佳承载能力。刚开始时，拥塞窗口取一个较小值，随后每当收到一个连续的ACK就增加拥塞窗口的大小，如果出现丢包则表明很有可能网络此时已经拥塞，所以此时减少拥塞窗口的值，就这样拥塞窗口的值随着网络环境的变化而不断的被调整。与此同时，当通知窗口(awnd)足够大时，发送方的实际窗口大小就取值于拥塞窗口的大小，这也就使得发送速率随着网络环境而动态变化。
+The advertised window can be obtained from the returned ACK header information, but how can we obtain the value of the congestion window? We can consider gradually applying pressure to the network to explore its optimal capacity. Initially, the congestion window takes a small value, and then, with each consecutive ACK received, it increases in size. If packet loss occurs, it likely indicates network congestion, so the congestion window is reduced at that point. This way, the congestion window value is continuously adjusted based on changes in the network environment. At the same time, when the advertised window (awnd) is sufficiently large, the sender's actual window size is determined by the congestion window size. This allows the sending rate to dynamically adapt to the network environment.
 
-拥塞控制算法的前提是要判断出何时出现拥塞，最简单的是根据丢包情况来进行判别，复杂点的可以根据延时情况来判断，还可以让节点路由器配合告知拥塞情况，这种方法叫做显式拥塞通知，不过由于涉及全球大量路由器的更新，现在还不是很普及。本文就介绍几种常见的拥塞控制算法，对比不同算法间的区别，以此加深对TCP协议拥塞控制过程的理解。
+The premise of congestion control algorithms is to determine when congestion is occurring. The simplest way is to discern congestion based on packet loss, but more sophisticated methods involve assessing delays or having network routers collaborate to report congestion, which is known as explicit congestion notification. However, the latter method is not yet widespread due to the need for updates across a large number of routers globally. This article introduces several common congestion control algorithms, compares the differences between them, and aims to enhance the understanding of the congestion control process in the TCP protocol.
 
-#### 3 基于丢包的拥塞控制算法
+#### 3 Loss-Based Algorithms
 
-##### 3.1 Tahoe算法
+##### 3.1 Tahoe
 
-Tahoe算法主要包含了**慢启动**、**拥塞避免**和**快速重传**机制。在连接刚开始建立时会先执行慢启动过程，在这个过程中发送窗口(cwnd)随往返时间(RTT)呈指数型增长，直到发送窗口增长到大于慢启动阈值(ssthresh)，此后进入拥塞避免阶段，在 这个过程中发送窗口随往返时间(RTT)呈线性增长，不断的逼近网络临界点，此时一旦出现丢包情况，无论是超时重传或者是快速重传，发送窗口都会立马置为1，然后再次进入慢启动阶段。在整个传输过程中，慢启动和拥塞避免过程是在不断的切换的，以此达到动态控制发送窗口大小的目的。下图显示了随着时间的增长，发送窗口大小的变化。
+The Tahoe algorithm primarily consists of three mechanisms: Slow Start**, **Congestion Avoidance, and Fast Retransmit. When a connection is initially established, the Slow Start process is executed. During this phase, the sending window (cwnd) grows exponentially with the round-trip time (RTT) until it exceeds the Slow Start threshold (ssthresh). Afterward, it enters the Congestion Avoidance phase, where the sending window grows linearly with the RTT, progressively approaching the network's congestion threshold. If packet loss occurs during this phase, either due to a timeout or Fast Retransmit, the sending window is immediately set to 1, and the connection re-enters the Slow Start phase. Throughout the entire transmission process, Slow Start and Congestion Avoidance processes alternate continuously to dynamically control the sending window size. The diagram below illustrates how the sending window size changes over time.
 
-##### 3.1.1 状态流转图
+![tcp_tahoe_line](../image/tcp_tahoe_line.svg)
 
-![](https://raw.githubusercontent.com/liuyunplus/yun-images/master/mbeD1u.png)
+**(1) Slow Start**
 
-##### 3.1.2 慢启动阶段
+The entire Slow Start process can be summarized as follows:
 
-整个慢启动过程概括如下：
-(1) 设置cwnd的初始值为1，表示可以传一个MSS大小的数据。
-(2) 每当收到一个ACK，$cwnd = cwnd + 1$，呈线性上升。
-(3) 每当经过一个RTT，$cwnd = cwnd^2$，呈指数上升。
-(4) 设置慢启动阈值(ssthresh)，当 $cwnd \geq ssthresh$ 时，进入拥塞避免阶段。
+- Initialize the cwnd with a value of 1, indicating the ability to transmit data of one MSS size.
+- Whenever an ACK is received, set cwnd = cwnd + 1, leading to linear growth.
+- After each round-trip time (RTT), set $cwnd = cwnd^2$, leading to exponential growth.
+- Set the slow start threshold (ssthresh), when cwnd >= ssthresh, transition into the congestion avoidance phase.
 
 ![TCP拥塞控制-慢启动](https://raw.githubusercontent.com/liuyunplus/yun-images/master/aqNu0f.svg)
 
-##### 3.1.3 拥塞避免阶段
+**(2) Congestion Avoidance**
 
-拥塞避免阶段如下：
-(1) 每当收到一个ACK，$cwnd = cwnd + 1/cwnd$。
-(2) 每当经过一个RTT，$cwnd = cwnd + 1$，呈线性上升。
-(3) 若出现超时丢包，则 $sshthresh =  cwnd/2，cwnd重置为1$ ，进入慢启动阶段。
+The congestion avoidance phases are as follows:
+
+- Whenever an ACK is received, set cwnd = cwnd + 1/cwnd.
+- Every time an RTT passes, set cwnd = cwnd + 1, following a linear growth pattern.
+- In the event of a timeout and packet loss, set sshthresh =  cwnd / 2, and cwnd = 1, entering the slow start phase.
 
 ![TCP拥塞控制-拥塞避免](https://raw.githubusercontent.com/liuyunplus/yun-images/master/gbIClA.svg)
 
-##### 3.1.4 拥塞窗口曲线图
-![TCP拥塞控制-慢启动&拥塞避免](https://raw.githubusercontent.com/liuyunplus/yun-images/master/6H0B8U.svg)
-
-##### 3.1.5 Problems
-
-The problem with Tahoe is that it take a complete timeout interval to detect a packet loss and in fact, in most implementations it takes even longer because of the coarse grain timeout. Also since it dosen't send immediate ACK's, it sends cumulative acknowledgements, there fore it follows a 'go back n' approach. Thus every time a packet is lost it waits for a timeout and the pipeline is emptied. This offers a major cost in high band-width delay product links.
-
-##### 3.2 Reno算法(标准算法)
-
-从上面可以看出，Tahoe算法在快速重传时会将发送窗口设置为1并开始慢启动阶段。我们知道发生快速重传是因为收到3个重复的ACK导致的，而既然能收到重复ACK说明网络情况也没有那么糟糕，没必要像超时丢包那样反应那么激烈，这样的话网络的吞吐量会比较低。因此，Reno算法在Tahoe算法的基础上提出了快速恢复机制。
-
-##### 3.2.1 状态流转图
-
-![](https://raw.githubusercontent.com/liuyunplus/yun-images/master/62JyDh.png)
-
-##### 3.2.2 快速恢复阶段
-快速恢复阶段如下：
-(1) 当收到一个重复的ACK时，$cwnd = cwnd + 1$，继续在快速恢复阶段。
-(2) 当收到一个好的ACK时，$cwnd = sshthresh$，进入拥塞避免阶段。
-(3) 若出现超时丢包，则 $sshthresh =  cwnd/2，cwnd重置为1$ ，进入慢启动阶段。
-
-##### 3.2.3 拥塞窗口曲线图
-![](https://raw.githubusercontent.com/liuyunplus/yun-images/master/ljEGn1.svg)
-##### 3.2.4 Problems
-
-Reno perform very well over TCP when the packet losses are small. But when we have multiple packet losses in one window then Reno doesn't perform too well and it's performance is almost the same as Tahoe under conditions of high packet loss. The reason is that it can only detect a single packet losses. If there is multiple packet drop then the first info about the packet loss comes when we receive the duplicate ACK's. But the information about the  second packet which was lost will come only after the ACK for the retransmitted first segment reaches the sender after one RTT.
-
-Also it is possible that the CWD is reduced twice for packet losses which occurred in one window. Suppose we send packets 1,2,3,4,5,6,7,8,9 in that order. Suppose packets 1, and 2 are lost. The ACK's generated by 2,4,5 will cause the re-transmission of 1 and the CWD is reduced to 7. Then when we receive ACK for 6,7,8,9 our CWD is sufficiently large to allow to us to send 10,11. When the re-transmitted segment 1 reaches the receiver we get two more ACK's for 2(due to 10,11) so once again we enter fast-retransmit and re-transmit 2 and then enter fast recovery. Thus when we exit fast recovery for the second time our window size is set to 2. Thus we reduced our window size twice for packets lost in one window.
-
-Another problem is that if the window is very small when the loss occurs then we would never receive enough duplicate acknowledgements for a fast-retransmit and we would have to wait for a coarse grained timeout . Thus is cannot effectively detect multiple packets losses.
-
-##### 3.3 NewReno算法
-
-NewReno is a slight modification over Reno. It is able to detect multiple packet losses and thus is much more efficient that Reno in the event of multiple packet losses.
+**(3) State Machine**
 
 
 
-TCP NewReno是对TCP Reno算法的一种改进。以下是其主要改进点：
-1.  多级重传：在Reno算法中，只有在三次重传后才会重新启动拥塞避免，而NewReno在每一个拥塞窗口的缩小中都重新启动拥塞避免。
-2.  快速恢复：在Reno算法中，数据包重传后慢启动会恢复到慢速恢复，而NewReno在快速恢复阶段中继续重传数据包以加速恢复。
-3.  避免过早的拥塞避免：在Reno算法中，很容易发生过早的拥塞避免，而NewReno通过在缩小窗口时保留一定的窗口大小来避免过早的拥塞避免。
-4.  改进的拥塞控制：NewReno改进了拥塞控制的策略，以更有效地避免拥塞并保证传输效率。
-这些改进使得NewReno算法更加稳定，能够更好地适应网络环境的变化，并且具有更快的恢复能力。
+![](../image/tcp-tahoe-state.svg)
+
+**(5) Problems**
+
+The problem with Tahoe is that it take a complete timeout interval to detect a packet loss and in fact, in most implementations it takes even longer because of the coarse grain timeout. Also since it dosen't send immediate ACK's, it sends cumulative acknowledgements, there fore it follows a 'go-back-n' approach. Thus every time a packet is lost it waits for a timeout and the pipeline is emptied. This offers a major cost in high band-width delay product links.
+
+##### 3.2 Reno
+
+As can be seen from the above, the Tahoe algorithm will set the send window to 1 and start the slow start phase during fast retransmission. We know that fast retransmission is caused by receiving three duplicate ACKs. Since duplicate ACKs can be received, it means that the network situation is not that bad. There is no need to react as violently as timeout packet loss. In this case, the network throughput will be lower. Therefore, the Reno algorithm proposes a fast recovery mechanism based on the Tahoe algorithm.
+
+![tcp_tahoe_line](../image/tcp_reno_line.svg)
+
+**(1) Fast Recovery**
+
+The fast recovery phases are as follows:
+
+- When a duplicate ACK is received, set cwnd = cwnd + 1, continuing in the fast recovery phase.
+- When a fresh ACK is received, set cwnd = sshthresh, entering the congestion avoidance phase.
+- If packet loss occurs due to timeout, then set sshthresh =  cwnd / 2, and set cwnd = 1, and enters the slow start phase.
+
+**(2) State Machine**
+
+![tcp-reno-state](../image/tcp-reno-state.svg)
+
+**(3) Problems**
+
+The biggest challenge with the Reno algorithm is that when multiple packets are lost within the same window, it can lead to premature exit from the fast retransmit phase and result in multiple reductions in CWND. As shown below, when the sender receives 3 duplicate ACKs, it triggers a fast retransmiss-ion of the lost packet and enters the fast recovery phase. At this point, the arrival of an ACK for packet 3 is treated as a new ACK, causing the sender to halve CWND and exit the fast retransmit phase, entering the congestion avoidance phase. However, it's important to note that packet 3 is also lost, so the sender subsequently receives duplicate ACKs for packet 3. This leads to the sender retransmitting packet 3 again and re-entering the fast retransmit phase. When multiple packets are lost, this process may repeat several times, resulting in a rapid reduction in CWND throughout the entire process.
+
+![](../image/tcp-NewReno.svg)
+
+##### 3.3 NewReno
+
+NewReno is a slight modification over Reno. It is able to detect multiple packet losses and thus is much more efficient that Reno in the event of multiple packet losses. Like Reno, NewReno also enters into fast-retransmit when it receives 3 duplicate packets, however it differs from Reno in that it doesn't exit fast-recovery until all the data which was out standing at the time it entered fast-recovery is acknowledged. Thus it overcomes the problem faced by Reno of reducing the CWD multiples times.
+
+The fast-retransmit phase is the same as in Reno. The difference in the fast-recovery phase which allows for multiple re-transmissions is NewReno. Whenever NewReno enters fast-recovery it notes the maximums segment which is outstanding. The fast-recovery phase proceeds as in Reno, however when a fresh ACK is received then there are two cases:
+
+- If it ACK's all the segment which were outstanding when we entered fast-recovery then it exits fast recovery and sets CWD to ssthresh and continues congestion avoidance like Tahoe.
+
+- If the ACK is a partial ACK then it deduces that the next segment in line was lost and it re-transmits that segment and sets the number of duplicate ACKs received to zero.
+
+It exit fast-recovery when all the data in the window is acknowledged.
+
+**Problems:**
+
+NewReno suffers from the fact that its take one RTT to detect each packet loss. When the ACK for the first re-transmitted segment is received only then can we deduce which other segment was lost.
+
+##### 3.4 SACK
+
+TCP with 'Selective Acknowledgments' is an extension of TCP Reno and it works around the problems face by TCP Reno and TCP NewReno, namely detection of multiple lost packets, and re-transmission of more than one lost packet per RTT. It retains the slow-start and fast-retransmit parts of Reno. It also has the coarse grained timeout of Tahoe to fall back on, incase a packet loss is not detected by the modified algorithm.
+
+SACK TCP requires that segments not be acknowledged cumulatively but should be acknowledged selectively. Thus each ACK has a block which describes which segments are being acknowledged. Thus the sender has a picture of which segments have been acknowledged and which are still outstanding. Whenever the sender enters fast-recovery, it initializes a variable pipe which is an estimate of how much data is outstanding in the network, and it also set CWND to half the current size. Every time it receives an ACK it reduces the pipe by 1 and every time it re-transmits a segment it increments it by 1. Whenever the pipe goes smaller than the CWD window it checks which segments are un received and send them. If there are no such segments outstanding then it sends a new packet. Thus more than one lost segment can be sent in one RTT.
+
+**Problems:**
+
+The biggest problem with SACK is that currently selective acknowledgements are not provided by the receiver to implement SACK we'll need to implement selective acknowledegment which is not a very easy task.
+
+##### 3.4 HSTCP
+
+根据数学估算，标准TCP的拥塞窗口w和丢包率p的关系为: $w = 1.2/\sqrt{p}$ . 
+
+假设当前带宽为 10Gbps， 往返时间为 100ms，每个包的字节数为 1500 byte。为了能充分利用带宽，拥塞窗口w要达到 83,333 segments
+
+可以计算丢包率 $p = 1.5 / w^2  \approx 1/5,000,000,000$ , 
+
+N = 1/p = 5000,000,000
+
+S = N/10W = 5000000000/10*83333 ≈ 6000 s ≈ 1.7 h
+
+也就是说要隔1.7小时才能丢一个包，这显然是不可能的。
 
 
-##### 3.4 RHBP算法
 
-优化快速重传机制
+HighSpeed TCP use three parameters, Low_Window, High_Window, and High_P. To ensure TCP compatibility:
+
+- when cwnd <= Low_Window, Use Standard TCP response function
+- when cwnd > Low_Window, Use HighSpeed response function
+- Low_Window is set to 38 MSS-sized segments, corresponding to a packet drop rate of $10^{-3}$ for TCP.
 
 
 
-##### 3.5 BIC算法
+W = $(p/Low_P)^S$ Low_Window
+
+
+
+未出现拥塞事件的时候，cwnd按照以下公式增加:
+
+w = w + a(w)/w
+
+出现拥塞事件的时候，cwnd按照以下公式减少：
+
+w = (1 - b(w))w
+
+
+
+当 w <= Low_Window时，和标准TCP一样，a(w) = 1 and b(w) = 1/2
+
+当 w = High_Window时，
+
+a(w) = High_Window^2 * High_P * 2 * b(w)/(2-b(w))
+
+
+
+
+
+In a steady-state environment, with a packet loss rate p, the current Standard TCP's average congestion window is roughly $\frac{1.2}{\sqrt{(p)}}$ segments.  This places a serious constraint on the congestion windows that can be achieved by TCP in realistic environments.  For example, for a Standard TCP connection with 1500-byte packets and a 100 ms round-trip time, achieving a steady-state throughput of 10 Gbps would require an average congestion window of 83,333 segments, and a packet drop rate of at most one congestion event every 5,000,000,000 packets (or equivalently, at most one congestion event every 1 2/3 hours).  The average packet drop rate of at most $2*10^{(-10)}$ needed for full link utilization in this environment corresponds to a bit error rate of at most $2*10^{(-14)}$, and this is an unrealistic requirement for current networks.
+
+
+
+The congestion control mechanisms of the current Standard TCP constrains the congestion windows that can be achieved by TCP in realistic environments. For example, for a Standard TCP connection with 1500-byte packets and a 100 ms round-trip time, achieving a steady-state throughput of 10 Gbps would require an average congestion window of 83,333 segments, and a packet drop rate of at most one congestion event every 5,000,000,000 packets (or equivalently, at most one congestion event every 1 2/3 hours). This is widely acknowledged as an unrealistic constraint.  To address this limitation of TCP.
+
+
+
+
+
+##### 3.5 BIC
 
 在高速网络下能保证公平性
 
  
 
-##### 3.6 CUBIC算法
+##### 3.6 CUBIC
 
 对BIC算法的改进，改进了BIC某些情况下增长过快的不足。
 
+On detection via duplicate ACKs:
 
+$W_{max} = cwnd$
 
-#### 4 基于延迟的拥塞控制算法
+$ssthresh = max(2, \ cwnd * \beta)$
 
-##### 4.1 Vegas Algorithm
+$cwnd = cwnd * \beta$
 
-Vegas is a TCP implementation which is a modification of Reno. It builds on the fast that proactive measure to encounter congestion are much more efficient than reactive ones. It tried to get around the problem of coarse grain timeouts by suggesting an algorithm which checks for timeouts at a very efficient schedule. Also it overcomes the problem of requiring enough duplicate acknowledgements to detect a packet loss, and it also suggest a modified slow start algorithm which prevent it from congesting the network. It does not depend solely on packet loss as a sign of congestion. It detects congestion before the packet losses occur. However it still retains the other mechanism of Reno and Tahoe, and a packet loss can still be detected by the coarse grain timeout of the other mechanisms fail. The three major changes induced by Vegas are:
+On detection via a timeout, it is the same except for cwnd:
 
-###### 4.1.1 New Re-Transmission Mechanism
-
-###### 4.1.2 Congestion Avoidance
-
-###### 4.1.3 Modified Slow-Start
-
-##### 4.2 WestWood算法
+cwnd = RW = min(cwnd, IW)
 
 
 
-##### 4.3 BBR Algorithm
+#### 4 Delay-Based Algorithms
 
+##### 4.1 Vegas
+
+Vegas is a TCP implementation which is a modification of Reno. The experiments demonstrate that, compared to Reno, Vegas can increase throughput by 40% to 70%, and the amount of retransmitted data is only 20% to 50% of the Reno.
+
+**(1) New Retransmission Mechanism**
+
+In Reno, round trip time(RTT) and variance estimates are computed using a coarse-grained timer (around 500 ms), meaning that the RTT estimate is not very accurate. This coarse granularity influences both the accuracy of the calculation itself, and how often TCP checks to see if it should time out on a segment. Reno not only retransmits when a coarse-grained timeout occurs, but also when it receices 3 duplicate ACKs. Reno sends a duplicate ACK whenever it receives new data that it cannot acknowledge because it has not yet received all the previous data.
+
+Vegas extends Reno's retransmission mechanisms as follows. First, Vegas reads and records the system clock each time a segment is sent. When an ACK arrives, Vegas reads the clock again and does the RTT calculation using this time and the timestamp recorded for the relevant segment. Vegas then uses this more accurate RTT estimate to decide to retransmit in the following two situations:
+
+- When a duplicate ACK is received, Vegas checks to see if the difference between the current time and the timestamp recorded for the relevant segment is greater than the timeout value. If it is, then Vegas retransmits the segment without having to wait for 3 duplicate ACKs. In many case, losses are either so great or the window so small that the sender will never receive three duplicate ACKs, and therefore, Reno would have to rely on the coarse-grained timeout mentioned above.
+- When a non-duplicate ACK is received, if it is the first or second one after a retansmission, Vegas again checks to see if the time interval since the segment was sent is larger than the timeout value. If it is, then Vegas retransmits the segment. This will catch any other segment that may have been lost previous to the retransmission without having to wait for a duplicate ACK.
+
+In other words, Vegas treats the receipt of certain ACKs as a trigger to check if a timeout should happen. It still contains Reno's coarse-grained timeout code in case these mechanisms fail to recognize a lost segment.
+
+**(2) Congestion Avoidance Mechanism**
+
+TCP Reno's congestion detection and control mechanism uses the loss of segments as a signal that there is congestion in the network. It has no mechanism to detect the incipient stages of congestion--before losses occur--so they can be prevented. Reno is reactive, rather than proactive, in this respect. As a result, Reno needs to create losses to find the available bandwidth of the connection. 
+
+Vegas' approach is most similar to Tri-S, in that it looks at changes in the throughput rate. However, it differs from Tri-S in that it calculates throughputs differently, and instead of looking for a change in the throughput slope, it compares the measured throughput rate with the expected throughput rate. The simple idea that Vegas exploits is that the number of bytes in transit is directly proportional to the expected throughput, and therefore, as the window size increases -- causing the bytes in transit to increase -- the throughput of connection should also increase.
+
+Step1: Define a given connection's BaseRTT to be the RTT of a segment when the connection is not congested. In practice, Vegas sets BaeRTT to the minimum of all measured round trip times.
+
+Step2: Calculates the expected throughput: Expected = WindowSize / BaseRTT. where WindowSize is the size of the current congestion window, which we assume for the purpose of this discussion, to be equal to the number of bytes in transmit.
+
+Step3: Calculates the current actual sending rate: Actual = transmittedBytes / transmittedRTT. This calculation is done once per round-trip time.
+
+Step4: Compares Actual to Expected, and adjusts the window accordingly. Let Diff = Expected - Actual. Note that Diff is positive or zero by definition, since Actual > Expected implies that we need to change BaseRTT to the latest sampled RTT. Also define two thresholds, α < β, roughly corresponding to having too little and too much extra data in the network, respectively:
+
+- when Diff < α, increases the congestion window linearly during the next RTT.
+
+- when Dif > β, decreases the congestion window linearly during the next RTT. 
+
+- when α < Diff < β, leaves the congestion window unchanged.
+
+**(3) Modified Slow-Start Mechanism**
+
+Vegas expects that as network bandwidth increases, the expected loss of slow-start will similarly increase. To be able to detect and avoid congestion during slow-start, Vegas allows exponential growth only every other RTT. In between, the congestion window stays fixed so a valid comparison of the expected and actual rates can be made. When the actual rate falls below the expected rate by a certain amount, call this the y threshold, Vegas changes from slow-start mode to linear increase/decrease mode.
+
+##### 4.2 WestWood
+
+
+
+##### 4.3 BBR
+
+ProbeBW
+
+ProbeRTT
+
+问题: 基于丢包的算法与BBR算法竞争可能会被挤出去
