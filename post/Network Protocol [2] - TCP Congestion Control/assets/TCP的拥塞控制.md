@@ -104,27 +104,19 @@ The biggest problem with SACK is that currently selective acknowledgements are n
 
 ##### 3.4 HSTCP
 
-根据数学计算，标准TCP的拥塞窗口w和丢包率p存在某种约束关系，该关系的数学表达式为: $w = 1.2/\sqrt{p}$ . 也就是说随着拥塞窗口w的增大，丢包率p必须足够小才行，这使得标准TCP无法充分利用高带宽网络。假设当前带宽为10Gbps， 往返时间为100ms，每个包的字节数为1500 byte。为了能充分利用带宽，拥塞窗口w要达到 83,333 segments。此时可以计算最大丢包率 $p = 1.5 / w^2  \approx 1/5,000,000,000$ , 也就是说发送5000000000个包最多只能丢一个包。可以计算丢包间隔时间 $S = ((1/p ÷ w) × 100) ÷ 1000 ≈ 6000s ≈ 1.7h$，也就是说至少隔1.7小时才能丢一个包，这显然是不可能的。
+根据数学计算，标准TCP的拥塞窗口w和丢包率p存在某种约束关系，该关系的数学表达式为: $w = 1.2/\sqrt{p}$ . 也就是说随着拥塞窗口w的增大，丢包率p必须足够小才行，这使得标准TCP无法充分利用高带宽网络。假设当前带宽为10Gbps， 往返时间为100ms，每个包的字节数为1500 byte。为了能充分利用带宽，拥塞窗口w要达到 83,333 segments。此时可以计算最大丢包率 $p = 1.5 / w^2  \approx 1/5,000,000,000$, 这意味着在发送的50亿个数据包中，最多只能允许丢失一个数据包。此外，还可以计算丢包间隔时间 $S = ((1/p ÷ w) × 100) ÷ 1000 ≈ 6000s ≈ 1.7h$，也就是说至少隔1.7小时才能丢一个包，这显然是不可能的。
 
 
 
-根据数学计算，标准TCP的拥塞窗口w和丢包率p之间存在一定的制约关系，可以用数学表达式$w = 1.2/\sqrt{p}$来表示。简而言之，拥塞窗口w必须保持较小，才能确保丢包率p足够低。这一特性限制了标准TCP在高带宽网络上充分利用带宽的能力。
+HighSpeed TCP is designed to solve the bandwidth bottleneck problem in high-speed networks, It use three parameters: Low_w, High_w and High_p. To ensure TCP compatibility:
 
-假设当前网络带宽为10Gbps，往返时间为100ms，每个数据包的大小为1500字节。为了最大程度地利用带宽，拥塞窗口w需要达到83,333个数据包。在这种情况下，可以计算出最大允许的丢包率为$p = 1.5 / w^2 \approx 1/5,000,000,000$，这意味着在发送50亿个数据包时，最多只能允许丢失一个数据包。
-
-此外，还可以计算出平均丢包的时间间隔$S$，它约为6000秒，相当于1.7小时。这意味着在理想情况下，至少需要1.7小时才会发生一次数据包丢失，这显然是不切实际的。
-
-
-
-HighSpeed TCP use three parameters, Low_Window, High_Window, and High_P. To ensure TCP compatibility:
-
-- when cwnd <= Low_Window, Use Standard TCP response function
-- when cwnd > Low_Window, Use HighSpeed response function
-- Low_Window is set to 38 MSS-sized segments, corresponding to a packet drop rate of $10^{-3}$ for TCP.
+- when cwnd <= Low_w, Use Standard TCP response function
+- when cwnd > Low_w, Use HighSpeed response function
+- Low_w is set to 38 MSS-sized segments, corresponding to a packet drop rate of $10^{-3}$ for TCP.
 
 
 
-W = $(p/\text{Low}_p)^S \text{Low}_{window}$
+W = (p/Low_p)^S Low_w
 
 
 
@@ -138,7 +130,7 @@ w = (1 - b(w))w
 
 
 
-当 w <= Low_Window时，和标准TCP一样，a(w) = 1 and b(w) = 1/2
+当 w <= Low_Window时，和标准TCP一样，a(w) = 1 并且 b(w) = 1/2
 
 当 w = High_Window时，
 
@@ -148,9 +140,17 @@ a(w) = High_Window^2 * High_P * 2 * b(w)/(2-b(w))
 
 ##### 3.5 BIC
 
-在高速网络下能保证公平性
+什么是RTT公平性:
 
- 
+Large windows with a short RTT can always grow faster than small windows with a long RTT.
+
+
+
+HSTCP and STCP are extremely scalable under low loss rates and TCP friendly under high loss rates. But they are not RTT fair.
+
+
+
+
 
 ##### 3.6 CUBIC
 
