@@ -24,7 +24,12 @@ function parse_math(source_html, target_html) {
         inlineMath: [ ['$','$'], ['$$', '$$']],
         processEscapes: true
     });
-    const svg = new SVG({fontCache: 'global', exFactor: ex / em});
+    const svg = new SVG({
+        fontCache: 'global',
+        exFactor: ex / em,
+        scale: 1,
+        minScale: 80
+    });
 
     const htmlFile = require('fs').readFileSync(source_html, 'utf8');
     const html = mathjax.document(htmlFile, {InputJax: tex, OutputJax: svg});
