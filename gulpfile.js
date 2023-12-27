@@ -101,6 +101,8 @@ function move_assets(cb) {
     // 移动字体文件
     gulp.src('src/static/font/*.ttf')
         .pipe(gulp.dest('dist/font'))
+    gulp.src('src/static/font/*.woff2')
+        .pipe(gulp.dest('dist/font'))
     cb()
 }
 

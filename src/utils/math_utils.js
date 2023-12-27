@@ -20,8 +20,9 @@ function parse_math(source_html, target_html) {
 
     const tex = new TeX({
         packages: PACKAGES.split(/\s*,\s*/),
-        inlineMath: [['$', '$']],
-        displayMath: [['$$', '$$']]
+        displayMath: [['$$\n', '\n$$'], ['$$\r\n', '\r\n$$']],
+        inlineMath: [ ['$','$'], ['$$', '$$']],
+        processEscapes: true
     });
     const svg = new SVG({fontCache: 'global', exFactor: ex / em});
 
