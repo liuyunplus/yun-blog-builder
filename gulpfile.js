@@ -6,23 +6,20 @@ const {glob} = require('glob');
 const fs = require('fs');
 const fse = require('fs-extra');
 const path = require('path');
-const {marked} = require('marked');
 const cheerio = require('cheerio');
+
 
 const file_utils = require("./src/utils/file_utils");
 const math_utils = require("./src/utils/math_utils");
+const md_utils = require("./src/utils/md_utils");
 
 
 function build_post(cb) {
     const files = glob.sync('post/**/config.json');
-    const options = {
-        headerIds: false,
-        mangle: false
-    };
     for (const file of files) {
         const configData = JSON.parse(fs.readFileSync(file, 'utf-8'))
-        const mdFile = `${path.dirname(file)}/index.md`
-        const mdHtml = marked(fs.readFileSync(mdFile, 'utf-8'), options);
+        const mdString = fs.readFileSync(`${path.dirname(file)}/index.md`, 'utf-8')
+        const mdHtml = md_utils.parseMarkdown(mdString)
         const pageTmpl = pug.compileFile("src/page/post.pug");
         const pageHtml = pageTmpl({mdHtml: mdHtml, title: configData.title});
         const id = configData.date.replaceAll("-", "")

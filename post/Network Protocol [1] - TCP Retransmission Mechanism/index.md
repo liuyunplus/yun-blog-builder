@@ -77,9 +77,13 @@ Although Fast Retransmit can more promptly detect packet loss compared to Timeou
 
 #### 5. References
 
-> 1. [TCP/IP Illustrated, Volume 1: The Protocols](https://book.douban.com/subject/1088054/)
-> 2. [TCP的哪些事儿(上)  || 酷壳 - CoolShell](https://coolshell.cn/articles/11564.html) 
-> 3. [TCP的哪些事儿(下)  || 酷壳 - CoolChell](https://coolshell.cn/articles/11609.html) 
-> 4. [Improving Round-Trip Time Estimates in Reliable Transport Protocols](chrome-extension://ikhdkkncnoglghljlkmcimlnlhkeamad/pdf-viewer/web/viewer.html?file=http%3A%2F%2Fccr.sigcomm.org%2Farchive%2F1995%2Fjan95%2Fccr-9501-partridge87.pdf)
-> 5. [Transmission Control Protocol (TCP) - Wikipedia](https://zh.wikipedia.org/wiki/%E4%BC%A0%E8%BE%93%E6%8E%A7%E5%88%B6%E5%8D%8F%E8%AE%AE)
+> [1] [TCP/IP Illustrated, Volume 1: The Protocols](https://book.douban.com/subject/1088054/)
+>
+> [2] [TCP的哪些事儿(上) || 酷壳 - CoolShell](https://coolshell.cn/articles/11564.html) 
+>
+> [3] [TCP的哪些事儿(下) || 酷壳 - CoolChell](https://coolshell.cn/articles/11609.html) 
+>
+> [4] [Improving Round-Trip Time Estimates in Reliable Transport Protocols](chrome-extension://ikhdkkncnoglghljlkmcimlnlhkeamad/pdf-viewer/web/viewer.html?file=http%3A%2F%2Fccr.sigcomm.org%2Farchive%2F1995%2Fjan95%2Fccr-9501-partridge87.pdf)
+>
+> [5] [Transmission Control Protocol (TCP) - Wikipedia](https://zh.wikipedia.org/wiki/%E4%BC%A0%E8%BE%93%E6%8E%A7%E5%88%B6%E5%8D%8F%E8%AE%AE)
 

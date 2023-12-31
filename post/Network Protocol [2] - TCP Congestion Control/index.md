@@ -224,7 +224,7 @@ In the HSTCP algorithm, flows with larger windows will occupy more bandwidth, wh
 
 If no packet loss occurs, the congestion window (cwnd) will increase in three different ways: binary search increase, additive increase, and slow-start growth. The specific growth process is as follows:
 
-```
+```text
 if (cwnd < wmax)          // binary search OR additive
   bic_inc = (wmax - cwnd) / 2;
 else                      // slow start OR additive
@@ -238,7 +238,7 @@ cwnd = cwnd + (bic_inc / cwnd);
 
 If a packet loss event occurs, a multiplicative decrease will be applied to the current window (cwnd). There is a reduction factor β, which is used to reduce cwnd by (100×β)%. The specific reduction process is as follows:
 
-```
+```text
 if (cwnd < wmax) // fast convergence
   wmax = cwnd * (2-β) / 2;
 else 
@@ -444,3 +444,26 @@ At around 40 seconds, the bandwidth on the link suddenly decreases. Since BBR ma
 - **Fairness issue**: When the BBR algorithm coexists with traditional loss-based algorithms, BBR traffic may occupy most of the bandwidth, leading to unfair bandwidth allocation for other traffic.
 - **Dependence on RTT**: The BBR algorithm relies on Round-Trip Time (RTT) to estimate bandwidth. However, in some network environments, RTT may fluctuate significantly, which could affect BBR's performance.
 - **Long tail effect**: When network traffic decreases, BBR's bandwidth estimation might lag behind the actual situation, and it may continue to send data at an excessively high rate, thereby causing network congestion. This situation will only improve when BBR's bandwidth estimation drops to an appropriate level.
+
+### 5 References
+
+>[1] “A Comparative Analysis of TCP Tahoe, Reno, New-Reno, SACK and Vegas.” 
+>
+>[2] S. Floyd, M. Handley, and J. Padhye, “A comparison of equation-based and AIMD congestion control,” 2000.
+>
+>[3] “BBR: Congestion-Based Congestion Control - ACM Queue.” Accessed: Dec. 31, 2023. [Online]. Available: https://queue.acm.org/detail.cfm?id=3022184
+>
+>[4] L. Xu, K. Harfoush, and I. Rhee, “Binary Increase Congestion Control for Fast, Long Distance Networks”.
+>
+>[5] V. Jacobson, “Congestion Avoidance and Control”.
+>
+>[6] L. Xu, S. Ha, I. Rhee, V. Goel, and L. Eggert, “CUBIC for Fast and Long-Distance Networks,” Internet Engineering Task Force, Request for Comments RFC 9438, Aug. 2023. doi: 10.17487/RFC9438.
+>
+>[7] S. Ha, I. Rhee, and L. Xu, “CUBIC: a new TCP-friendly high-speed TCP variant,” SIGOPS Oper. Syst. Rev., vol. 42, no. 5, pp. 64–74, Jul. 2008, doi: 10.1145/1400097.1400105.
+>
+>[8] S. Floyd, “HighSpeed TCP for Large Congestion Windows,” Internet Engineering Task Force, Request for Comments RFC 3649, Dec. 2003. doi: 10.17487/RFC3649.
+>
+>[9] V. R. P. DRAFT, “Modifying TCP’s Congestion Control for High Speeds,” 2002.
+>
+>[10] A. Gurtov, T. Henderson, and S. Floyd, “The NewReno Modification to TCP’s Fast Recovery Algorithm,” Internet Engineering Task Force, Request for Comments RFC 3782, Apr. 2004. doi: 10.17487/RFC3782.
+

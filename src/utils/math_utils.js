@@ -30,9 +30,13 @@ function parse_math(source_html, target_html) {
         scale: 1,
         minScale: 80
     });
+    
+    const options = {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
 
-    const htmlFile = require('fs').readFileSync(source_html, 'utf8');
-    const html = mathjax.document(htmlFile, {InputJax: tex, OutputJax: svg});
+    const htmlFile = fs.readFileSync(source_html, 'utf8');
+    const html = mathjax.document(htmlFile, {InputJax: tex, OutputJax: svg, skipHtmlTags: options.skipHtmlTags});
 
     html.render();
 

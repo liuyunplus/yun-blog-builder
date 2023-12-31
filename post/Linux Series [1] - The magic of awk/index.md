@@ -17,7 +17,7 @@ $ awk -f {script file} {text file}
 | Built-in Variable | Meaning |
 | --- | --- |
 | $0 | Entire line |
-| $1-$n | Fields 1-n of the current line |
+| \$1-\$n | Fields 1-n of the current line |
 | NF | The number of fields in the current row, that is, how many columns there are |
 | NR | The line number of the current line, counting from 1 |
 | FNR | When processing multiple files, the line number of each file is counted separately, starting from 0 |

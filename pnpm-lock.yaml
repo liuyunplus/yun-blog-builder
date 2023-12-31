@@ -23,6 +23,12 @@ dependencies:
   jstransformer-marked:
     specifier: ^1.3.0
     version: registry.npmmirror.com/jstransformer-marked@1.3.0
+  markdown-it:
+    specifier: ^14.0.0
+    version: registry.npmmirror.com/markdown-it@14.0.0
+  markdown-it-mathjax:
+    specifier: ^2.0.0
+    version: registry.npmmirror.com/markdown-it-mathjax@2.0.0
   mathjax:
     specifier: ^3.2.2
     version: registry.npmmirror.com/mathjax@3.2.2
@@ -251,6 +257,12 @@ packages:
     version: 1.0.10
     dependencies:
       sprintf-js: registry.npmmirror.com/sprintf-js@1.0.3
+    dev: false
+
+  registry.npmmirror.com/argparse@2.0.1:
+    resolution: {integrity: sha512-8+9WqebbFzpX9OR+Wa6O29asIogeRMzcGtAINdpMHHyAg10f05aSFVBbcEqGf/PXw1EjAZ+q2/bEBg3DvurK3Q==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/argparse/-/argparse-2.0.1.tgz}
+    name: argparse
+    version: 2.0.1
     dev: false
 
   registry.npmmirror.com/arr-diff@1.1.0:
@@ -2770,6 +2782,14 @@ packages:
       - supports-color
     dev: true
 
+  registry.npmmirror.com/linkify-it@5.0.0:
+    resolution: {integrity: sha512-5aHCbzQRADcdP+ATqnDuhhJ/MRIqDkZX5pyjFHRRysS8vZ5AbqGEoFIb6pYHPZ+L/OC2Lc+xT8uHVVR5CAK/wQ==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/linkify-it/-/linkify-it-5.0.0.tgz}
+    name: linkify-it
+    version: 5.0.0
+    dependencies:
+      uc.micro: registry.npmmirror.com/uc.micro@2.0.0
+    dev: false
+
   registry.npmmirror.com/load-json-file@1.1.0:
     resolution: {integrity: sha512-cy7ZdNRXdablkXYNI049pthVeXFurRyb9+hA/dZzerZ0pGTx42z+y+ssxBaVV2l70t1muq5IdKhn4UtcoGUY9A==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/load-json-file/-/load-json-file-1.1.0.tgz}
     name: load-json-file
@@ -2942,6 +2962,26 @@ packages:
       object-visit: registry.npmmirror.com/object-visit@1.0.1
     dev: true
 
+  registry.npmmirror.com/markdown-it-mathjax@2.0.0:
+    resolution: {integrity: sha512-Fafv7TnMENccWYTNjMZzV4BzONPxpK9Mknr1iMEK6m7PI5a5UTCOFctPzx7Nhv81fFzYEY8WHDkSu9n43fTV9g==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/markdown-it-mathjax/-/markdown-it-mathjax-2.0.0.tgz}
+    name: markdown-it-mathjax
+    version: 2.0.0
+    dev: false
+
+  registry.npmmirror.com/markdown-it@14.0.0:
+    resolution: {integrity: sha512-seFjF0FIcPt4P9U39Bq1JYblX0KZCjDLFFQPHpL5AzHpqPEKtosxmdq/LTVZnjfH7tjt9BxStm+wXcDBNuYmzw==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/markdown-it/-/markdown-it-14.0.0.tgz}
+    name: markdown-it
+    version: 14.0.0
+    hasBin: true
+    dependencies:
+      argparse: registry.npmmirror.com/argparse@2.0.1
+      entities: registry.npmmirror.com/entities@4.5.0
+      linkify-it: registry.npmmirror.com/linkify-it@5.0.0
+      mdurl: registry.npmmirror.com/mdurl@2.0.0
+      punycode.js: registry.npmmirror.com/punycode.js@2.3.1
+      uc.micro: registry.npmmirror.com/uc.micro@2.0.0
+    dev: false
+
   registry.npmmirror.com/marked@4.3.0:
     resolution: {integrity: sha512-PRsaiG84bK+AMvxziE/lCFss8juXjNaWzVbN5tXAm4XjeaS9NAHhop+PjQxz2A9h8Q4M/xGmzP8vqNwy6JeK0A==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/marked/-/marked-4.3.0.tgz}
     name: marked
@@ -2987,6 +3027,12 @@ packages:
     resolution: {integrity: sha512-Bt+SSVU8eBG27zChVewOicYs7Xsdt40qm4+UpHyX7k0/O9NliPc+x77k1/FEsPsjKPZGJvtRZM1vO+geW0OhGw==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/mathjax/-/mathjax-3.2.2.tgz}
     name: mathjax
     version: 3.2.2
+    dev: false
+
+  registry.npmmirror.com/mdurl@2.0.0:
+    resolution: {integrity: sha512-Lf+9+2r+Tdp5wXDXC4PcIBjTDtq4UKjCPMQhKIuzpJNW0b96kVqSwW0bT7FhRSfmAiFYgP+SCRvdrDozfh0U5w==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/mdurl/-/mdurl-2.0.0.tgz}
+    name: mdurl
+    version: 2.0.0
     dev: false
 
   registry.npmmirror.com/mhchemparser@4.2.1:
@@ -3736,6 +3782,13 @@ packages:
       inherits: registry.npmmirror.com/inherits@2.0.4
       pump: registry.npmmirror.com/pump@2.0.1
     dev: true
+
+  registry.npmmirror.com/punycode.js@2.3.1:
+    resolution: {integrity: sha512-uxFIHU0YlHYhDQtV4R9J6a52SLx28BCjT+4ieh7IGbgwVJWO+km431c4yRlREUAsAmt/uMjQUyQHNEPf0M39CA==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/punycode.js/-/punycode.js-2.3.1.tgz}
+    name: punycode.js
+    version: 2.3.1
+    engines: {node: '>=6'}
+    dev: false
 
   registry.npmmirror.com/punycode@1.4.1:
     resolution: {integrity: sha512-jmYNElW7yvO7TV33CjSmvSiE2yco3bV2czu/OzDKdMNVZQWfxCblURLhf+47syQRBntjfLdd/H0egrzIG+oaFQ==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/punycode/-/punycode-1.4.1.tgz}
@@ -4564,6 +4617,12 @@ packages:
     name: typedarray
     version: 0.0.6
     dev: true
+
+  registry.npmmirror.com/uc.micro@2.0.0:
+    resolution: {integrity: sha512-DffL94LsNOccVn4hyfRe5rdKa273swqeA5DJpMOeFmEn1wCDc7nAbbB0gXlgBCL7TNzeTv6G7XVWzan7iJtfig==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/uc.micro/-/uc.micro-2.0.0.tgz}
+    name: uc.micro
+    version: 2.0.0
+    dev: false
 
   registry.npmmirror.com/unc-path-regex@0.1.2:
     resolution: {integrity: sha512-eXL4nmJT7oCpkZsHZUOJo8hcX3GbsiDOa0Qu9F646fi8dT3XuSVopVqAcEiVzSKKH7UoDti23wNX3qGFxcW5Qg==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/unc-path-regex/-/unc-path-regex-0.1.2.tgz}

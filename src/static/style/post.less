@@ -4,6 +4,7 @@
 }
 
 h1, h2, h3, h4, h5, h6 {
+  display: block;
   margin-top: 1rem;
   margin-bottom: 1rem;
   font-weight: bold;
@@ -13,36 +14,37 @@ h1, h2, h3, h4, h5, h6 {
 
 h1 {
   font-size: 2.25em;
+  line-height: 1.2;
+  border-bottom: 1px solid #eee;
 }
 
 h2 {
   font-size: 1.75em;
+  line-height: 1.225;
+  border-bottom: 1px solid #eee;
 }
 
 h3 {
   font-size: 1.5em;
+  line-height: 1.43;
 }
 
 h4 {
   font-size: 1.25em;
-  display: block;
-  margin-block-start: 1.33em;
-  margin-block-end: 1.33em;
-  margin-inline-start: 0px;
-  margin-inline-end: 0px;
+  line-height: 1.4;
 }
 
 h5 {
   font-size: 1em;
-  display: block;
-  margin-block-start: 1.67em;
-  margin-block-end: 1.67em;
-  margin-inline-start: 0px;
-  margin-inline-end: 0px;
+  line-height: 1.4;
 }
 
 p, pre, blockquote, ul, ol, dl, table {
-  margin: 0.313em 0;
+  margin: 0.8em 0;
+}
+
+li + li {
+  margin-top: 0.5rem;
 }
 
 a {
@@ -68,9 +70,9 @@ pre code {
 // 表格样式
 table {
   width: 100%; /*表格宽度*/
-  max-width: 65em; /*表格最大宽度，避免表格过宽*/
+  max-width: 100%; /*表格最大宽度，避免表格过宽*/
   border: 1px solid #dedede; /*表格外边框设置*/
-  margin: 15px auto; /*外边距*/
+  margin: 10px auto; /*外边距*/
   border-collapse: collapse; /*使用单一线条的边框*/
   empty-cells: show; /*单元格无内容依旧绘制边框*/
 
@@ -104,8 +106,8 @@ blockquote {
   color: #777777;
   background: #f9f9f9;
   border-left: 4px solid #dfe2e5;
-  margin: 10px 0px;
-  padding: 2px 0px;
+  //margin: 10px 0px;
+  padding: 2px 15px;
 
   &:before {
     color: #ccc;
@@ -116,7 +118,7 @@ blockquote {
   }
 
   p {
-    display: inline;
+    display: block;
   }
 
 }
