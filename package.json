@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "prebuild": "pnpm install",
+    "prebuild": "npm install",
     "build": "gulp build",
     "server": "cd ./dist && http-server"
   },
